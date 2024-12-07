@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist", // Chỉ định thư mục đầu ra
+    "rootDir": "./src", // Chỉ định thư mục gốc chứa mã nguồn
+    "forceConsistentCasingInFileNames": true, // Bật kiểm tra case-sensitive
+    "strict": true,                          // Bật chế độ strict mode
+    "target": "ESNext",
+    "module": "ESNext",
+    "jsx": "react-jsx",
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}

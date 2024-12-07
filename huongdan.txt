@@ -1,0 +1,4 @@
+Để chạy FE cần làm những bước sau ;
+- Tải nodejs về máy, phiên bản v20
+- Sau đó clone dự án về máy, chạy câu lệnh : npm install (tải node modules từ node global về)
+- chạy câu lệnh sau để mở giao diện : npm run dev 
