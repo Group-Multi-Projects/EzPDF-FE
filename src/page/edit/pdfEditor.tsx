@@ -99,7 +99,7 @@ const FakeDataHTML = `<h3 style="text-align:center">
   return (
     <div>
 
-      <h1 className='text-center text-3xl'>PDF Editor</h1>
+      <h1 className='text-center text-3xl m-3'>PDF Editor</h1>
       
       {/* Toolbar for editor controls */}
       <MenuBar editor={editor} />
