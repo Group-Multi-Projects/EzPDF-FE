@@ -29,28 +29,6 @@ function ModalLogin() {
         toast.error(response.message)
         setCheckError(true)
       }
-
-    // if (validate.EC === 0) {
-    //   toast.success(validate.EM)
-    //   setemail_login("");
-    //   setpassword_login("");
-    //   let groupWithRoles = validate.DT.groupWithRoles;
-    //   let email = validate.DT.email;
-    //   let username = validate.DT.username;
-    //   let token = validate.DT.access_token;
-    //   const data = {
-    //     isAuthenticated: true,
-    //     token: token,
-    //     account: {groupWithRoles, email, username},
-    //     isLoading: false
-    //   };
-    //   localStorage.setItem('jwt', token)
-    //   loginContext(data)
-    //   navigate("/home")
-    // } else {
-    //   toast.error(validate.EM)
-    //   setCheckError(true)
-    // }
   };
   return (
     <div className="w-full border border-gray-300 rounded-lg p-6 max-w-md shadow-[0_2px_22px_-4px_rgba(93,96,127,0.2)] max-md:mx-auto ">
