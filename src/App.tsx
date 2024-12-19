@@ -1,6 +1,4 @@
 import { useState } from "react";
-import PDFEditor from "./PDFEditor";
-import PDFUploader from "./PDFUploader";
 import AppRouter from "./router/AppRouter";
 import { Toast } from "./toast";
 import "react-toastify/dist/ReactToastify.css";
@@ -14,13 +12,6 @@ function App() {
     <div className="App">
       <AppRouter/>
       <Toast/>
-      {/* <div>
-      {!uploadedFile ? (
-        <PDFUploader onFileUpload={handleFileUpload} />
-      ) : (
-        <PDFEditor file={uploadedFile} />
-      )}
-    </div> */}
     </div>
   )
 }

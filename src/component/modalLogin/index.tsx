@@ -7,8 +7,11 @@ import { handleLoginApi } from "@/service/login";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import { setIsOpenSignup, setIsOpenLogin } from "@/store/client/login_register";
+import { useDispatch } from "react-redux";
 // import { useAuth } from "@/hooks/useAth";
 function ModalLogin() {
+  const dispatch = useDispatch()
   let navigate = useNavigate();
   const [email_login, setemail_login] = useState("");
   const [password_login, setpassword_login] = useState("");
@@ -30,8 +33,13 @@ function ModalLogin() {
         setCheckError(true)
       }
   };
+
+  const handleOpenSignup = () =>{
+    dispatch(setIsOpenSignup(true))
+    dispatch(setIsOpenLogin(false))
+  }
   return (
-    <div className="w-full border border-gray-300 rounded-lg p-6 max-w-md shadow-[0_2px_22px_-4px_rgba(93,96,127,0.2)] max-md:mx-auto ">
+    <div className="max-w-sm">
       <form className="space-y-4">
         <div className="mb-8">
           <h3 className="text-gray-800 text-3xl font-extrabold">Sign in</h3>
@@ -75,9 +83,10 @@ function ModalLogin() {
         <p className="text-sm mt-8 text-center text-gray-800">
           Don't have an account
           <Link
-            to="/SignUp"
+            to=''
             style={{ color: PRIMARY.MEDIUM }}
             className=" font-semibold hover:underline ml-1 whitespace-nowrap"
+            onClick={() => handleOpenSignup()}
           >
             Register here
           </Link>
