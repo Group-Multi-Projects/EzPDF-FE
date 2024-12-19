@@ -91,13 +91,14 @@ const FakeDataHTML = `<h3 style="text-align:center">
     // content: pdfContent || "<p>Loading PDF...</p>", // Default content if PDF is not yet loaded
     content: FakeDataHTML,
   });
+  console.log("ashj",)
 
   if (!editor) {
     return <div>Loading Editor...</div>;
   }
 
   return (
-    <div>
+    <div className='p-10'>
 
       <h1 className='text-center text-3xl m-3'>PDF Editor</h1>
       

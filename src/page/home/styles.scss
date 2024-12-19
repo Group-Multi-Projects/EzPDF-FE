@@ -1,0 +1,111 @@
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    background: linear-gradient(90deg, #a18cd1, #fbc2eb);
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+  }
+  
+  .title {
+    color: #fff;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .search-input {
+    width: 50%;
+    padding: 10px;
+    border: none;
+    border-radius: 20px 0 0 20px;
+    outline: none;
+    font-size: 16px;
+  }
+  
+  .search-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 0 20px 20px 0;
+    background-color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .tools {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+  }
+  
+  .tool-button {
+    background-color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    margin: 10px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    font-size: 14px;
+    transition: transform 0.2s ease;
+  }
+  
+  .tool-button:hover {
+    transform: scale(1.1);
+  }
+  .why-use-ezpdf {
+    text-align: center;
+    padding: 40px 20px;
+  }
+  
+  .title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .features {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .feature {
+    width: 300px;
+    text-align: center;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    transition: transform 0.3s ease;
+  }
+  
+  .feature:hover {
+    transform: translateY(-5px);
+  }
+  
+  .feature-image {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .feature-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .feature-description {
+    font-size: 14px;
+    color: #6c757d;
+  }
+  
