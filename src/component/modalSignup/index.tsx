@@ -6,10 +6,11 @@ import ButtonCustom from "@/component/atoms/button/button";
 import InputCustom from "@/component/atoms/input/input";
 import { PRIMARY, WHITE } from "@/helper/colors";
 import { handleSignupApi } from "@/service/signup";
-
+import { setIsOpenSignup, setIsOpenLogin } from "@/store/client/login_register";
+import { useDispatch } from "react-redux";
 
 function ModalSignUp() {
-  
+    let dispatch = useDispatch()
     let navigate = useNavigate()
     const [email, setEmail] = useState('')
     const [username, setUserName] = useState('')
@@ -23,6 +24,11 @@ function ModalSignUp() {
     const [helperTextErrorPassword1, setHelperTextErrorPassword1] = useState('')
     const [helperTextErrorPassword2, setHelperTextErrorPassword2] = useState('')
 
+
+    const handleOpenLogin = () =>{
+      dispatch(setIsOpenSignup(false))
+      dispatch(setIsOpenLogin(true))
+    }  
   const handleRegister = async () => {
         let res = await handleSignupApi(email, username, password1 , password2)
         console.log('check res signup: ', res)
@@ -33,7 +39,7 @@ function ModalSignUp() {
           setUserName('');
           setPassword1('');
           setPassword2('');
-          navigate("/login"); 
+          navigate(""); 
         } else {
           toast.error(res.message)
           setCheckError(true)
@@ -46,14 +52,14 @@ function ModalSignUp() {
   }
     
     return(
-        <div className="w-full border border-gray-300 rounded-lg p-6 max-w-md shadow-[0_2px_22px_-4px_rgba(93,96,127,0.2)] max-md:mx-auto">
+        <div className="max-w-sm w-full">
             <form className="space-y-4">
               <div className="mb-8">
                 <h3 className="text-gray-800 text-3xl font-extrabold">
                   Sign up
                 </h3>
                 <p className="text-gray-500 text-sm mt-4 leading-relaxed">
-                    Nếu bạn chưa có tài khoản, hãy tạo tài khoản tại đây
+                    If you don't have account, let create it here !
                 </p>
               </div>
 
@@ -115,18 +121,19 @@ function ModalSignUp() {
                   fontWeight="600"
                   onClick={() => handleRegister()}
                 >
-                  Đăng ký
+                  Sign up
                 </ButtonCustom>
               </div>
 
               <p className="text-sm mt-8 text-center text-gray-800">
-                Đã có tài khoản ?
+                Do you already have an account?
                 <Link
-                  to="/login"
+                  to=""
                   style={{ color: PRIMARY.MEDIUM }}
                   className=" font-semibold hover:underline ml-1 whitespace-nowrap"
+                  onClick={() => handleOpenLogin()}
                 >
-                  Đăng nhập tại đây
+                  Login here
                 </Link>
               </p>
             </form>

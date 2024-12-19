@@ -62,7 +62,7 @@ const ButtonCustom = forwardRef<HTMLButtonElement, Props>(
       <button
         ref={ref}
         style={{
-          borderRadius: '4px',
+          borderRadius: '5px',
           transition: 'all 0.2s linear',
           lineHeight: '20px',
           backgroundColor: backgroundColor(),
