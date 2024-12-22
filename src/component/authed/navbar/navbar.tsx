@@ -1,6 +1,11 @@
 import React from "react";
 
-const Navbar = ({ isOpen, toggleNavbar }) => {
+interface NavbarProps {
+  isOpen: boolean;
+  toggleNavbar: () => void;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ isOpen, toggleNavbar }) => {
   return (
     <nav
       style={{
@@ -8,13 +13,12 @@ const Navbar = ({ isOpen, toggleNavbar }) => {
         width: isOpen ? "200px" : "0px", // Thay đổi chiều rộng dựa trên trạng thái
       }}
     >
-       
       {isOpen && <div style={styles.logo}>MyApp</div>} {/* Ẩn logo khi đóng */}
       <ul style={styles.navLinks}>
         <li>
           <a href="/addShape" style={styles.link}>
             Add Shape
-          </a>  
+          </a>
         </li>
         <li>
           <a href="/editPage" style={styles.link}>
@@ -23,7 +27,7 @@ const Navbar = ({ isOpen, toggleNavbar }) => {
         </li>
         <li>
           <a href="/home" style={styles.link}>
-            Home 
+            Home
           </a>
         </li>
       </ul>
@@ -31,8 +35,13 @@ const Navbar = ({ isOpen, toggleNavbar }) => {
   );
 };
 
-// CSS cho Navbar
-const styles = {
+// CSS cho Navbar với kiểu React.CSSProperties
+const styles: {
+  navbar: React.CSSProperties;
+  logo: React.CSSProperties;
+  navLinks: React.CSSProperties;
+  link: React.CSSProperties;
+} = {
   navbar: {
     height: "100vh",
     backgroundColor: "#007bff",

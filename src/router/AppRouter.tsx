@@ -1,67 +1,53 @@
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
-import Layout from "@/component/layout/layout";
-// import { AddShape } from "@/component/addShape/addShape";
-import Login from "@/component/login";
-import PDFEditor from "@/page/edit/pdfEditor";
-import HomePage from "@/page/home/home";
+import React from "react";
+const Layout = React.lazy(() => import('@/component/authed/layout/layout'));
+import { useSelector } from "react-redux";
+import PDFEditor from "@/page/authed/edit/old/pdfEditor";
+import HomePage from "@/page/authed/home/home";
 import LandingPage from "@/page/landingPage";
 
-import Signup from "@/component/signup";
+import { RootState } from "@/store";
+import CheckAuth from "@/component/atoms/checkauth";
+import Edit from "@/page/authed/edit";
 
 const AppRouter = () => {
+  const { isAuthenticated, user } = useSelector((state:RootState) => state.auth);
+  console.log('isAuth', isAuthenticated)
+  console.log('user in app router', user)
   return (
     <Router>
-      <Routes>
-        {/* Routes không có Layout */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        
-        {/* Routes có Layout */}
-        <Route 
-          path="/" 
-          element={    
-              <LandingPage  />
-          } 
-        />
-        {/* <Route 
-          path="/addShape" 
-          element={
-            <Layout>
-              <AddShape />
-            </Layout>
-          } 
-        /> */}
-        <Route 
-          path="/editPage" 
-          element={
-            <Layout>
-              <PDFEditor />
-            </Layout>
-          } 
-        />
+<Routes>
+        {/* Các tuyến đường không yêu cầu xác thực */}
+        <Route path="/client" element={<LandingPage />} />
 
-        <Route 
-          path="/home" 
+        {/* Routes có bảo vệ xác thực */}
+        <Route
+          path="/*"
           element={
-            <Layout>
-              <HomePage />
-            </Layout>
-          } 
+            <CheckAuth isAuthenticated={isAuthenticated} user={user}>
+              <Routes>
+                <Route
+                  path="/home"
+                  element={
+                    <Layout>
+                      <HomePage />
+                    </Layout>
+                  }
+                />
+                <Route
+                  path="/edit"
+                  element={
+                    <Layout>
+                      <Edit/>
+                    </Layout>
+                  }
+                />
+              </Routes>
+            </CheckAuth>
+          }
         />
-{/* import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Login from "@/component/login";
-import PDFEditor from "@/page/edit/pdfEditor";
-import Signup from "@/component/signup";
-import LandingPage from "@/page/landingPage";
-const AppRouter = () =>{
-    return(
-    <Router>
-        <Routes>
-        <Route path="/" element={<LandingPage/>} />
-        <Route path="/login" element={<Login/>} />
-        <Route path="/signup" element={<Signup/>} />
-        <Route path="/editPage" element={<PDFEditor/>} /> */}
       </Routes>
+
       
     </Router>
   );

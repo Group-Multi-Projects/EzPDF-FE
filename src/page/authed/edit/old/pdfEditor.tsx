@@ -1,11 +1,10 @@
 import './styles.scss'
-import React, { useEffect, useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import TextAlign from "@tiptap/extension-text-align";
 import Highlight from "@tiptap/extension-highlight";
 import Color from "@tiptap/extension-color";
-import MenuBar from "@/component/menuBar/menuBar";
+import MenuBar from "@/component/authed/menuBar/menuBar";
 import TextStyle from "@tiptap/extension-text-style";
 import Image from '@tiptap/extension-image';
 import { Node, mergeAttributes } from '@tiptap/core';
