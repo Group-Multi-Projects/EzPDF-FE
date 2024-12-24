@@ -1,4 +1,5 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 window.onerror = (message, error) => {
     console.error("Runtime Error:", message, error);
     return true; // Ngăn popup lỗi
@@ -12,7 +13,7 @@ const instance = axios.create({
   });
   
 // Alter defaults after instance has been created
-instance.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem("jwt")}`;
+instance.defaults.headers.common['Authorization'] = `Bearer ${Cookies.get('accessToken')}`;
 
 // Add a request interceptor
 instance.interceptors.request.use(function (config) {

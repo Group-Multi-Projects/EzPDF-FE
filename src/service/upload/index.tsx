@@ -1,12 +1,16 @@
 
 import axios from "@/config/axios"
+import { UploadResponse } from "@/store/upload_slice";
 
-interface UploadProps {
-    file:string,
-    request_type:string
+
+
+export const handleUploadApi = (formData:FormData): Promise<UploadResponse> =>{
+    return axios.post("/upload/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      
 }
 
 
-export const handleUploadApi = ({file, request_type}:UploadProps) =>{
-    return axios.post("/upload/",{file, request_type})
-}

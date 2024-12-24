@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBackward, faForward, faHouse, faRotate, faShapes } from "@fortawesome/free-solid-svg-icons";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
-import Navbar from "../navbar/navbar";
 interface HeaderMenuProps {
     onToggleNavbar: () => void; // Hàm không có tham số, không trả về giá trị
     isOpen: boolean; // Biến boolean
