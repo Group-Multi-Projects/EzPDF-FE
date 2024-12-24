@@ -14,7 +14,7 @@ const Layout = ({ children }) => {
     <div style={styles.container}>
       <Navbar isOpen={isOpen} toggleNavbar={toggleNavbar} />{" "}
       {/* Truyền state và toggle */}
-      <div style={{ ...styles.content, marginLeft: isOpen ? "200px" : "0" }}>
+      <div style={{ ...styles.content, marginLeft: isOpen ? "" : "0" }}>
         <HeaderMenu onToggleNavbar={toggleNavbar} isOpen={isOpen}></HeaderMenu>
         {children}
       </div>
