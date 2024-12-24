@@ -1,11 +1,17 @@
 import React from "react";
-
+import "./navbar.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHouse, faRotate, faShapes } from "@fortawesome/free-solid-svg-icons";
+import { HomeIcon } from "@heroicons/react/24/outline";
+interface NavbarProps {
+  isOpen: boolean; // Kiểu boolean cho trạng thái mở/đóng
+}
 interface NavbarProps {
   isOpen: boolean;
   toggleNavbar: () => void;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ isOpen, toggleNavbar }) => {
+const Navbar: React.FC<NavbarProps>: React.FC<NavbarProps> = ({ isOpen = true })=> {
   return (
     <nav
       style={{
@@ -13,12 +19,13 @@ const Navbar: React.FC<NavbarProps> = ({ isOpen, toggleNavbar }) => {
         width: isOpen ? "200px" : "0px", // Thay đổi chiều rộng dựa trên trạng thái
       }}
     >
+       
       {isOpen && <div style={styles.logo}>MyApp</div>} {/* Ẩn logo khi đóng */}
       <ul style={styles.navLinks}>
         <li>
           <a href="/addShape" style={styles.link}>
             Add Shape
-          </a>
+          </a>  
         </li>
         <li>
           <a href="/editPage" style={styles.link}>
@@ -27,7 +34,7 @@ const Navbar: React.FC<NavbarProps> = ({ isOpen, toggleNavbar }) => {
         </li>
         <li>
           <a href="/home" style={styles.link}>
-            Home
+            Home 
           </a>
         </li>
       </ul>
@@ -35,13 +42,8 @@ const Navbar: React.FC<NavbarProps> = ({ isOpen, toggleNavbar }) => {
   );
 };
 
-// CSS cho Navbar với kiểu React.CSSProperties
-const styles: {
-  navbar: React.CSSProperties;
-  logo: React.CSSProperties;
-  navLinks: React.CSSProperties;
-  link: React.CSSProperties;
-} = {
+// CSS cho Navbar
+const styles = {
   navbar: {
     height: "100vh",
     backgroundColor: "#007bff",

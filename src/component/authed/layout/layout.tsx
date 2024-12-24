@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import Navbar from "@/component/authed/navbar/navbar";
+import Navbar from "../navbar/navbar";
 import HeaderMenu from "../HeaderMenu/headerMenu";
-
 interface LayoutProps {
-  children: React.ReactNode;  // Định nghĩa kiểu cho children
+  children: ReactNode; // Định nghĩa kiểu cho children
 }
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+
+const Layout = ({ children }) => {
   const [isOpen, setIsOpen] = useState(true); // Trạng thái mở/đóng Navbar
 
   // Hàm toggle để mở/đóng Navbar
@@ -15,9 +15,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <div style={styles.container}>
-      <Navbar isOpen={isOpen} toggleNavbar={toggleNavbar} />{" "}
+      <Navbar isOpen={isOpen} />{" "}
       {/* Truyền state và toggle */}
-      <div style={{ ...styles.content, marginLeft: isOpen ? "200px" : "0" }}>
+      <div style={{ ...styles.content, marginLeft: isOpen ? "" : "0" }}>
         <HeaderMenu onToggleNavbar={toggleNavbar} isOpen={isOpen}></HeaderMenu>
         {children}
       </div>
