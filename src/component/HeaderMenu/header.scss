@@ -1,16 +1,27 @@
 /* Tổng quát */
+.navbarall{
+  display: flex;  
+}
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 20px;
-    background-color: #00bfff;
+    padding: 10px 10px;
+    background-color: #ffffff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     position: sticky;
     top: 0;
     z-index: 1000;
+    width: 100%;
   }
-  
+  .toggle_side_button{
+    background:  linear-gradient(90deg, #a18cd1, #fbc2eb);  
+    transition: background-color 0.5s ease, width 0.5s ease;
+    &:hover {
+      color: #1bffc2;      
+      background:  linear-gradient(90deg,#fbc2eb,  #a18cd1);
+    }
+  }
   /* Logo */
   .header-logo {
     display: flex;
@@ -127,3 +138,26 @@
     color: #007bff;
   }
   
+  @media (max-width: 768px) {
+    .toggle_side_button {
+      display: none;
+    }
+    ul.nav-links {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
+  width: 100%;
+
+  .link {
+    font-size: 22px;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 10px 10px;
+    display: block;
+  }
+}
+  }
+  .offcanvas{
+    width: 250px !important;
+  }
+
