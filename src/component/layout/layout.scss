@@ -1,0 +1,26 @@
+/* layout.scss */
+
+.container-all {
+    display: flex;
+    width: 100%;
+  }
+  
+.content {
+    height: 100vh;
+    padding: 0;
+    transition: margin-left 0.05s ease; /* Hiệu ứng mượt khi Navbar mở/đóng */
+    width: 90%;
+    margin-left: 10%;
+    margin-top: 10%;
+}
+
+.toggle-button {
+    margin-top: 10px;
+    background-color: #0056b3;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
