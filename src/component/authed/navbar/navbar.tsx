@@ -24,13 +24,13 @@ const Navbar: React.FC<NavbarProps> = ({ isOpen = true })=> {
             </a>
           </li>
           <li>
-            <a href="/addShape" className="link">
+            <a href="/edit" className="link">
             <FontAwesomeIcon className="mr-4" icon={faShapes} /> 
-              Add Shape
+              Edit
             </a>
           </li>
           <li>
-            <a href="/editPage" className="link">
+            <a href="/edit" className="link">
             <FontAwesomeIcon  className="mr-4" icon={faRotate} />
               Convert
             </a>

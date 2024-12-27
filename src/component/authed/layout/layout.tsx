@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { ReactNode, useState } from "react";
 import Navbar from "../navbar/navbar";
 import HeaderMenu from "../HeaderMenu/headerMenu";
 interface LayoutProps {
   children: ReactNode; // Định nghĩa kiểu cho children
 }
 
-const Layout = ({ children }) => {
+const Layout = ({ children }:LayoutProps) => {
   const [isOpen, setIsOpen] = useState(true); // Trạng thái mở/đóng Navbar
 
   // Hàm toggle để mở/đóng Navbar

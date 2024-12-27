@@ -1,6 +1,7 @@
 import { forwardRef, ButtonHTMLAttributes, ReactNode } from 'react';
 import _ from 'lodash'
 import { PRIMARY, RED, WHITE } from '@/helper/colors';
+import { style } from '@mui/system';
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement>  {
   children: ReactNode,
@@ -71,6 +72,7 @@ const ButtonCustom = forwardRef<HTMLButtonElement, Props>(
           fontWeight,
           padding,
           textTransform,
+          ...style,
         }}
         onMouseEnter={(e) => {
           Object.assign((e.target as HTMLButtonElement).style, hoverStyles);
