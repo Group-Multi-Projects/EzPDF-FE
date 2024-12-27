@@ -11,12 +11,12 @@ function CheckAuth({ isAuthenticated, user, children }: CheckAuthProps) {
   const location = useLocation();
   if (location.pathname === "/") {
     if (!isAuthenticated || !user) {
-      return <Navigate to="/client" />;
+      return <Navigate to="/" />;
     } else {
       if (user) {
         return <Navigate to="/home" />;
       } else {
-        return <Navigate to="/client" />;
+        return <Navigate to="/" />;
       }
     }
   }

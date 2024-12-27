@@ -18,7 +18,7 @@ const AppRouter = () => {
     <Router>
 <Routes>
         {/* Các tuyến đường không yêu cầu xác thực */}
-        <Route path="/client" element={<LandingPage />} />
+        <Route path="/" element={<LandingPage />} />
 
         {/* Routes có bảo vệ xác thực */}
         <Route

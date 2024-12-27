@@ -1,50 +1,42 @@
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import Navbar from "../navbar/navbar";
 import HeaderMenu from "../HeaderMenu/headerMenu";
+import "./layout.scss";
+
 interface LayoutProps {
   children: ReactNode; // Định nghĩa kiểu cho children
 }
 
-const Layout = ({ children }:LayoutProps) => {
-  const [isOpen, setIsOpen] = useState(true); // Trạng thái mở/đóng Navbar
+const Layout: React.FC<LayoutProps> = ({ children }) => {
+  const [isMobile, setIsMobile] = useState(false);
+  // Hook to check screen width
+  useEffect(() => {
+    const handleResize = () => {
 
-  // Hàm toggle để mở/đóng Navbar
-  const toggleNavbar = () => {
-    setIsOpen(!isOpen);
-  };
+      setIsMobile(window.innerWidth <= 768); // Kiểm tra nếu chiều rộng nhỏ hơn hoặc bằng 768px
+      // console.log(isMobile ,window.innerWidth ,"9")
+    };
 
+    window.addEventListener("resize", handleResize); // Lắng nghe sự thay đổi kích thước
+    handleResize(); // Kiểm tra kích thước khi component mount
+
+    return () => {
+      window.removeEventListener("resize", handleResize); // Dọn dẹp event listener khi component unmount
+    };
+  }, []);
   return (
-    <div style={styles.container}>
-      <Navbar isOpen={isOpen} />{" "}
-      {/* Truyền state và toggle */}
-      <div style={{ ...styles.content, marginLeft: isOpen ? "" : "0" }}>
-        <HeaderMenu onToggleNavbar={toggleNavbar} isOpen={isOpen}></HeaderMenu>
-        {children}
-      </div>
+    <div className="container-all">
+    <Navbar isMobile ={isMobile} />
+    <HeaderMenu isMobile={isMobile} />
+    <div className="content" style={{marginLeft : isMobile? "0px":"10%",
+      width : isMobile?"100%":"90%",
+      marginTop : isMobile?"20%":"10%",
+      
+    }}>
+      {children}
     </div>
+  </div>
   );
-};
-
-// CSS cho Layout
-const styles = {
-  container: {
-    display: "flex", // Bố trí theo chiều ngang
-    width: "100%",
-  },
-  content: {
-    padding: "0 0",
-    transition: "margin-left 0.05s ease", // Hiệu ứng mượt khi Navbar mở/đóng
-    width: "100%",
-  },
-  toggleButton: {
-    marginTop: "10px",
-    backgroundColor: "#0056b3",
-    color: "#fff",
-    border: "none",
-    padding: "5px 10px",
-    cursor: "pointer",
-    borderRadius: "5px",
-  },
 };
 
 export default Layout;

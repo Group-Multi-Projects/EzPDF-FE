@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import './styles.scss'
+import './styles.scss';
+import { FileCode, FileSpreadsheet, Presentation ,Image, FileText, FilePen } from 'lucide-react';
 
 const HomePage = () => {
     const features = [
@@ -28,12 +28,12 @@ const HomePage = () => {
             <button className="search-button">🔍</button>
           </div>
           <div className="tools">
-            <button className="tool-button">Edit PDF</button>
-            <button className="tool-button">PDF to Word</button>
-            <button className="tool-button">PDF to HTML</button>
-            <button className="tool-button">PDF to PPT</button>
-            <button className="tool-button">PDF to Excel</button>
-            <button className="tool-button">PDF to JPG</button>
+            <button className="tool-button flex"><FilePen style={{marginRight:"10px"}} size={20} color="#ff4d00" strokeWidth={3} />Edit PDF</button>
+            <button className="tool-button flex "> <FileText style={{marginRight:"10px"}} size={20} color="#0f1fff" strokeWidth={3} />PDF to Word</button>
+            <button className="tool-button flex"> <FileCode style={{marginRight:"10px"}} size={20} color="#ff824d" strokeWidth={3} />  PDF to HTML</button>
+            <button className="tool-button flex"><Presentation style={{marginRight:"10px"}} size={20} color="#ff824d" strokeWidth={3} />PDF to PPT</button>
+            <button className="tool-button flex "><FileSpreadsheet style={{marginRight:"10px"}} size={20} color="#00c220" strokeWidth={3} />PDF to Excel</button>
+            <button className="tool-button flex" ><Image style={{marginRight:"10px"}} size={20} color="#0010f5" strokeWidth={3} />PDF to JPG</button>
           </div>
         </div>
 

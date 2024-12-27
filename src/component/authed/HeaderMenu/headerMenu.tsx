@@ -1,37 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./header.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBackward, faForward, faHouse, faRotate, faShapes } from "@fortawesome/free-solid-svg-icons";
+import {  faHouse, faRotate, faShapes } from "@fortawesome/free-solid-svg-icons";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
-interface HeaderMenuProps {
-    onToggleNavbar: () => void; // Hàm không có tham số, không trả về giá trị
-    isOpen: boolean; // Biến boolean
-  }
-const HeaderMenu : React.FC<HeaderMenuProps> = ({ onToggleNavbar, isOpen }) => {
-  const [isMobile, setIsMobile] = useState(false);
-  // Hook to check screen width
-  useEffect(() => {
-    const handleResize = () => {
+import { CircleUser } from "lucide-react";
 
-      setIsMobile(window.innerWidth <= 768); // Kiểm tra nếu chiều rộng nhỏ hơn hoặc bằng 768px
-      // console.log(isMobile ,window.innerWidth ,"9")
-    };
 
-    window.addEventListener("resize", handleResize); // Lắng nghe sự thay đổi kích thước
-    handleResize(); // Kiểm tra kích thước khi component mount
+interface HeaderProps {
+  isMobile: boolean; // Explicitly define the type of isMobile
+}
 
-    return () => {
-      window.removeEventListener("resize", handleResize); // Dọn dẹp event listener khi component unmount
-    };
-  }, []);
+const HeaderMenu : React.FC<HeaderProps> = ({ isMobile }) => {
+  
 
   return (
-    <div className="flex">
-    <button   className=" toggle_side_button border-solid bg-gray-600 border-blue-600 text-white hover:bg-blue-600 hover:text-white hover:border-blue-800 p-2 px-4  transition-all duration-300"
- onClick={onToggleNavbar}>
-            {isOpen ? <FontAwesomeIcon icon={faBackward} />: <FontAwesomeIcon icon={faForward} />} {/* Hiển thị nút phù hợp */}
-        </button>
+    <div className="flex fixed-box" style={{width: isMobile?"100%":"93%",marginLeft: isMobile?"0":"7%"}}>
     <header className="header">
         
       {/* Logo */}
@@ -89,7 +73,7 @@ const HeaderMenu : React.FC<HeaderMenuProps> = ({ onToggleNavbar, isOpen }) => {
 
       {/* User Profile */}
       <div className="header-user">
-        <img src="/assets/user-avatar.png" alt="User Avatar" className="user-avatar" />
+      <CircleUser size={48} color="#000000" strokeWidth={3} />
         <div className="user-menu">
           <a href="/account" className="user-menu-item">Account</a>
           <a href="/logout" className="user-menu-item">Logout</a>
