@@ -6,12 +6,15 @@ import { useState } from "react";
 import { handleLoginApi } from "@/service/login";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { loginUser } from "@/store/auth_slice";
 import Cookies from "js-cookie";
 import { setIsOpenSignup, setIsOpenLogin } from "@/store/client/login_register";
 import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/store";
 // import { useAuth } from "@/hooks/useAth";
-function ModalLogin() {
-  const dispatch = useDispatch()
+
+ function ModalLogin() {
+  const dispatch:AppDispatch = useDispatch()
   let navigate = useNavigate();
   const [email_login, setemail_login] = useState("");
   const [password_login, setpassword_login] = useState("");
@@ -20,24 +23,37 @@ function ModalLogin() {
   // const {loginContext} = useAuth()
 
   const handleLogin = async () => {
-      let response = await handleLoginApi(email_login, password_login);
-      console.log("check res:", response);
-      let access_token = response.access
-      if (response.success === true) {
-        toast.success('Đăng nhập thành công');
-        Cookies.set('accessToken', access_token?? '' , { expires: 365 })
-        navigate('/editPage')
+    try {
+      // Gửi action loginUser
+      const resultAction = await dispatch(
+        loginUser({ email_login, password_login })
+      );
+    
+      // Kiểm tra nếu kết quả là fulfilled
+      const data = resultAction as ReturnType<typeof loginUser.fulfilled>;
+    
+      const access_token = data.payload?.access;
+    
+      if (data.payload?.success) {
+        toast.success("Login successfully");
+        Cookies.set("accessToken", access_token ?? "", { expires: 365 });
+        navigate('/home')
+      } else {
+        toast.error(data.payload?.message || "Đăng nhập thất bại");
+        setCheckError(true);
       }
-      else{
-        toast.error(response.message)
-        setCheckError(true)
-      }
-  };
+    } catch (error) {
+      toast.error("Có lỗi xảy ra, vui lòng thử lại!");
+      console.error("Login error:", error);
+      setCheckError(true);
+    }
+  } 
 
   const handleOpenSignup = () =>{
     dispatch(setIsOpenSignup(true))
     dispatch(setIsOpenLogin(false))
   }
+
   return (
     <div className="max-w-sm">
       <form className="space-y-4">

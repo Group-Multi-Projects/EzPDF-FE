@@ -1,13 +1,18 @@
-import { useState } from "react";
 import AppRouter from "./router/AppRouter";
 import { Toast } from "./toast";
 import "react-toastify/dist/ReactToastify.css";
-function App() {
-  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { setUser } from "./store/auth_slice";
 
-  const handleFileUpload = (file: File) => {
-    setUploadedFile(file);
-  };
+function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    // Gọi action để cập nhật người dùng từ cookies
+   let user = dispatch(setUser());
+    console.log('user:', user)
+  }, [dispatch]);
   return (
     <div className="App">
       <AppRouter/>

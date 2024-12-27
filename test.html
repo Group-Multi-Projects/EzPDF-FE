@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit File</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        #toolbar {
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: start;
+        }
+
+        #add-image {
+            padding: 10px 15px;
+            cursor: pointer;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+
+        #add-image:hover {
+            background-color: #45a049;
+        }
+
+        #canvas-container {
+            width: 100vw;
+            height: 90vh;
+            background-color: #ffffff;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .image {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            cursor: move;
+        }
+    </style>
+</head>
+<body>
+    <div id="toolbar">
+        <button id="add-image">Add Image</button>
+    </div>
+    <div id="canvas-container">
+        <!-- Canvas content will be here -->
+    </div>
+
+    <input type="file" id="image-upload" style="display: none;" accept="image/*"/>
+
+    <script>
+        const addImageButton = document.getElementById('add-image');
+        const canvasContainer = document.getElementById('canvas-container');
+        const imageUploadInput = document.getElementById('image-upload');
+
+        let isAddingImage = false;
+        let selectedImage = null;
+
+        addImageButton.addEventListener('click', () => {
+            // Mở file input khi người dùng nhấn nút "Add Image"
+            imageUploadInput.click();
+        });
+
+        imageUploadInput.addEventListener('change', (event) => {
+            // Lấy hình ảnh đã chọn
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    selectedImage = new Image();
+                    selectedImage.src = e.target.result;
+                    selectedImage.onload = function() {
+                        // Khi hình ảnh được tải xong, cho phép thêm nó vào canvas
+                        isAddingImage = true;
+                        addImageButton.textContent = 'Click on Canvas to Add Image';
+                    };
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        canvasContainer.addEventListener('click', (event) => {
+            if (isAddingImage && selectedImage) {
+                const image = document.createElement('img');
+                image.classList.add('image');
+                image.src = selectedImage.src;
+
+                // Lấy tọa độ click chuột
+                const x = event.clientX - canvasContainer.offsetLeft;
+                const y = event.clientY - canvasContainer.offsetTop;
+
+                // Gán vị trí cho hình ảnh
+                image.style.left = `${x - 50}px`; // Căn giữa hình ảnh theo tọa độ click
+                image.style.top = `${y - 50}px`;
+
+                // Thêm sự kiện kéo thả cho hình ảnh
+                makeDraggable(image);
+
+                // Thêm hình ảnh vào container
+                canvasContainer.appendChild(image);
+
+                // Reset trạng thái
+                isAddingImage = false;
+                addImageButton.textContent = 'Add Image';
+            }
+        });
+
+        // Hàm thêm tính năng kéo thả
+        function makeDraggable(element) {
+            let offsetX = 0, offsetY = 0, isDragging = false;
+
+            element.addEventListener('mousedown', (event) => {
+                isDragging = true;
+                offsetX = event.clientX - element.offsetLeft;
+                offsetY = event.clientY - element.offsetTop;
+                element.style.zIndex = 1000; // Đưa hình ảnh lên trên cùng khi kéo
+            });
+
+            document.addEventListener('mousemove', (event) => {
+                if (isDragging) {
+                    const x = event.clientX - offsetX;
+                    const y = event.clientY - offsetY;
+
+                    element.style.left = `${x}px`;
+                    element.style.top = `${y}px`;
+                }
+            });
+
+            document.addEventListener('mouseup', () => {
+                if (isDragging) {
+                    isDragging = false;
+                    element.style.zIndex = 1; // Trả lại z-index ban đầu
+                }
+            });
+        }
+    </script>
+</body>
+</html>
