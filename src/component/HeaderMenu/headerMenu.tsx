@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {  faHouse, faRotate, faShapes } from "@fortawesome/free-solid-svg-icons";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
+import { CircleUser } from "lucide-react";
 
 
 interface HeaderProps {
@@ -14,7 +15,7 @@ const HeaderMenu : React.FC<HeaderProps> = ({ isMobile }) => {
   
 
   return (
-    <div className="flex fixed-box" style={{width: isMobile?"100%":"90%",marginLeft: isMobile?"0":"10%"}}>
+    <div className="flex fixed-box" style={{width: isMobile?"100%":"93%",marginLeft: isMobile?"0":"7%"}}>
     <header className="header">
         
       {/* Logo */}
@@ -72,7 +73,7 @@ const HeaderMenu : React.FC<HeaderProps> = ({ isMobile }) => {
 
       {/* User Profile */}
       <div className="header-user">
-        <img src="/assets/user-avatar.png" alt="User Avatar" className="user-avatar" />
+      <CircleUser size={48} color="#000000" strokeWidth={3} />
         <div className="user-menu">
           <a href="/account" className="user-menu-item">Account</a>
           <a href="/logout" className="user-menu-item">Logout</a>

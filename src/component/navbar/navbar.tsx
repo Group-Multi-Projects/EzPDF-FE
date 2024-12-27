@@ -1,7 +1,6 @@
 import React from "react";
 import "./navbar.scss";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHouse, faRotate, faShapes } from "@fortawesome/free-solid-svg-icons";
+import { ArrowLeftRight, House, Ungroup } from "lucide-react";
 interface NavbarProps {
   isMobile: boolean; // Explicitly define the type of isMobile
 }
@@ -20,19 +19,19 @@ const Navbar : React.FC<NavbarProps> = ({ isMobile })=> {
         <ul className="nav-links">
         <li>
             <a href="/home" className="link">
-            <FontAwesomeIcon className="mr-4" icon={faHouse} /> 
+            <House size={20} color="#ffffff" strokeWidth={3} />
               Home
             </a>
           </li>
           <li>
             <a href="/addShape" className="link">
-            <FontAwesomeIcon className="mr-4" icon={faShapes} /> 
+            <Ungroup size={20} color="#ffffff" strokeWidth={3} />
               Add Shape
             </a>
           </li>
           <li>
             <a href="/editPage" className="link">
-            <FontAwesomeIcon  className="mr-4" icon={faRotate} />
+            <ArrowLeftRight size={20} color="#ffffff" strokeWidth={3} />
               Convert
             </a>
           </li>
