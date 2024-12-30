@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { handleUploadApi } from "@/service/upload";
-import { AxiosResponse } from "axios";
+
+
 // Interface cho dữ liệu trả về từ API
 export interface UploadResponse {
   file: string;

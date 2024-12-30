@@ -2,45 +2,62 @@ import "./style.scss";
 import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import { useState, useRef, useEffect } from "react";
+import {  BeatLoader, PuffLoader, SyncLoader } from "react-spinners";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SaveIcon from "@mui/icons-material/Save";
 import { RootState, AppDispatch } from "@/store";
 import {
   uploadFile,
   resetUploadState,
-  UploadResponse,
 } from "@/store/upload_slice";
 import {
   faArrowDown,
   faCircle,
-  faICursor,
+  faCircleXmark,
+  faFont,
+  faImage,
+  faPenToSquare,
   faSquare,
   faStar,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ButtonTool } from "@/component/authed/tool";
 import { ShapeType } from "@/type";
+import { convertFile, HTMLtoPDFResponse } from "@/store/convert_slice";
 
 const Edit = () => {
+
   const dispatch = useDispatch<AppDispatch>();
-
   const { isLoading, data } = useSelector((state: RootState) => state.upload);
-  const { user } = useSelector((state: RootState) => state.auth);
-  const [requestType] = useState<string>("editfile");
+  const {isLoading_convert} = useSelector((state:RootState) => state.convert)
 
-  //add shape
+  const [contentEditable, setContentEditable] = useState(false)
   const editContainer = useRef<HTMLDivElement | null>(null);
-  const [isAddingShape, setIsAddingShape] = useState(false);
-
-  const [shapeType, setShapeType] = useState<ShapeType>('square')
-
-  // add image
-  const [isAddingImage, setIsAddingImage] = useState<boolean>(false);
-  const [imageSrc, setImageSrc] = useState<string | null>(null);
-
+  const [uploadedFileName, setUploadedFileName] = useState<string | undefined>("");
+  const [requestType, setRequestType] = useState<string>("editfile");
+  const [actionType, setActionType] = useState<"shape" | "image" | "text">(
+    "shape"
+  );
+  const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    switch (actionType) {
+      case "shape":
+        addShape(e, shapeType, 50);
+        break;
+      case "image":
+        addImage(e);
+        break;
+      // case "text":
+      //   addText(e, "Sample Text");
+      //   break;
+      default:
+        break;
+    }
+  };
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    setUploadedFileName(file?.name);
     if (!file) {
       console.log("Please provide a file.");
       return;
@@ -56,71 +73,99 @@ const Edit = () => {
       console.error("Upload failed:", error);
     }
   };
-
   // const handleReset = () => {
   //   dispatch(resetUploadState());
   // };
 
-
+  //add shape
+  
+  const [isAddingShape, setIsAddingShape] = useState(false);
+  const [shapeType, setShapeType] = useState<ShapeType>("square");
   const addShape = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
     type: ShapeType,
     size: number = 50
   ) => {
-    // Kiểm tra isAddingShape là true mới cho phép thêm hình
     if (!isAddingShape) return;
-
+  
     if (editContainer.current) {
       const shape = document.createElement("div");
       shape.classList.add(type);
       shape.style.position = "absolute";
-      shape.style.width = `${size}px`;
-      shape.style.height = `${size}px`;
-
+  
       const containerRect = editContainer.current.getBoundingClientRect();
       const x = event.clientX - containerRect.left;
       const y = event.clientY - containerRect.top;
-
+  
       shape.style.left = `${x - size / 2}px`;
       shape.style.top = `${y - size / 2}px`;
-
+  
       switch (type) {
         case "circle":
+          shape.style.width = `${size}px`;
+          shape.style.height = `${size}px`;
           shape.style.borderRadius = "50%";
           shape.style.backgroundColor = "blue";
           break;
-        case "triangle":
-          shape.style.width = "0";
-          shape.style.height = "0";
-          shape.style.borderLeft = `${size / 2}px solid transparent`;
-          shape.style.borderRight = `${size / 2}px solid transparent`;
-          shape.style.borderBottom = `${size}px solid red`;
+        case "star":
+          shape.style.width = `${size}px`;
+          shape.style.aspectRatio = "1";
+          shape.style.background = "#F8CA00";
+          shape.style.clipPath = `polygon(
+            50% 0,
+            calc(50% * (1 + sin(.4turn))) calc(50% * (1 - cos(.4turn))),
+            calc(50% * (1 - sin(.2turn))) calc(50% * (1 - cos(.2turn))),
+            calc(50% * (1 + sin(.2turn))) calc(50% * (1 - cos(.2turn))),
+            calc(50% * (1 - sin(.4turn))) calc(50% * (1 - cos(.4turn)))
+          )`;
+          break;
+        case "text":
+          shape.style.width = "auto";
+          shape.style.height = "auto";
+          shape.style.padding = "5px";
+          shape.style.color = "black";
+          shape.style.fontSize = "16px";
+          shape.style.fontFamily = "Arial, sans-serif";
+          shape.style.backgroundColor = "transparent";
+          shape.style.border = "1px dashed #ccc";
+          shape.contentEditable = "true";
+          shape.innerText = "Edit me";
           break;
         case "square":
         default:
+          shape.style.width = `${size}px`;
+          shape.style.height = `${size}px`;
           shape.style.backgroundColor = "green";
           break;
       }
-
-      // Thêm điểm kéo dãn
-      const resizeHandle = document.createElement("div");
-      resizeHandle.classList.add("resize-handle");
-      resizeHandle.style.position = "absolute";
-      resizeHandle.style.right = "0";
-      resizeHandle.style.bottom = "0";
-      resizeHandle.style.width = "10px";
-      resizeHandle.style.height = "10px";
-      resizeHandle.style.backgroundColor = "black";
-      shape.appendChild(resizeHandle);
-
+  
+      // Thêm điểm kéo dãn nếu không phải là text
+      if (type !== "text") {
+        const resizeHandle = document.createElement("div");
+        resizeHandle.classList.add("resize-handle");
+        resizeHandle.style.position = "absolute";
+        resizeHandle.style.right = "0";
+        resizeHandle.style.bottom = "0";
+        resizeHandle.style.width = "10px";
+        resizeHandle.style.height = "10px";
+        resizeHandle.style.backgroundColor = "black";
+        shape.appendChild(resizeHandle);
+  
+        makeResizable(shape, resizeHandle);
+      }
+  
       makeDraggable(shape);
-      makeResizable(shape, resizeHandle);
-      
-
+  
       editContainer.current.appendChild(shape);
     }
-   setIsAddingShape(false) 
+    setIsAddingShape(false);
   };
+  
+
+  // add image
+  const [isAddingImage, setIsAddingImage] = useState<boolean>(false);
+  const [imageSrc, setImageSrc] = useState<string | null>(null);
+
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -131,9 +176,10 @@ const Edit = () => {
       };
       reader.readAsDataURL(file);
     }
+    setActionType("image");
   };
 
-  const handleCanvasClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const addImage = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (isAddingImage && imageSrc) {
       const canvasContainer = e.currentTarget;
       const x = e.clientX - canvasContainer.offsetLeft;
@@ -147,9 +193,20 @@ const Edit = () => {
       image.style.left = `${x - 50}px`; // Center image on click
       image.style.top = `${y - 50}px`;
 
+      // Thêm điểm kéo dãn
+      const resizeHandle = document.createElement("div");
+      resizeHandle.classList.add("resize-handle");
+      resizeHandle.style.position = "absolute";
+      resizeHandle.style.right = "0";
+      resizeHandle.style.bottom = "0";
+      resizeHandle.style.width = "10px";
+      resizeHandle.style.height = "10px";
+      resizeHandle.style.backgroundColor = "black";
+      image.appendChild(resizeHandle);
+
       // Add draggable functionality
       makeDraggable(image);
-
+      makeResizable(image, resizeHandle);
       // Add image to canvas
       canvasContainer.appendChild(image);
 
@@ -157,6 +214,7 @@ const Edit = () => {
       setIsAddingImage(false);
     }
   };
+
   // Hàm thêm tính năng kéo thả
   const makeDraggable = (element: HTMLDivElement) => {
     let offsetX = 0,
@@ -193,17 +251,19 @@ const Edit = () => {
   };
 
   // Hàm thêm tính năng kéo dãn
-  const makeResizable = (element: HTMLDivElement, resizeHandle: HTMLDivElement) => {
+  const makeResizable = (
+    element: HTMLDivElement,
+    resizeHandle: HTMLDivElement
+  ) => {
     let isResizing = false;
-    let initialWidth = 0;
-    let initialHeight = 0;
+    let initialSize = 0; // Kích thước ban đầu
     let initialX = 0;
     let initialY = 0;
 
     resizeHandle.addEventListener("mousedown", (e) => {
       isResizing = true;
-      initialWidth = parseFloat(element.style.width);
-      initialHeight = parseFloat(element.style.height);
+      // Lấy kích thước ban đầu
+      initialSize = parseFloat(element.style.width); // Dùng width vì height = aspect-ratio
       initialX = e.clientX;
       initialY = e.clientY;
       e.preventDefault();
@@ -214,8 +274,21 @@ const Edit = () => {
         const deltaX = e.clientX - initialX;
         const deltaY = e.clientY - initialY;
 
-        element.style.width = `${initialWidth + deltaX}px`;
-        element.style.height = `${initialHeight + deltaY}px`;
+        // Tính kích thước mới dựa trên thay đổi
+        const newSize = Math.max(initialSize + Math.max(deltaX, deltaY), 20); // Đặt kích thước tối thiểu
+        element.style.width = `${newSize}px`;
+        element.style.height = `${newSize}px`; // Đảm bảo tỷ lệ vuông
+
+        // Cập nhật clip-path nếu là star
+        if (element.classList.contains("star")) {
+          element.style.clipPath = `polygon(
+            50% 0,
+            calc(50% * (1 + sin(.4turn))) calc(50% * (1 - cos(.4turn))),
+            calc(50% * (1 - sin(.2turn))) calc(50% * (1 - cos(.2turn))),
+            calc(50% * (1 + sin(.2turn))) calc(50% * (1 - cos(.2turn))),
+            calc(50% * (1 - sin(.4turn))) calc(50% * (1 - cos(.4turn)))
+          )`;
+        }
       }
     });
 
@@ -225,26 +298,90 @@ const Edit = () => {
       }
     });
   };
+
+// Các hàm add shape, add text  
   const Square = () => {
-    setIsAddingShape(true)
-    setShapeType('square')
+    setIsAddingShape(true);
+    setShapeType("square");
+  };
+  const Circle = () => {
+    setIsAddingShape(true);
+    setShapeType("circle");
+  };
+  const Star = () => {
+    setIsAddingShape(true);
+    setShapeType("star");
+  };
+  const Text = () =>{
+    setIsAddingShape(true);
+    setShapeType("text");
   }
-  const Circle = () =>{
-    setIsAddingShape(true)
-    setShapeType('circle')
+  const handleEditContent = () =>{
+    setContentEditable((prev) => !prev)
   }
-  const Triangle =() =>{
-    setIsAddingShape(true)
-    setShapeType('triangle')
-  }
-  const Image = () =>[
+
+// Hàm save nội dung PDF
+  const SaveAll = async () =>{
+    setRequestType('html2pdf')
+    if (editContainer.current) {
+    const htmlContent = editContainer.current.innerHTML;
+
+        // Lấy thời gian hiện tại
+    const now = new Date();
+    const dateTime = now.toISOString().replace(/[:.-]/g, "_"); // Thay thế ký tự đặc biệt
+
+    // Tên tệp gốc từ file đã tải lên
+    const baseFileName = uploadedFileName?.split(".")[0]; // Bỏ phần mở rộng
+
+    // Tạo tên tệp mới
+    const newFileName = `${baseFileName}_${dateTime}.html`;
+
+    // Tạo Blob từ nội dung HTML
+    const blob = new Blob([htmlContent], { type: "text/html" });
     
-  ]
+    // Tạo URL từ Blob
+  
+    const formData = new FormData();
+
+    formData.append("file", blob, newFileName);
+    formData.append("request_type", requestType);
+    // Lưu trữ hoặc gửi dữ liệu HTML đến server
+    
+    try {
+      let res = await dispatch(convertFile(formData)); // Gọi API
+
+      // Kiểm tra kiểu dữ liệu trả về
+      const response = res.payload as HTMLtoPDFResponse;
+
+      if (response.ouput_file_url) {
+        const fileUrl = response.ouput_file_url;
+
+        const a = document.createElement("a");
+        a.href = fileUrl;
+        a.download = newFileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        toast.success("File saved and downloaded successfully!");
+      } else {
+        toast.error("Failed to get the file URL!");
+        console.error("Response does not include output_file_url:", response);
+      }
+    } catch (error) {
+      toast.error("Download failed!");
+      console.error("Download failed:", error);
+    }
+  } else {
+    console.error("EditContainer is not available");
+    toast.error('EditContainer is not available !')
+  }
+  }
   return (
     <>
       {data && (
-        <div>
-          <div className="flex items-center justify-between p-2 shadow-sm w-full">
+        <div style={{ zIndex: 1000 }}>
+          <div className="w-full  flex items-center justify-between p-2 shadow-sm">
             <div className="flex">
               {/* <ButtonTool onClick={addText} icon={faICursor} ariaLabel="Add Text" /> */}
               <ButtonTool
@@ -252,15 +389,48 @@ const Edit = () => {
                 icon={faSquare}
                 ariaLabel="Add Shape"
               />
-              <ButtonTool onClick={Circle} icon={faCircle} ariaLabel="Add Shape" />
-              <ButtonTool onClick={Triangle} icon={faStar} ariaLabel="Add Shape" />
+              <ButtonTool
+                onClick={Circle}
+                icon={faCircle}
+                ariaLabel="Add Shape"
+              />
+              <ButtonTool onClick={Star} icon={faStar} ariaLabel="Add Shape" />
+              <ButtonTool
+                onClick={Text}
+                icon={faFont} // Icon tương ứng (có thể sử dụng FontAwesome hoặc bất kỳ thư viện nào)
+                ariaLabel="Add Text"
+              />
+              <ButtonTool
+                onClick={handleEditContent}
+                icon={contentEditable ? faCircleXmark  : faPenToSquare} // Icon tương ứng (có thể sử dụng FontAwesome hoặc bất kỳ thư viện nào)
+                ariaLabel="Edit"
+              />              
+              {/* Nút thêm hình ảnh */}
+              <label
+                className="p-2 border"
+                htmlFor="image-upload"
+                style={{ cursor: "pointer", marginLeft: "10px" }}
+                aria-label="Add image"
+              >
+                <FontAwesomeIcon icon={faImage}/>
+              </label>
+              <input
+                className="hidden"
+                id="image-upload"
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                style={{ display: "none" }}
+              />
             </div>
 
             <button
+              onClick={SaveAll}
               type="button"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm py-2 px-3 me-2"
+              className="flex justify-center items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm py-2 px-3 me-2"
             >
-              Save all <FontAwesomeIcon icon={faArrowDown} />
+              <span className="me-2"> {isLoading_convert ? 'Saving data...' : 'Save all'} </span>
+              <span>{isLoading_convert ? <BeatLoader size={3} color="#fff"/> : <FontAwesomeIcon  icon={faArrowDown} />}</span>
             </button>
           </div>
         </div>
@@ -273,7 +443,7 @@ const Edit = () => {
               <div
                 className="border"
                 ref={editContainer}
-                onClick={(e) => addShape(e, shapeType, 50)} // Tạo hình vuông
+                onClick={handleClick} // Tạo hình vuông
                 style={{
                   position: "relative", // Đảm bảo phần tử chứa có vị trí tương đối
                   width: "100%",
@@ -283,7 +453,7 @@ const Edit = () => {
                 <style>{data.style}</style>
                 <div
                   dangerouslySetInnerHTML={{ __html: data.body }}
-                  contentEditable={false}
+                  contentEditable={contentEditable}
                 />
               </div>
             </>
