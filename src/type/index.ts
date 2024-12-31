@@ -20,4 +20,4 @@ export interface ApiSignupResponse {
   errors?: ValidateSignup  
 }  
 
-export type ShapeType = "square" | "circle" | "triangle";
+export type ShapeType = "square" | "circle" | "triangle" | "star" | "text";
