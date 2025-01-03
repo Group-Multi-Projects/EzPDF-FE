@@ -38,4 +38,4 @@ export const ORANGE = {
     LIGHT:'#f59b42',
     MEDIUM:'#F89E19',
     DARK:'#c77626'
-}   
+}

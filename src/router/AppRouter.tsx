@@ -1,22 +1,26 @@
-import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import React from "react";
-const Layout = React.lazy(() => import('@/component/authed/layout/layout'));
+const Layout = React.lazy(() => import("@/component/authed/layout/layout"));
 import { useSelector } from "react-redux";
-import PDFEditor from "@/page/authed/edit/old/pdfEditor";
 import HomePage from "@/page/authed/home/home";
 import LandingPage from "@/page/landingPage";
+import FilesList from "@/page/authed/fileslist/fileslist";
 
 import { RootState } from "@/store";
 import CheckAuth from "@/component/atoms/checkauth";
 import Edit from "@/page/authed/edit";
+import ProfileDetail from "@/page/authed/Profile/profileDetail";
+
 
 const AppRouter = () => {
-  const { isAuthenticated, user } = useSelector((state:RootState) => state.auth);
-  console.log('isAuth', isAuthenticated)
-  console.log('user in app router', user)
+  const { isAuthenticated, user } = useSelector(
+    (state: RootState) => state.auth
+  );
+  console.log("isAuth", isAuthenticated);
+  console.log("user in app router", user);
   return (
     <Router>
-<Routes>
+      <Routes>
         {/* Các tuyến đường không yêu cầu xác thực */}
         <Route path="/" element={<LandingPage />} />
 
@@ -38,7 +42,25 @@ const AppRouter = () => {
                   path="/edit"
                   element={
                     <Layout>
-                      <Edit/>
+                      <Edit />
+                    </Layout>
+                  }
+                />
+
+                <Route
+                  path="/fileslist"
+                  element={
+                    <Layout>
+                      <FilesList />
+                    </Layout>
+                  }
+                />
+
+                <Route
+                  path="/profileDetal"
+                  element={
+                    <Layout>
+                      <ProfileDetail />
                     </Layout>
                   }
                 />
@@ -47,8 +69,6 @@ const AppRouter = () => {
           }
         />
       </Routes>
-
-      
     </Router>
   );
 };
