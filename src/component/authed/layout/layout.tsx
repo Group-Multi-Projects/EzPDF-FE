@@ -9,6 +9,10 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [isMobile, setIsMobile] = useState(false);
+  const [isNavbarOpen, setIsNavbarOpen] = useState(true); 
+  const toggleNavbar = () => {
+    setIsNavbarOpen(!isNavbarOpen);
+  };
   // Hook to check screen width
   useEffect(() => {
     const handleResize = () => {
@@ -26,12 +30,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   }, []);
   return (
     <div className="container-all">
-    <Navbar isMobile ={isMobile} />
-    <HeaderMenu isMobile={isMobile} />
-    <div className="content" style={{marginLeft : isMobile? "0px":"10%",
-      width : isMobile?"100%":"90%",
+    <Navbar isMobile ={isMobile} isOpen={isNavbarOpen}/>
+    <HeaderMenu isMobile={isMobile} isOpen={isNavbarOpen} toggleNavbar={toggleNavbar} />
+    <div className="content" style={{marginLeft : isMobile? "0px":isNavbarOpen ? "0":"7%",
       marginTop : isMobile?"20%":"10%",
-      
     }}>
       {children}
     </div>

@@ -2,17 +2,28 @@
 .navbarall{
   display: flex;  
 }
+.toggleButton{
+  padding: 2px;
+  background: linear-gradient(to right, #9F53E3, #C354AE, #EA5675);
+  width: 100px !important;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box !important;
+}
+
 .fixed-box{
   height: 10%;
-  transition: width 0.1s ease; // Hiệu ứng mượt khi mở/đóng
   position: fixed;
-  margin-left: 7%;
+  // margin-left: 7%;
+  transition: padding  0.25s ease-out;
 }
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 10px;
+    padding: 0px 10px 0 0;
     background-color: #ffffff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     position: sticky;
@@ -106,6 +117,7 @@
     align-items: center;
     gap: 10px;
     position: relative;
+    margin-left: 70%;
   }
   
   .user-avatar {
@@ -145,6 +157,9 @@
   }
   
   @media (max-width: 768px) {
+    .header{
+      flex-direction: row-reverse;
+    }
     .toggle_side_button {
       display: none;
     }
@@ -153,6 +168,7 @@
   padding: 0;
   margin-top: 20px;
   width: 100%;
+    display: block;
 
   .link {
     font-size: 22px;
@@ -167,3 +183,38 @@
     width: 250px !important;
   }
 
+/* Đảm bảo submenu ẩn mặc định */
+.submenu {
+  position: absolute;
+  top: 100%; /* Đặt submenu ngay dưới nút */
+  left: 0;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.submenu ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.submenu li {
+  padding: 8px 16px;
+}
+
+.submenu li a {
+  text-decoration: none;
+  color: black;
+}
+
+.submenu li:hover {
+  background-color: #ddd;
+}
+.tools-button{
+  border-radius: 0 !important;
+  border: none !important;
+  color: black !important;
+  background-color: white !important;
+}

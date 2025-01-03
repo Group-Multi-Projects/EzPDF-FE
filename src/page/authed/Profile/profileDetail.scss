@@ -1,0 +1,136 @@
+/* Tổng quát */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    
+  }
+  
+  .account-page {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 20px;
+    text-align: left;
+
+  }
+  
+  .account-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  /* Avatar */
+  .profile-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+  
+  .avatar {
+    position: relative;
+  }
+  
+  .avatar-circle {
+    width: 150px;
+    height: 150px;
+    background-color: #8eff03;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-weight: bold;
+    position: relative !important; /* hoặc absolute nếu cần */
+    z-index: 0 !important;
+  }
+  
+  .change-avatar-btn {
+    margin-left: 20px;
+    padding: 5px 10px;
+    border: 1px solid #000;
+    background: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .change-avatar-btn:hover {
+    background-color: #f0f0f0;
+  }
+  
+  /* Thông tin tài khoản */
+  .account-info {
+    margin-top: 20px;
+  }
+  
+  .info-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+  }
+  
+   label {
+    flex: 1;
+    font-weight: bold;
+    max-width: 300px;
+  }
+  
+  .info-item input {
+    flex: 2;
+    padding: 5px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+  }
+  
+  .save-btn {
+    padding: 5px 10px;
+    border: 1px solid #000;
+    background: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .save-btn:hover {
+    background-color: #f0f0f0;
+  }
+  
+  /* Mật khẩu */
+  .password-wrapper {
+    display: flex;
+    align-items: center;
+  }
+  
+  .password-wrapper input {
+    flex: 1;
+  }
+  
+  .toggle-password {
+    margin-left: 10px;
+    cursor: pointer;
+  }
+  
+  /* Nút lưu thay đổi */
+  .save-all-btn {
+    margin-top: 30px;
+    padding: 10px 20px;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .save-all-btn:hover {
+    background-color: #444;
+  }
+  .password-wrapper{
+    width: 700px;
+  }

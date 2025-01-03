@@ -9,8 +9,7 @@ export const handleUploadApi = (formData:FormData): Promise<UploadResponse> =>{
         headers: {
           "Content-Type": "multipart/form-data",
         },
-      });
-      
+      });     
 }
 
 

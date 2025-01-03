@@ -4,13 +4,16 @@ import openModalSlice from '@/store/client/login_register'
 import authSlice from '@/store/auth_slice'
 import uploadSlice from '@/store/upload_slice'
 import convertSlice from './convert_slice'
+import GetListFilesSlice from './list_files'
+
 
 export const store = configureStore({
   reducer: {
     modalLogin_Signup: openModalSlice,
     auth: authSlice,
     upload: uploadSlice,
-    convert: convertSlice
+    convert: convertSlice,
+    getlistfiles:GetListFilesSlice
   },
 })
 
