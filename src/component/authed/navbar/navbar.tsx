@@ -38,7 +38,7 @@ const Navbar : React.FC<NavbarProps> = ({ isMobile ,isOpen })=> {
           </li>
 
           <li>
-            <a href="/editPage" className="link">
+            <a href="/fileslisttrash" className="link">
             <Trash2   size={20}  strokeWidth={3} />
               Trash
             </a>
@@ -52,6 +52,9 @@ const Navbar : React.FC<NavbarProps> = ({ isMobile ,isOpen })=> {
               Projects
             </a>
           </li>
+
+
+          
         </ul>
       </nav>
     </div>

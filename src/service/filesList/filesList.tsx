@@ -14,8 +14,9 @@ export interface GetListFilesResponse {
   list_files: File[];
 }
 
-export const getFilesList = (): Promise<GetListFilesResponse> => { 
+export const getFilesList = (type :string): Promise<GetListFilesResponse> => { 
   // Thực hiện yêu cầu GET với token trong header Authorization
-  return axios.get("/get_list_files/files/", {
-  });
+  const url = type === "trash" ? "/get_list_files/trash" : "/get_list_files/files";  // Điều chỉnh URL theo type
+
+  return axios.get(url);
 };
