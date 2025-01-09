@@ -184,7 +184,7 @@ export const columns: ColumnDef<FileList>[] = [
   },
 ];
 
-export default function FilesList() {
+export default function FilesListTrash() {
 
   const dispatch = useDispatch<AppDispatch>();
   
@@ -193,7 +193,7 @@ export default function FilesList() {
 
   React.useEffect(() => {
 
-    dispatch(GetListFiles("")) ;
+    dispatch(GetListFiles("trash")) ;
   },  [dispatch]);
 
   

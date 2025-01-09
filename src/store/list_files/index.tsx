@@ -30,25 +30,24 @@ const initialState:GetListFilesState = {
   errorListFiles: null,
 };
 
-// Async Thunk cho việc upload file
-export const GetListFiles = createAsyncThunk<
-GetListFilesResponse,
-void, // Kiểu dữ liệu trả về từ API
-{ rejectValue: string } // Kiểu lỗi trả về nếu bị `reject`
->(
-  "get_list_files/files",
-  async ( _ , thunkAPI) => {
-    try {
-      const response = await getFilesList();      
-      return response;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (errorListFiles: any) {
-      return thunkAPI.rejectWithValue(
-        errorListFiles.response?.message || "Failed to upload"
-      );
+  export const GetListFiles = createAsyncThunk<
+  GetListFilesResponse,
+  string, // Kiểu dữ liệu trả về từ API
+  { rejectValue: string } // Kiểu lỗi trả về nếu bị `reject`
+  >(
+    "get_list_files/files",
+    async ( type , thunkAPI) => {
+      try {
+        const response = await getFilesList(type);      
+        return response;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (errorListFiles: any) {
+        return thunkAPI.rejectWithValue(
+          errorListFiles.response?.message || "Failed"
+        );
+      }
     }
-  }
-);
+  );
 // await handleUploadApi({ file, request_type });
 // Tạo slice
 const GetListFilesSlice = createSlice({

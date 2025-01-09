@@ -5,12 +5,13 @@ import { useSelector } from "react-redux";
 import HomePage from "@/page/authed/home/home";
 import LandingPage from "@/page/landingPage";
 import FilesList from "@/page/authed/fileslist/fileslist";
+import  FilesListTrash from "@/page/authed/fileslisttrash/fileslisttrash";
+
 
 import { RootState } from "@/store";
 import CheckAuth from "@/component/atoms/checkauth";
 import Edit from "@/page/authed/edit";
 import ProfileDetail from "@/page/authed/Profile/profileDetail";
-
 
 const AppRouter = () => {
   const { isAuthenticated, user } = useSelector(
@@ -56,6 +57,14 @@ const AppRouter = () => {
                   }
                 />
 
+                <Route
+                  path="/fileslisttrash"
+                  element={
+                    <Layout>
+                      <FilesListTrash />
+                    </Layout>
+                  }
+                />
                 <Route
                   path="/profileDetal"
                   element={
