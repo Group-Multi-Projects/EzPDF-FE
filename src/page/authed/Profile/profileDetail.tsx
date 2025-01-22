@@ -11,11 +11,6 @@ const ProfileDetail = () => {
   return (
     <div className="account-page">
       <h1 className="account-title">Tài khoản</h1>
-      <div className="profile-section">
-        <img className="avatar-circle" src="https://media.vanityfair.com/photos/5f5245d91e10df7a77868af6/4:3/w_1776,h_1332,c_limit/avatar-the-last-airbender.jpg" alt="anh" />
-        <button className="change-avatar-btn">Thay ảnh đại diện</button>
-      </div>
-
       <div className="account-info">
       <label>Tên</label>
 
