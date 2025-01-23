@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {   Route, Routes } from "react-router-dom";
 import React from "react";
 const Layout = React.lazy(() => import("@/component/authed/layout/layout"));
 import { useSelector } from "react-redux";
@@ -6,12 +6,12 @@ import HomePage from "@/page/authed/home/home";
 import LandingPage from "@/page/landingPage";
 import FilesList from "@/page/authed/fileslist/fileslist";
 import  FilesListTrash from "@/page/authed/fileslisttrash/fileslisttrash";
-
-
 import { RootState } from "@/store";
-import CheckAuth from "@/component/atoms/checkauth";
 import Edit from "@/page/authed/edit";
 import ProfileDetail from "@/page/authed/Profile/profileDetail";
+import Convert from "@/page/authed/convert";
+import PrivateRouters from "./PrivateRoute";
+import PublicRoute from "./PublicRoute";
 
 const AppRouter = () => {
   const { isAuthenticated, user } = useSelector(
@@ -20,65 +20,18 @@ const AppRouter = () => {
   console.log("isAuth", isAuthenticated);
   console.log("user in app router", user);
   return (
-    <Router>
       <Routes>
-        {/* Các tuyến đường không yêu cầu xác thực */}
-        <Route path="/" element={<LandingPage />} />
+        <Route path="/" element={<PublicRoute component={LandingPage} />} />
+        
 
-        {/* Routes có bảo vệ xác thực */}
-        <Route
-          path="/*"
-          element={
-            <CheckAuth isAuthenticated={isAuthenticated} user={user}>
-              <Routes>
-                <Route
-                  path="/home"
-                  element={
-                    <Layout>
-                      <HomePage />
-                    </Layout>
-                  }
-                />
-                <Route
-                  path="/edit"
-                  element={
-                    <Layout>
-                      <Edit />
-                    </Layout>
-                  }
-                />
-
-                <Route
-                  path="/fileslist"
-                  element={
-                    <Layout>
-                      <FilesList />
-                    </Layout>
-                  }
-                />
-
-                <Route
-                  path="/fileslisttrash"
-                  element={
-                    <Layout>
-                      <FilesListTrash />
-                    </Layout>
-                  }
-                />
-                <Route
-                  path="/profileDetal"
-                  element={
-                    <Layout>
-                      <ProfileDetail />
-                    </Layout>
-                  }
-                />
-              </Routes>
-            </CheckAuth>
-          }
-        />
+        <Route path="/home" element={<PrivateRouters component={HomePage} />} />
+        <Route path="/edit" element={<PrivateRouters component={Edit} />} />
+        <Route path="/convert" element={<PrivateRouters component={Convert} />} />
+        <Route path="/fileslist" element={<PrivateRouters component={FilesList} />} />
+        <Route path="/fileslisttrash" element={<PrivateRouters component={FilesListTrash} />} />
+        <Route path="/profileDetal" element={<PrivateRouters component={ProfileDetail} />} />
+        
       </Routes>
-    </Router>
   );
 };
 

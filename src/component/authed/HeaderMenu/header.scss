@@ -3,8 +3,6 @@
   display: flex;  
 }
 .toggleButton{
-  padding: 2px;
-  background: linear-gradient(to right, #9F53E3, #C354AE, #EA5675);
   width: 100px !important;
   height: 100%;
   display: flex;
@@ -46,10 +44,7 @@
     gap: 10px;
   }
   
-  .logo-image {
-    width: 40px;
-    height: 40px;
-  }
+
   
   .logo-text {
     font-size: 20px;

@@ -192,7 +192,8 @@ const Edit = () => {
       // Set image position
       image.style.left = `${x - 50}px`; // Center image on click
       image.style.top = `${y - 50}px`;
-
+      image.style.height = "50px"
+      image.style.width = "50px"
       // Thêm điểm kéo dãn
       const resizeHandle = document.createElement("div");
       resizeHandle.classList.add("resize-handle");
@@ -225,7 +226,7 @@ const Edit = () => {
       isDragging = true;
       offsetX = event.clientX - element.offsetLeft;
       offsetY = event.clientY - element.offsetTop;
-      element.style.zIndex = "1000";
+      element.style.zIndex = "9";
     };
 
     const handleMouseMove = (event: MouseEvent) => {
@@ -380,7 +381,7 @@ const Edit = () => {
   return (
     <>
       {data && (
-        <div style={{ zIndex: 1000 }}>
+        <div style={{ zIndex: 10 }}>
           <div className="w-full  flex items-center justify-between p-2 shadow-sm">
             <div className="flex">
               {/* <ButtonTool onClick={addText} icon={faICursor} ariaLabel="Add Text" /> */}
@@ -462,6 +463,11 @@ const Edit = () => {
               <label
                 htmlFor="dropzone-file"
                 className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50"
+                style={{
+                  fontWeight: 'bold',
+                  flex: 'unset',
+                  maxWidth: 'unset',
+                }}
               >
                 {isLoading ? (
                   <LoadingButton
