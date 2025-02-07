@@ -3,7 +3,7 @@ import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useLayoutEffect } from "react";
 import {  BeatLoader, PuffLoader, SyncLoader } from "react-spinners";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SaveIcon from "@mui/icons-material/Save";
@@ -21,6 +21,7 @@ import {
   faPenToSquare,
   faSquare,
   faStar,
+  faPencil
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ButtonTool } from "@/component/authed/tool";
@@ -37,7 +38,7 @@ const Edit = () => {
   const editContainer = useRef<HTMLDivElement | null>(null);
   const [uploadedFileName, setUploadedFileName] = useState<string | undefined>("");
   const [requestType, setRequestType] = useState<string>("editfile");
-  const [actionType, setActionType] = useState<"shape" | "image" | "text">(
+  const [actionType, setActionType] = useState<"shape" | "image" | "text"|"draw">(
     "shape"
   );
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -80,6 +81,8 @@ const Edit = () => {
   //add shape
   
   const [isAddingShape, setIsAddingShape] = useState(false);
+  const [isDrawingMode, setIsDrawingMode] = useState(false);
+
   const [shapeType, setShapeType] = useState<ShapeType>("square");
   const addShape = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -161,7 +164,111 @@ const Edit = () => {
     setIsAddingShape(false);
   };
   
+  ////Draw vẽ
+  const canvasRef = useRef<HTMLCanvasElement | null>(null); // Canvas reference
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [lastX, setLastX] = useState(0);
+  const [lastY, setLastY] = useState(0);
+  const [lineColor, setLineColor] = useState('#000');
+  const [lineWidth, setLineWidth] = useState(5);
+  const [containerSize, setContainerSize] = useState<{ width: number; height: number }>({ width: 1000, height:1000 });
+  useEffect(() => {
+    const updateContainerSize = () => {
+      if (editContainer.current) {
+        setContainerSize({
+          width: editContainer.current.offsetWidth,  // Lấy chiều rộng của thẻ cha
+          height: editContainer.current.offsetHeight, // Lấy chiều cao của thẻ cha
+        });
+      }
+    };
+    // Gọi hàm khi component mount và khi cửa sổ thay đổi kích thước
+    updateContainerSize();
+    window.addEventListener('resize', updateContainerSize);
+    // Dọn dẹp event listener khi component unmount
+    return () => {
+      window.removeEventListener('resize', updateContainerSize);
+    };
+  }, [data]);
+  const [position, setPosition] = useState({ top: 0, left: 0 });
+  
+  useEffect(() => {
+    if (editContainer.current) {
+      const rect = editContainer.current.getBoundingClientRect();
+      setPosition({
+        top: rect.top,
+        left: rect.left,
+      });
+    }
+  }, [data]);
 
+
+  useEffect(() => {
+    console.log(  "============================");
+    const handleScroll = () => {
+     
+        
+        setPosition({ top: editContainer.current?.getBoundingClientRect().top,  // Lấy vị trí cuộn dọc
+        left: editContainer.current?.getBoundingClientRect().left, });
+      
+    };
+
+    
+    window?.addEventListener("scroll", handleScroll);
+    
+
+    return () => {
+
+        window.removeEventListener("scroll", handleScroll);
+      
+    };
+  }, [data ]);
+
+
+
+
+
+
+
+
+  // Hàm bắt đầu vẽ
+  const startDrawing = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
+    const canvas = canvasRef.current;
+    if (canvas) {
+      const context = canvas.getContext('2d');
+      if (context) {
+        const { offsetX, offsetY } = e.nativeEvent;
+        setLastX(offsetX);
+        setLastY(offsetY);
+        setIsDrawing(true);
+      }
+    }
+  };
+
+  // Hàm vẽ
+  const draw = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
+    const canvas = canvasRef.current;
+    if (canvas && isDrawing) {
+      const context = canvas.getContext('2d');
+      if (context) {
+        const { offsetX, offsetY } = e.nativeEvent;
+        context.beginPath();
+        context.moveTo(lastX, lastY);
+        context.lineTo(offsetX, offsetY);
+        context.strokeStyle = lineColor;
+        context.lineWidth = lineWidth;
+        context.stroke();
+        
+        setLastX(offsetX);
+        setLastY(offsetY);
+      }
+    }
+  };
+
+  // Hàm dừng vẽ
+  const stopDrawing = () => {
+    setIsDrawing(false);
+  };
+  ////
   // add image
   const [isAddingImage, setIsAddingImage] = useState<boolean>(false);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
@@ -316,6 +423,9 @@ const Edit = () => {
     setIsAddingShape(true);
     setShapeType("text");
   }
+  const Draw = () =>{
+    setIsDrawingMode(!isDrawingMode);
+  }
   const handleEditContent = () =>{
     setContentEditable((prev) => !prev)
   }
@@ -404,7 +514,12 @@ const Edit = () => {
                 onClick={handleEditContent}
                 icon={contentEditable ? faCircleXmark  : faPenToSquare} // Icon tương ứng (có thể sử dụng FontAwesome hoặc bất kỳ thư viện nào)
                 ariaLabel="Edit"
-              />              
+              /> 
+               <ButtonTool
+                onClick={Draw}
+                icon={   faPencil } // Icon tương ứng (có thể sử dụng FontAwesome hoặc bất kỳ thư viện nào)
+                ariaLabel="Draw"
+              />             
               {/* Nút thêm hình ảnh */}
               <label
                 className="p-2 border"
@@ -437,6 +552,7 @@ const Edit = () => {
       )}
       <div className="p-10">
         <div className="flex flex-col items-center justify-center w-full">
+          
           {!isLoading && data ? (
             <>
               {/* Hiển thị html từ api ở đây */}
@@ -448,14 +564,51 @@ const Edit = () => {
                   position: "relative", // Đảm bảo phần tử chứa có vị trí tương đối
                   width: "100%",
                   height: "100%",
+                  zIndex: "1",
                 }}
               >
                 <style>{data.style}</style>
                 <div
-                  dangerouslySetInnerHTML={{ __html: data.body }}
+                  // dangerouslySetInnerHTML={{ __html: data.body }}
+                  dangerouslySetInnerHTML={{ __html:`<!DOCTYPE html> <html lang="vi"><head> <meta charset="UTF-8">  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Trang HTML Mẫu</title></head>
+                    <body style="z-index:1"><h1>Xin chào, đây là trang HTML!</h1><p>Đây là một đoạn văn bản trong HTML.</p>
+                    <h1>Xin chào, đây là trang HTML!</h1><p>Đây là một đoạn văn bản trong HTML.</p>
+                    <h1>Xin chào, đây là trang HTML!</h1><p>Đây là một đoạn văn bản trong HTML.</p>
+                    <h1>Xin chào, đây là trang HTML!</h1><p>Đây là một đoạn văn bản trong HTML.</p>
+                    <h1>Xin chào, đây là trang HTML!</h1><p>Đây là một đoạn văn bản trong HTML.</p>
+                    <h1>Xin chào, đây là trang HTML!</h1><p>Đây là một đoạn văn bản trong HTML.</p>
+                    <h1>Xin chào, đây là trang HTML!</h1><p>Đây là một đoạn văn bản trong HTML.</p>
+                    <h1>Xin chào, đây là trang HTML!</h1><p>Đây là một đoạn văn bản trong HTML.</p>
+                    <h1>Xin chào, đây là trang HTML!</h1><p>Đây là một đoạn văn bản trong HTML.</p>
+                    <h1>Xin chào, đây là trang HTML!</h1><p>Đây là một đoạn văn bản trong HTML.</p>
+                    <h1>Xin chào, đây là trang HTML!</h1><p>Đây là một đoạn văn bản trong HTML.</p>
+                    <h1>Xin chào, đây là trang HTML!</h1><p>Đây là một đoạn văn bản trong HTML.</p>
+                    <h1>Xin chào, đây là trang HTML!</h1><p>Đây là một đoạn văn bản trong HTML.</p></body></html>`}}
+
                   contentEditable={contentEditable}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    zIndex: "1",
+                  }}
                 />
               </div>
+              <canvas
+        ref={canvasRef}
+        width={containerSize.width}  // Đặt width của canvas bằng chiều rộng thẻ cha
+        height={containerSize.height} // Đặt height của canvas bằng chiều cao thẻ cha
+        style={{position: 'fixed', // Thoát khỏi z-index bị âm
+          top: isDrawingMode ?`${position.top-1}px`:`${position.top}px`,
+          left: isDrawingMode ?`${position.left-1}px`:`${position.left}px`,
+          zIndex: isDrawingMode? 1 :-1, // Đảm bảo tương tác
+          border: isDrawingMode? '1px solid blue':"",
+          pointerEvents: "auto"}}
+        onMouseDown={startDrawing}
+        onMouseMove={draw}
+        onMouseUp={stopDrawing}
+        onMouseLeave={stopDrawing}
+        
+      />
             </>
           ) : (
             <>
