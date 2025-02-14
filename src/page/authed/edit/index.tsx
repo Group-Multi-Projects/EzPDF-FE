@@ -571,10 +571,7 @@ const Edit = () => {
                 <style>{data.style}</style>
                 <div
                   dangerouslySetInnerHTML={{ __html: data.body }}
-
-                  //Đoạn này là test html bởi vì api hết hạn không trả về html đúng được 
-
-                  
+                  //Đoạn này là test html bởi vì api hết hạn không trả về html đúng được                  
                   // dangerouslySetInnerHTML={{ __html:`<!DOCTYPE html> <html lang="vi"><head> <meta charset="UTF-8">  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Trang HTML Mẫu</title></head>
                   //   <body style="z-index:1"><h1>Xin chào, đây là trang HTML!</h1><p>Đây là một đoạn văn bản trong HTML.</p>
                   //   <h1>Xin chào, đây là trang HTML!</h1><p>Đây là một đoạn văn bản trong HTML.</p>
@@ -589,7 +586,6 @@ const Edit = () => {
                   //   <h1>Xin chào, đây là trang HTML!</h1><p>Đây là một đoạn văn bản trong HTML.</p>
                   //   <h1>Xin chào, đây là trang HTML!</h1><p>Đây là một đoạn văn bản trong HTML.</p>
                   //   <h1>Xin chào, đây là trang HTML!</h1><p>Đây là một đoạn văn bản trong HTML.</p></body></html>`}}
-
                   contentEditable={contentEditable}
                   style={{
                     width: "100%",

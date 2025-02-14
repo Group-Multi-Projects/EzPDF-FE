@@ -54,7 +54,7 @@ const callsToAction = [
 
 
 
-export default function NavbarLandingPage() {
+export default function sidebarLandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const dispatch = useDispatch()  
   const isOpenLogin = useSelector((state:RootState) => state.modalLogin_Signup.isOpenLogin)
@@ -92,7 +92,7 @@ export default function NavbarLandingPage() {
             <Bars3Icon aria-hidden="true" className="size-6" />
           </button>
         </div>
-          {/* this navbar appear when your screen is greater than 1024px (>= 1024px) */}
+          {/* this sidebar appear when your screen is greater than 1024px (>= 1024px) */}
         <PopoverGroup className="hidden lg:flex lg:gap-x-12">
           <Popover className="relative">
             <PopoverButton className="flex items-center gap-x-1 text-sm/6 font-semibold text-gray-900">
@@ -189,7 +189,7 @@ export default function NavbarLandingPage() {
         className="lg:hidden"
       >
 
-        {/* navbar in equal to or less than 768p (<= 768px) */}
+        {/* sidebar in equal to or less than 768p (<= 768px) */}
         <div className="fixed inset-0 z-10" />
         <DialogPanel className={`fixed  right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6  lg:ring-1 lg:ring-gray-900/10 
            ${isOpenLogin || isOpenSignup ? "" : "inset-y-0"}`}>
