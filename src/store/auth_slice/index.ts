@@ -46,29 +46,16 @@ export const loginUser = createAsyncThunk(
 );
 
 
-// export const logoutUser = createAsyncThunk(
-//   "/account/logout",
-//   async (formData) => {
-//     return new Promise((resolve) => {
-//       const mockResponse = {
-//         success: true,
-//         message: "Login successful",
-//         data: {
-//           token: "mocked_jwt_token",
-//           user: {
-//             id: 1,
-//             username: formData.username,
-//             email: "user@example.com",
-//           },
-//         },
-//       };
+export const logoutUser = createAsyncThunk(
+  "/account/logout",
+  async () => {
+    return new Promise(() => {
+      // Xóa token khỏi cookie
+      Cookies.remove("accessToken");
+    });
+  }
+);
 
-//       setTimeout(() => {
-//         resolve(mockResponse);
-//       }, 100); // 1 giây
-//     });
-//   }
-// );
 
 
 
@@ -126,18 +113,18 @@ const authSlice = createSlice({
         state.user = null;
         state.isAuthenticated = false;
       })
-    //   .addCase(logoutUser.fulfilled, (state, action) => {
-    //     state.isLoading = false;
-    //     state.user = null;
-    //     state.isAuthenticated = false;
+      .addCase(logoutUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.user = null;
+        state.isAuthenticated = false;
 
-    //   })
-    //   .addCase(logoutUser.rejected, (state, action) => {
-    //     state.isLoading = false;
-    //     state.user = null;
-    //     state.isAuthenticated = false;
+      })
+      .addCase(logoutUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.user = null;
+        state.isAuthenticated = false;
 
-    //   });
+      });
   },
 });
 

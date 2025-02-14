@@ -12,17 +12,19 @@ const instance = axios.create({
     // withCredentials: true, // Đảm bảo cookie được gửi cùng request
   });
   
-// Alter defaults after instance has been created
-instance.defaults.headers.common['Authorization'] = `Bearer ${Cookies.get('accessToken')}`;
+// // Alter defaults after instance has been created
+// instance.defaults.headers.common['Authorization'] = `Bearer ${Cookies.get('accessToken')}`;
 
-// Add a request interceptor
-instance.interceptors.request.use(function (config) {
-    // Do something before request is sent
-    return config;
-  }, function (error) {
-    // Do something with request error
-    return Promise.reject(error);
-  });
+instance.interceptors.request.use((config) => {
+  const token = Cookies.get('accessToken'); // Lấy token mới nhất
+  if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+  }
+  console.log("🔍 Sending request with headers:", config.headers);
+  return config;
+}, (error) => {
+  return Promise.reject(error);
+});
 
 // Add a response interceptor
 instance.interceptors.response.use(function (response) {

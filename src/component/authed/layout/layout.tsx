@@ -1,20 +1,16 @@
 import React, { ReactNode, useEffect, useState } from "react";
-import Navbar from "../navbar/navbar";
-import HeaderMenu from "../HeaderMenu/headerMenu";
-import "./layout.scss";
+import SidebarRoot from "../navbar/navbar";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
+import bgImg from '@/assets/svg/ss.svg'
 interface LayoutProps {
   children: ReactNode; // Định nghĩa kiểu cho children
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [isMobile, setIsMobile] = useState(false);
-  const [isNavbarOpen, setIsNavbarOpen] = useState(true);
-
-  const toggleNavbar = () => {
-    setIsNavbarOpen(!isNavbarOpen);
-  };
+  const [isSidebarOpen] = useState(false);
+  const [toggled, setToggled] = React.useState(false);
   // Hook to check screen width
   useEffect(() => {
     const handleResize = () => {
@@ -31,20 +27,31 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   }, []);
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
   return (
-    <div className="container-all">
-      <div className={isAuthenticated ? "" : "hidden"}>
-        <Navbar isMobile={isMobile} isOpen={isNavbarOpen} />
-        <HeaderMenu
-          isMobile={isMobile}
-          isOpen={isNavbarOpen}
-          toggleNavbar={toggleNavbar}
+    <div className={isAuthenticated ? "flex w-full h-screen" : "hidden"}>
+      <div className={isAuthenticated ? "fixed" : "hidden"}>
+        <SidebarRoot
+          onBackdropClick={() => setToggled(false)}
+          toggled={toggled}
+          breakPoint="md"
         />
+          {isMobile && (
+          <>
+            <div className="bg-white fixed right-0  p-3">
+            <button className="" onClick={() => setToggled(!toggled)}>
+              Toggle
+            </button>
+            </div>
+          </>
+        )}
       </div>
       <div
-        className={`p-0 transition-[margin] duration-250 ease-out w-full  ${isAuthenticated && `ml-[5%] mt-[5%]`}`}
+        className={`p-0 transition-[margin] duration-250 ease-out w-full h-full`}
         style={{
-          marginLeft: isMobile ? "0px" : isNavbarOpen ? "" : "7%",
-          marginTop: isMobile ? "20%" : "",
+          marginLeft: isMobile ? "0px" : isSidebarOpen ? "" : "250px",
+          // backgroundImage: `url(${bgImg})`, // ✅ Đúng cú pháp
+          // backgroundSize: "cover",          // Tùy chọn: để ảnh phủ kín
+          // backgroundPosition: "center",     // Tùy chọn: căn giữa ảnh
+          backgroundColor: "#F3E5F5"
         }}
       >
         {children}

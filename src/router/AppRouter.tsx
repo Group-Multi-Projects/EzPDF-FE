@@ -27,9 +27,9 @@ const AppRouter = () => {
         <Route path="/home" element={<PrivateRouters component={HomePage} />} />
         <Route path="/edit" element={<PrivateRouters component={Edit} />} />
         <Route path="/convert" element={<PrivateRouters component={Convert} />} />
-        <Route path="/fileslist" element={<PrivateRouters component={FilesList} />} />
-        <Route path="/fileslisttrash" element={<PrivateRouters component={FilesListTrash} />} />
-        <Route path="/profileDetal" element={<PrivateRouters component={ProfileDetail} />} />
+        <Route path="/filesList" element={<PrivateRouters component={FilesList} />} />
+        <Route path="/trash" element={<PrivateRouters component={FilesListTrash} />} />
+        <Route path="/profileDetail" element={<PrivateRouters component={ProfileDetail} />} />
         
       </Routes>
   );

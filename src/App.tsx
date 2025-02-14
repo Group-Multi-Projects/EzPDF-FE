@@ -4,21 +4,35 @@ import "react-toastify/dist/ReactToastify.css";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { setUser } from "./store/auth_slice";
+import Layout from "./component/authed/layout/layout";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
 
 function App() {
   const dispatch = useDispatch();
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
-    // Gọi action để cập nhật người dùng từ cookies
-   let user = dispatch(setUser());
-    console.log('user:', user)
-  }, [dispatch]);
+    dispatch(setUser()); // Cập nhật user khi auth thay đổi
+  }, [dispatch, isAuthenticated]); // Theo dõi isAuthenticated
+
   return (
     <div className="App">
-      <AppRouter/>
-      <Toast/>
+      {isAuthenticated ? (
+        <>
+          <Layout>
+            <AppRouter />
+            <Toast />
+          </Layout>
+        </>
+      ) : (
+        <>
+          <AppRouter/>
+          <Toast/>
+        </>
+      )}
     </div>
-  )
+  );
 }
 
 export default App;

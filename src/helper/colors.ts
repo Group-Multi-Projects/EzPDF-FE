@@ -1,8 +1,9 @@
 export const PRIMARY = {
-    LIGHT:'#549bd6',
-    MEDIUM:'#0078D4',
-    DARK:'#1f6299'
+    LIGHT: '#C754A8',  // Màu hồng tím nhạt
+    MEDIUM: '#A23E8D', // Màu tím trung bình
+    DARK: '#7B266F'    // Màu tím đậm
 }
+
 export const BLACK = {
     LIGHT:'#1a1a1a',
     DARK:'#00000'
