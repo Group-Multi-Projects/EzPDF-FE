@@ -83,7 +83,7 @@ const SidebarRoot: FC<SidebarProps> = ({
         </MenuItem>
         <SubMenu label="Tools" icon={<FaTools size={16} />}>
           <MenuItem component={<Link to="/edit" />}>Edit</MenuItem>
-          <MenuItem component={<Link to="#" />}>Convert</MenuItem>
+          <MenuItem component={<Link to="/convert" />}>Convert</MenuItem>
         </SubMenu>
         <MenuItem
           icon={<TfiLayoutListThumbAlt size={18} />}

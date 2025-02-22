@@ -10,8 +10,10 @@ import { RootState } from "@/store";
 import Edit from "@/page/authed/edit";
 import ProfileDetail from "@/page/authed/Profile/profileDetail";
 import Convert from "@/page/authed/convert";
+import PdfToWord from "@/page/authed/convert/PdfToWord"
 import PrivateRouters from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
+
 
 const AppRouter = () => {
   const { isAuthenticated, user } = useSelector(
@@ -27,6 +29,7 @@ const AppRouter = () => {
         <Route path="/home" element={<PrivateRouters component={HomePage} />} />
         <Route path="/edit" element={<PrivateRouters component={Edit} />} />
         <Route path="/convert" element={<PrivateRouters component={Convert} />} />
+        <Route path="/convert/pdf-to-word" element={<PrivateRouters component={PdfToWord} />} />
         <Route path="/filesList" element={<PrivateRouters component={FilesList} />} />
         <Route path="/trash" element={<PrivateRouters component={FilesListTrash} />} />
         <Route path="/profileDetail" element={<PrivateRouters component={ProfileDetail} />} />

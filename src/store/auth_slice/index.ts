@@ -52,6 +52,7 @@ export const logoutUser = createAsyncThunk(
     return new Promise(() => {
       // Xóa token khỏi cookie
       Cookies.remove("accessToken");
+      location.reload();
     });
   }
 );
