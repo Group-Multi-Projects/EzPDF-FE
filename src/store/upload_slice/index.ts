@@ -5,8 +5,7 @@ export interface UploadResponse {
   file: string;
   created_at: string;
   account: number;
-  style: string;
-  body: string;
+  html_content: string;
   ouput_file_url: string;
 }
 
@@ -35,9 +34,7 @@ FormData,       // Kiểu của tham số đầu vào (formData)
   async (formData, thunkAPI) => {
     try {
       const response = await handleUploadApi(formData);
-      console.log('res upload', response)
       return response;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       return thunkAPI.rejectWithValue(
         error.response?.message || "Failed to upload"
@@ -45,8 +42,6 @@ FormData,       // Kiểu của tham số đầu vào (formData)
     }
   }
 );
-// await handleUploadApi({ file, request_type });
-// Tạo slice
 const uploadSlice = createSlice({
   name: "upload",
   initialState,
@@ -67,7 +62,6 @@ const uploadSlice = createSlice({
         state.isLoading = false;
         state.data = action.payload;
         state.error = null;
-        console.log('Upload successful, payload:', action.payload); // Log ra payload
       })
       .addCase(uploadFile.rejected, (state, action) => {
         state.isLoading = false;

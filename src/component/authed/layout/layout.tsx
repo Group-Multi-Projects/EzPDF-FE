@@ -3,6 +3,7 @@ import SidebarRoot from "../navbar/navbar";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import bgImg from '@/assets/svg/ss.svg'
+import { Menu } from "lucide-react";
 interface LayoutProps {
   children: ReactNode; // Định nghĩa kiểu cho children
 }
@@ -36,21 +37,17 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         />
           {isMobile && (
           <>
-            <div className="bg-white fixed right-0  p-3">
-            <button className="" onClick={() => setToggled(!toggled)}>
-              Toggle
-            </button>
+            <div className="bg-white fixed right-0 left-0 p-3 shadow-lg">
+              <Menu onClick={() => setToggled(!toggled)} size={18}/>
             </div>
           </>
         )}
       </div>
       <div
-        className={`p-0 transition-[margin] duration-250 ease-out w-full h-full`}
+        className={`p-0 transition-[margin] duration-250 ease-out w-full h-screen overflow-y-scroll`}
         style={{
           marginLeft: isMobile ? "0px" : isSidebarOpen ? "" : "250px",
-          // backgroundImage: `url(${bgImg})`, // ✅ Đúng cú pháp
-          // backgroundSize: "cover",          // Tùy chọn: để ảnh phủ kín
-          // backgroundPosition: "center",     // Tùy chọn: căn giữa ảnh
+          paddingTop: isMobile ? '3.5rem' : "0px",
           backgroundColor: "#F3E5F5"
         }}
       >

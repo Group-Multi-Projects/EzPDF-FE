@@ -9,7 +9,7 @@ import { IoMdPerson } from "react-icons/io";
 import { MdLogout } from "react-icons/md";
 import { PRIMARY } from '@/helper/colors';
 import logo from "@/assets/png/logo.png";
-import bgNavbar from '@/assets/svg/ss.svg'
+import bgNavbar from '@/assets/svg/bg_img.svg'
 import { logoutUser } from '@/store/auth_slice';
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store";
@@ -40,7 +40,7 @@ const SidebarRoot: FC<SidebarProps> = ({
       collapsed={collapsed}
       toggled={toggled}
       onBackdropClick={handleToggleSidebar}
-      image={`${bgNavbar}`}
+       image={`${bgNavbar}`}
       {...rest}
     >
       <div className="my-6 flex px-2">
@@ -83,7 +83,7 @@ const SidebarRoot: FC<SidebarProps> = ({
         </MenuItem>
         <SubMenu label="Tools" icon={<FaTools size={16} />}>
           <MenuItem component={<Link to="/edit" />}>Edit</MenuItem>
-          <MenuItem component={<Link to="#" />}>Convert</MenuItem>
+          <MenuItem component={<Link to="/convert" />}>Convert</MenuItem>
         </SubMenu>
         <MenuItem
           icon={<TfiLayoutListThumbAlt size={18} />}

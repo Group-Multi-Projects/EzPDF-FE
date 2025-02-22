@@ -33,7 +33,6 @@ const Edit = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { isLoading, data } = useSelector((state: RootState) => state.upload);
   const {isLoading_convert} = useSelector((state:RootState) => state.convert)
-
   const [contentEditable, setContentEditable] = useState(false)
   const editContainer = useRef<HTMLDivElement | null>(null);
   const [uploadedFileName, setUploadedFileName] = useState<string | undefined>("");
@@ -165,63 +164,57 @@ const Edit = () => {
   };
   
   ////Draw vẽ
-  const canvasRef = useRef<HTMLCanvasElement | null>(null); // Canvas reference
-  const [isDrawing, setIsDrawing] = useState(false);
-  const [lastX, setLastX] = useState(0);
-  const [lastY, setLastY] = useState(0);
-  const [lineColor, setLineColor] = useState('#000');
-  const [lineWidth, setLineWidth] = useState(5);
-  const [containerSize, setContainerSize] = useState<{ width: number; height: number }>({ width: 1000, height:1000 });
-  useEffect(() => {
-    const updateContainerSize = () => {
-      if (editContainer.current) {
-        setContainerSize({
-          width: editContainer.current.offsetWidth,  // Lấy chiều rộng của thẻ cha
-          height: editContainer.current.offsetHeight, // Lấy chiều cao của thẻ cha
-        });
-      }
-    };
-    // Gọi hàm khi component mount và khi cửa sổ thay đổi kích thước
-    updateContainerSize();
-    window.addEventListener('resize', updateContainerSize);
-    // Dọn dẹp event listener khi component unmount
-    return () => {
-      window.removeEventListener('resize', updateContainerSize);
-    };
-  }, [data]);
-  const [position, setPosition] = useState({ top: 0, left: 0 });
+  // const canvasRef = useRef<HTMLCanvasElement | null>(null); // Canvas reference
+  // const [isDrawing, setIsDrawing] = useState(false);
+  // const [lastX, setLastX] = useState(0);
+  // const [lastY, setLastY] = useState(0);
+  // const [lineColor, setLineColor] = useState('#000');
+  // const [lineWidth, setLineWidth] = useState(5);
+  // const [containerSize, setContainerSize] = useState<{ width: number; height: number }>({ width: 1000, height:1000 });
+  // useEffect(() => {
+  //   const updateContainerSize = () => {
+  //     if (editContainer.current) {
+  //       setContainerSize({
+  //         width: editContainer.current.offsetWidth,  // Lấy chiều rộng của thẻ cha
+  //         height: editContainer.current.offsetHeight, // Lấy chiều cao của thẻ cha
+  //       });
+  //     }
+  //   };
+  //   updateContainerSize();
+  //   window.addEventListener('resize', updateContainerSize);
+  //   return () => {
+  //     window.removeEventListener('resize', updateContainerSize);
+  //   };
+  // }, [data]);
+  // const [position, setPosition] = useState({ top: 0, left: 0 });
   
-  useEffect(() => {
-    if (editContainer.current) {
-      const rect = editContainer.current.getBoundingClientRect();
-      setPosition({
-        top: rect.top,
-        left: rect.left,
-      });
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (editContainer.current) {
+  //     const rect = editContainer.current.getBoundingClientRect();
+  //     setPosition({
+  //       top: rect.top,
+  //       left: rect.left,
+  //     });
+  //   }
+  // }, [data]);
 
 
-  useEffect(() => {
-    console.log(  "============================");
-    const handleScroll = () => {
-     
-        
-        setPosition({ top: editContainer.current?.getBoundingClientRect().top,  // Lấy vị trí cuộn dọc
-        left: editContainer.current?.getBoundingClientRect().left, });
-      
-    };
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //       setPosition({ top: editContainer.current?.getBoundingClientRect().top,  // Lấy vị trí cuộn dọc
+  //       left: editContainer.current?.getBoundingClientRect().left, });
+  //   };
 
     
-    window?.addEventListener("scroll", handleScroll);
+  //   window?.addEventListener("scroll", handleScroll);
     
 
-    return () => {
+  //   return () => {
 
-        window.removeEventListener("scroll", handleScroll);
+  //       window.removeEventListener("scroll", handleScroll);
       
-    };
-  }, [data ]);
+  //   };
+  // }, [data ]);
 
 
 
@@ -230,44 +223,44 @@ const Edit = () => {
 
 
 
-  // Hàm bắt đầu vẽ
-  const startDrawing = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
-    const canvas = canvasRef.current;
-    if (canvas) {
-      const context = canvas.getContext('2d');
-      if (context) {
-        const { offsetX, offsetY } = e.nativeEvent;
-        setLastX(offsetX);
-        setLastY(offsetY);
-        setIsDrawing(true);
-      }
-    }
-  };
+  // // Hàm bắt đầu vẽ
+  // const startDrawing = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
+  //   const canvas = canvasRef.current;
+  //   if (canvas) {
+  //     const context = canvas.getContext('2d');
+  //     if (context) {
+  //       const { offsetX, offsetY } = e.nativeEvent;
+  //       setLastX(offsetX);
+  //       setLastY(offsetY);
+  //       setIsDrawing(true);
+  //     }
+  //   }
+  // };
 
-  // Hàm vẽ
-  const draw = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
-    const canvas = canvasRef.current;
-    if (canvas && isDrawing) {
-      const context = canvas.getContext('2d');
-      if (context) {
-        const { offsetX, offsetY } = e.nativeEvent;
-        context.beginPath();
-        context.moveTo(lastX, lastY);
-        context.lineTo(offsetX, offsetY);
-        context.strokeStyle = lineColor;
-        context.lineWidth = lineWidth;
-        context.stroke();
+  // // Hàm vẽ
+  // const draw = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
+  //   const canvas = canvasRef.current;
+  //   if (canvas && isDrawing) {
+  //     const context = canvas.getContext('2d');
+  //     if (context) {
+  //       const { offsetX, offsetY } = e.nativeEvent;
+  //       context.beginPath();
+  //       context.moveTo(lastX, lastY);
+  //       context.lineTo(offsetX, offsetY);
+  //       context.strokeStyle = lineColor;
+  //       context.lineWidth = lineWidth;
+  //       context.stroke();
         
-        setLastX(offsetX);
-        setLastY(offsetY);
-      }
-    }
-  };
+  //       setLastX(offsetX);
+  //       setLastY(offsetY);
+  //     }
+  //   }
+  // };
 
-  // Hàm dừng vẽ
-  const stopDrawing = () => {
-    setIsDrawing(false);
-  };
+  // // Hàm dừng vẽ
+  // const stopDrawing = () => {
+  //   setIsDrawing(false);
+  // };
   ////
   // add image
   const [isAddingImage, setIsAddingImage] = useState<boolean>(false);
@@ -463,7 +456,7 @@ const Edit = () => {
 
       // Kiểm tra kiểu dữ liệu trả về
       const response = res.payload as HTMLtoPDFResponse;
-
+      console.log('response edit page', response)
       if (response.ouput_file_url) {
         const fileUrl = response.ouput_file_url;
 
@@ -491,7 +484,7 @@ const Edit = () => {
   return (
     <>
       {data && (
-        <div style={{ zIndex: 10 }}>
+        <div style={{ zIndex: 1000}}>
           <div className="w-full  flex items-center justify-between p-2 shadow-sm">
             <div className="flex">
               {/* <ButtonTool onClick={addText} icon={faICursor} ariaLabel="Add Text" /> */}
@@ -552,49 +545,33 @@ const Edit = () => {
         </div>
       )}
       <div className="p-10">
-        <div className="flex flex-col items-center justify-center w-full">
-          
           {!isLoading && data ? (
             <>
-              {/* Hiển thị html từ api ở đây */}
-              <div
-                className="border"
-                ref={editContainer}
-                onClick={handleClick} // Tạo hình vuông
-                style={{
-                  position: "relative", // Đảm bảo phần tử chứa có vị trí tương đối
-                  width: "100%",
-                  height: "100%",
-                  zIndex: "1",
-                }}
-              >
-                <style>{data.style}</style>
-                <div
-                  dangerouslySetInnerHTML={{ __html: data.body }}
-                  //Đoạn này là test html bởi vì api hết hạn không trả về html đúng được                  
-                  // dangerouslySetInnerHTML={{ __html:`<!DOCTYPE html> <html lang="vi"><head> <meta charset="UTF-8">  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Trang HTML Mẫu</title></head>
-                  //   <body style="z-index:1"><h1>Xin chào, đây là trang HTML!</h1><p>Đây là một đoạn văn bản trong HTML.</p>
-                  //   <h1>Xin chào, đây là trang HTML!</h1><p>Đây là một đoạn văn bản trong HTML.</p>
-                  //   <h1>Xin chào, đây là trang HTML!</h1><p>Đây là một đoạn văn bản trong HTML.</p>
-                  //   <h1>Xin chào, đây là trang HTML!</h1><p>Đây là một đoạn văn bản trong HTML.</p>
-                  //   <h1>Xin chào, đây là trang HTML!</h1><p>Đây là một đoạn văn bản trong HTML.</p>
-                  //   <h1>Xin chào, đây là trang HTML!</h1><p>Đây là một đoạn văn bản trong HTML.</p>
-                  //   <h1>Xin chào, đây là trang HTML!</h1><p>Đây là một đoạn văn bản trong HTML.</p>
-                  //   <h1>Xin chào, đây là trang HTML!</h1><p>Đây là một đoạn văn bản trong HTML.</p>
-                  //   <h1>Xin chào, đây là trang HTML!</h1><p>Đây là một đoạn văn bản trong HTML.</p>
-                  //   <h1>Xin chào, đây là trang HTML!</h1><p>Đây là một đoạn văn bản trong HTML.</p>
-                  //   <h1>Xin chào, đây là trang HTML!</h1><p>Đây là một đoạn văn bản trong HTML.</p>
-                  //   <h1>Xin chào, đây là trang HTML!</h1><p>Đây là một đoạn văn bản trong HTML.</p>
-                  //   <h1>Xin chào, đây là trang HTML!</h1><p>Đây là một đoạn văn bản trong HTML.</p></body></html>`}}
-                  contentEditable={contentEditable}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    zIndex: "1",
-                  }}
-                />
-              </div>
-              <canvas
+<div
+  className="border"
+  ref={editContainer}
+  onClick={handleClick}
+  style={{
+    position: "relative",
+    width: "100%",
+    height: "100vh", 
+    zIndex: "1",
+  }}
+>
+{/* <style dangerouslySetInnerHTML={{ __html: data.style }} /> */}
+  <div
+    dangerouslySetInnerHTML={{ __html: data.html_content }}
+    contentEditable={contentEditable}
+    style={{
+      width: "100%",
+      height: "100%", // Đặt chiều cao tối thiểu
+      zIndex: "10",
+    }}
+  />
+  
+</div>
+
+              {/* <canvas
         ref={canvasRef}
         width={containerSize.width}  // Đặt width của canvas bằng chiều rộng thẻ cha
         height={containerSize.height} // Đặt height của canvas bằng chiều cao thẻ cha
@@ -609,13 +586,13 @@ const Edit = () => {
         onMouseUp={stopDrawing}
         onMouseLeave={stopDrawing}
         
-      />
+      /> */}
             </>
           ) : (
             <>
               <label
                 htmlFor="dropzone-file"
-                className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50"
+                className="flex flex-col items-center justify-center w-full h-[90vh] border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50"
                 style={{
                   fontWeight: 'bold',
                   flex: 'unset',
@@ -650,7 +627,6 @@ const Edit = () => {
               </label>
             </>
           )}
-        </div>
       </div>
     </>
   );
