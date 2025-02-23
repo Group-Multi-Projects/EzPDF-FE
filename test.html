@@ -4,65 +4,58 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Add Text Functionality</title>
-    <style>
-      body {
-        margin: 0;
-        padding: 0;
-        height: 100vh;
-        position: relative;
-      }
-
-      .add-text-btn {
-        position: fixed;
-        top: 10px;
-        left: 10px;
-        padding: 10px 20px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-      }
-
-      .textbox {
-        position: absolute;
-        border: 1px solid #ccc;
-        padding: 5px;
-        resize: none;
-        min-width: 100px;
-        min-height: 30px;
-      }
-    </style>
   </head>
   <body>
-    <button id="addTextBtn">Add text</button>
+    <div id="printArea">
+      <h2>Tiêu đề của PDF</h2>
+      <p>Nội dung bên trong div cần in.</p>
+      <h2>Tiêu đề của PDF</h2>
+      <p>Nội dung bên trong div cần in.</p>      <h2>Tiêu đề của PDF</h2>
+      <p>Nội dung bên trong div cần in.</p>      <h2>Tiêu đề của PDF</h2>
+      <p>Nội dung bên trong div cần in.</p>      <h2>Tiêu đề của PDF</h2>
+      <p>Nội dung bên trong div cần in.</p>      <h2>Tiêu đề của PDF</h2>
+      <p>Nội dung bên trong div cần in.</p>      <h2>Tiêu đề của PDF</h2>
+      <p>Nội dung bên trong div cần in.</p>      <h2>Tiêu đề của PDF</h2>
+      <p>Nội dung bên trong div cần in.</p>      <h2>Tiêu đề của PDF</h2>
+      <p>Nội dung bên trong div cần in.</p>      <h2>Tiêu đề của PDF</h2>
+      <p>Nội dung bên trong div cần in.</p>      <h2>Tiêu đề của PDF</h2>
+      <p>Nội dung bên trong div cần in.</p>      <h2>Tiêu đề của PDF</h2>
+      <p>Nội dung bên trong div cần in.</p>      <h2>Tiêu đề của PDF</h2>
+      <p>Nội dung bên trong div cần in.</p>      <h2>Tiêu đề của PDF</h2>
+      <p>Nội dung bên trong div cần in.</p>      <h2>Tiêu đề của PDF</h2>
+      <p>Nội dung bên trong div cần in.</p>      <h2>Tiêu đề của PDF</h2>
+      <p>Nội dung bên trong div cần in.</p>      <h2>Tiêu đề của PDF</h2>
+      <p>Nội dung bên trong div cần in.</p>      <h2>Tiêu đề của PDF</h2>
+      <p>Nội dung bên trong div cần in.</p>      <h2>Tiêu đề của PDF</h2>
+      <p>Nội dung bên trong div cần in.</p>      <h2>Tiêu đề của PDF</h2>
+      <p>Nội dung bên trong div cần in.</p>      <h2>Tiêu đề của PDF</h2>
+      <p>Nội dung bên trong div cần in.</p>      <h2>Tiêu đề của PDF</h2>
+      <p>Nội dung bên trong div cần in.</p>      <h2>Tiêu đề của PDF</h2>
+      <p>Nội dung bên trong div cần in.</p>      <h2>Tiêu đề của PDF</h2>
+      <p>Nội dung bên trong div cần in.</p>      <h2>Tiêu đề của PDF</h2>
+      <p>Nội dung bên trong div cần in.</p>
+      <form>
+        <label for="name">Họ tên:</label>
+        <input type="text" id="name" name="name" value="Nguyễn Văn A" />
+      </form>
+    </div>
+
+    <h2>Đây là nội dung bên ngoài div </h2>
+    <p>Đây là nội dung bên ngoài div </p>
+
+    <button onclick="printDiv()">In PDF</button>
 
     <script>
-      const addTextBtn = document.getElementById("addTextBtn");
-      let isAddingText = false;
-      //Toggle the add text mode
-      addTextBtn.addEventListener("click", () => {
-        isAddingText = !isAddingText;
-        addTextBtn.style.backgroundColor = isAddingText ? "#28a745" : "#007bff";
-        addTextBtn.textContent = isAddingText ? "Adding Text..." : "Add Text";
-      });
-      // Add a textbox at the clicked position
-      document.body.addEventListener("click", (event) => {
-        if (!isAddingText) return;
-        // Avoid adding textboxes on the button itself
-        if (event.target === addTextBtn) return;
-        const textbox = document.createElement("input");
-        textbox.classList.add("textbox");
-        textbox.style.left = `${event.pageX}px`;
-        textbox.style.top = `${event.pageY}px`;
-        document.body.appendChild(textbox);
-        // Focus on the new textbox for immediate editing
-        textbox.focus();
-        // Disable adding mode after adding a textbox
-        isAddingText = false;
-        addTextBtn.style.backgroundColor = "#007bff";
-        addTextBtn.textContent = "Add Text";
-      });
+      function printDiv() {
+        const printContent = document.getElementById("printArea").innerHTML;
+        const originalContent = document.body.innerHTML;
+
+        document.body.innerHTML = printContent;
+        window.print();
+
+        document.body.innerHTML = originalContent; // Khôi phục nội dung sau khi in
+        location.reload(); // Tải lại trang để khôi phục sự kiện và JavaScript
+      }
     </script>
   </body>
 </html>

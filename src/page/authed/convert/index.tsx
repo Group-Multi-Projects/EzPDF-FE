@@ -41,7 +41,7 @@ const Convert = () => {
         </div>
       </div>  
     </div>
-  )
-}
+  );
+};
 
-export default Convert
+export default Convert;
