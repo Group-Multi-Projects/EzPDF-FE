@@ -5,7 +5,7 @@ export interface HTMLtoPDFResponse {
     file: string;
     created_at: string;
     account: number;
-    ouput_file_url: string;
+    output_file_url: string;
   }
 
 // Interface cho trạng thái ban đầu
