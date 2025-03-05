@@ -36,7 +36,7 @@ const SidebarRoot: FC<SidebarProps> = ({
 
   return (
     <Sidebar
-      className="h-[100vh] z-10"
+      className="h-[100vh] z-50"
       collapsed={collapsed}
       toggled={toggled}
       onBackdropClick={handleToggleSidebar}

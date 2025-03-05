@@ -4,14 +4,11 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { useState, useRef, useEffect, useLayoutEffect } from "react";
-import {  BeatLoader, PuffLoader, SyncLoader } from "react-spinners";
+import { BeatLoader, PuffLoader, SyncLoader } from "react-spinners";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SaveIcon from "@mui/icons-material/Save";
 import { RootState, AppDispatch } from "@/store";
-import {
-  uploadFile,
-  resetUploadState,
-} from "@/store/upload_slice";
+import { uploadFile, resetUploadState } from "@/store/upload_slice";
 import {
   faArrowDown,
   faCircle,
@@ -21,7 +18,7 @@ import {
   faPenToSquare,
   faSquare,
   faStar,
-  faPencil
+  faPencil,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ButtonTool } from "@/component/authed/tool";
@@ -29,17 +26,24 @@ import { ShapeType } from "@/type";
 import { convertFile, HTMLtoPDFResponse } from "@/store/convert_slice";
 
 const Edit = () => {
-
   const dispatch = useDispatch<AppDispatch>();
   const { isLoading, data } = useSelector((state: RootState) => state.upload);
-  const {isLoading_convert} = useSelector((state:RootState) => state.convert)
-  const [contentEditable, setContentEditable] = useState(false)
-  const editContainer = useRef<HTMLDivElement | null>(null);
-  const [uploadedFileName, setUploadedFileName] = useState<string | undefined>("");
-  const [requestType, setRequestType] = useState<string>("editfile");
-  const [actionType, setActionType] = useState<"shape" | "image" | "text"|"draw">(
-    "shape"
+  const { isLoading_convert } = useSelector(
+    (state: RootState) => state.convert
   );
+   const [isAddingShape, setIsAddingShape] = useState(false);
+  const [isDrawingMode, setIsDrawingMode] = useState(false); 
+  const [contentEditable, setContentEditable] = useState(false);
+  const editContainer = useRef<HTMLDivElement | null>(null);
+  const [uploadedFileName, setUploadedFileName] = useState<string | undefined>(
+    ""
+  );
+  const [requestType, setRequestType] = useState<string>("editfile");
+  const [actionType, setActionType] = useState<
+    "shape" | "image" | "text" | "draw"
+  >("shape");
+  const [isAddingImage, setIsAddingImage] = useState<boolean>(false);
+  const [imageSrc, setImageSrc] = useState<string | null>(null);
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     switch (actionType) {
       case "shape":
@@ -48,9 +52,6 @@ const Edit = () => {
       case "image":
         addImage(e);
         break;
-      // case "text":
-      //   addText(e, "Sample Text");
-      //   break;
       default:
         break;
     }
@@ -78,9 +79,8 @@ const Edit = () => {
   // };
 
   //add shape
-  
-  const [isAddingShape, setIsAddingShape] = useState(false);
-  const [isDrawingMode, setIsDrawingMode] = useState(false);
+
+
 
   const [shapeType, setShapeType] = useState<ShapeType>("square");
   const addShape = (
@@ -89,19 +89,19 @@ const Edit = () => {
     size: number = 50
   ) => {
     if (!isAddingShape) return;
-  
+
     if (editContainer.current) {
       const shape = document.createElement("div");
       shape.classList.add(type);
       shape.style.position = "absolute";
-  
+
       const containerRect = editContainer.current.getBoundingClientRect();
       const x = event.clientX - containerRect.left;
       const y = event.clientY - containerRect.top;
-  
+
       shape.style.left = `${x - size / 2}px`;
       shape.style.top = `${y - size / 2}px`;
-  
+
       switch (type) {
         case "circle":
           shape.style.width = `${size}px`;
@@ -140,7 +140,7 @@ const Edit = () => {
           shape.style.backgroundColor = "green";
           break;
       }
-  
+
       // Thêm điểm kéo dãn nếu không phải là text
       if (type !== "text") {
         const resizeHandle = document.createElement("div");
@@ -152,17 +152,17 @@ const Edit = () => {
         resizeHandle.style.height = "10px";
         resizeHandle.style.backgroundColor = "black";
         shape.appendChild(resizeHandle);
-  
+
         makeResizable(shape, resizeHandle);
       }
-  
+
       makeDraggable(shape);
-  
+
       editContainer.current.appendChild(shape);
     }
     setIsAddingShape(false);
   };
-  
+
   ////Draw vẽ
   // const canvasRef = useRef<HTMLCanvasElement | null>(null); // Canvas reference
   // const [isDrawing, setIsDrawing] = useState(false);
@@ -187,7 +187,7 @@ const Edit = () => {
   //   };
   // }, [data]);
   // const [position, setPosition] = useState({ top: 0, left: 0 });
-  
+
   // useEffect(() => {
   //   if (editContainer.current) {
   //     const rect = editContainer.current.getBoundingClientRect();
@@ -198,30 +198,20 @@ const Edit = () => {
   //   }
   // }, [data]);
 
-
   // useEffect(() => {
   //   const handleScroll = () => {
   //       setPosition({ top: editContainer.current?.getBoundingClientRect().top,  // Lấy vị trí cuộn dọc
   //       left: editContainer.current?.getBoundingClientRect().left, });
   //   };
 
-    
   //   window?.addEventListener("scroll", handleScroll);
-    
 
   //   return () => {
 
   //       window.removeEventListener("scroll", handleScroll);
-      
+
   //   };
   // }, [data ]);
-
-
-
-
-
-
-
 
   // // Hàm bắt đầu vẽ
   // const startDrawing = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
@@ -250,7 +240,7 @@ const Edit = () => {
   //       context.strokeStyle = lineColor;
   //       context.lineWidth = lineWidth;
   //       context.stroke();
-        
+
   //       setLastX(offsetX);
   //       setLastY(offsetY);
   //     }
@@ -263,8 +253,6 @@ const Edit = () => {
   // };
   ////
   // add image
-  const [isAddingImage, setIsAddingImage] = useState<boolean>(false);
-  const [imageSrc, setImageSrc] = useState<string | null>(null);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -292,8 +280,8 @@ const Edit = () => {
       // Set image position
       image.style.left = `${x - 50}px`; // Center image on click
       image.style.top = `${y - 50}px`;
-      image.style.height = "50px"
-      image.style.width = "50px"
+      image.style.height = "50px";
+      image.style.width = "50px";
       // Thêm điểm kéo dãn
       const resizeHandle = document.createElement("div");
       resizeHandle.classList.add("resize-handle");
@@ -400,7 +388,7 @@ const Edit = () => {
     });
   };
 
-// Các hàm add shape, add text  
+  // Các hàm add shape, add text
   const Square = () => {
     setIsAddingShape(true);
     setShapeType("square");
@@ -413,78 +401,78 @@ const Edit = () => {
     setIsAddingShape(true);
     setShapeType("star");
   };
-  const Text = () =>{
+  const Text = () => {
     setIsAddingShape(true);
     setShapeType("text");
-  }
-  const Draw = () =>{
+  };
+  const Draw = () => {
     setIsDrawingMode(!isDrawingMode);
-  }
-  const handleEditContent = () =>{
-    setContentEditable((prev) => !prev)
-  }
+  };
+  const handleEditContent = () => {
+    setContentEditable((prev) => !prev);
+  };
 
-// Hàm save nội dung PDF
-  const SaveAll = async () =>{
-    setRequestType('html2pdf')
-    if (editContainer.current) {
-    const htmlContent = editContainer.current.innerHTML;
+  // Hàm save nội dung PDF
+  // const SaveAll = async () => {
+  //   setRequestType("html2pdf");
+  //   if (editContainer.current) {
+  //     const htmlContent = editContainer.current.innerHTML;
+  //     const now = new Date();
+  //     const dateTime = now.toISOString().replace(/[:.-]/g, "_"); 
+  //     const baseFileName = uploadedFileName?.split(".")[0]; 
+  //     const newFileName = `${baseFileName}_${dateTime}.html`;
+  //     const blob = new Blob([htmlContent], { type: "text/html" });
+  //     const formData = new FormData();
+  //     formData.append("file", blob, newFileName);
+  //     formData.append("request_type", requestType);
+  //     try {
+  //       let res = await dispatch(convertFile(formData)); 
 
-        // Lấy thời gian hiện tại
-    const now = new Date();
-    const dateTime = now.toISOString().replace(/[:.-]/g, "_"); // Thay thế ký tự đặc biệt
+  //       const response = res.payload as HTMLtoPDFResponse;
+  //       console.log("response edit page", response);
+  //       if (response.ouput_file_url) {
+  //         const fileUrl = response.ouput_file_url;
 
-    // Tên tệp gốc từ file đã tải lên
-    const baseFileName = uploadedFileName?.split(".")[0]; // Bỏ phần mở rộng
+  //         const a = document.createElement("a");
+  //         a.href = fileUrl;
+  //         a.download = newFileName;
+  //         document.body.appendChild(a);
+  //         a.click();
+  //         document.body.removeChild(a);
 
-    // Tạo tên tệp mới
-    const newFileName = `${baseFileName}_${dateTime}.html`;
-
-    // Tạo Blob từ nội dung HTML
-    const blob = new Blob([htmlContent], { type: "text/html" });
-    
-    // Tạo URL từ Blob
+  //         toast.success("File saved and downloaded successfully!");
+  //       } else {
+  //         toast.error("Failed to get the file URL!");
+  //         console.error("Response does not include output_file_url:", response);
+  //       }
+  //     } catch (error) {
+  //       toast.error("Download failed!");
+  //       console.error("Download failed:", error);
+  //     }
+  //   } else {
+  //     console.error("EditContainer is not available");
+  //     toast.error("EditContainer is not available !");
+  //   }
+  // };
+  const SaveAll = () => {
+    if (!editContainer.current) return;
   
-    const formData = new FormData();
+    const printContent = editContainer.current.innerHTML;
+    const originalContent = document.body.innerHTML; // Lưu nội dung gốc
+  
+    document.body.innerHTML = printContent; // Chỉ hiển thị nội dung cần in
+    window.print(); // In nội dung
+  
+    document.body.innerHTML = originalContent; // Khôi phục lại nội dung sau khi in
+    location.reload(); // Tải lại trang để đảm bảo mọi thứ hoạt động đúng
+  };
+  
+  
 
-    formData.append("file", blob, newFileName);
-    formData.append("request_type", requestType);
-    // Lưu trữ hoặc gửi dữ liệu HTML đến server
-    
-    try {
-      let res = await dispatch(convertFile(formData)); // Gọi API
-
-      // Kiểm tra kiểu dữ liệu trả về
-      const response = res.payload as HTMLtoPDFResponse;
-      console.log('response edit page', response)
-      if (response.ouput_file_url) {
-        const fileUrl = response.ouput_file_url;
-
-        const a = document.createElement("a");
-        a.href = fileUrl;
-        a.download = newFileName;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-
-        toast.success("File saved and downloaded successfully!");
-      } else {
-        toast.error("Failed to get the file URL!");
-        console.error("Response does not include output_file_url:", response);
-      }
-    } catch (error) {
-      toast.error("Download failed!");
-      console.error("Download failed:", error);
-    }
-  } else {
-    console.error("EditContainer is not available");
-    toast.error('EditContainer is not available !')
-  }
-  }
   return (
     <>
       {data && (
-        <div style={{ zIndex: 1000}}>
+        <div style={{ zIndex: 1000 }}>
           <div className="w-full  flex items-center justify-between p-2 shadow-sm">
             <div className="flex">
               {/* <ButtonTool onClick={addText} icon={faICursor} ariaLabel="Add Text" /> */}
@@ -506,14 +494,14 @@ const Edit = () => {
               />
               <ButtonTool
                 onClick={handleEditContent}
-                icon={contentEditable ? faCircleXmark  : faPenToSquare} // Icon tương ứng (có thể sử dụng FontAwesome hoặc bất kỳ thư viện nào)
+                icon={contentEditable ? faCircleXmark : faPenToSquare} // Icon tương ứng (có thể sử dụng FontAwesome hoặc bất kỳ thư viện nào)
                 ariaLabel="Edit"
-              /> 
-               <ButtonTool
+              />
+              <ButtonTool
                 onClick={Draw}
-                icon={   faPencil } // Icon tương ứng (có thể sử dụng FontAwesome hoặc bất kỳ thư viện nào)
+                icon={faPencil} // Icon tương ứng (có thể sử dụng FontAwesome hoặc bất kỳ thư viện nào)
                 ariaLabel="Draw"
-              />             
+              />
               {/* Nút thêm hình ảnh */}
               <label
                 className="p-2 border"
@@ -521,7 +509,7 @@ const Edit = () => {
                 style={{ cursor: "pointer", marginLeft: "10px" }}
                 aria-label="Add image"
               >
-                <FontAwesomeIcon icon={faImage}/>
+                <FontAwesomeIcon icon={faImage} />
               </label>
               <input
                 className="hidden"
@@ -538,40 +526,47 @@ const Edit = () => {
               type="button"
               className="flex justify-center items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm py-2 px-3 me-2"
             >
-              <span className="me-2"> {isLoading_convert ? 'Saving data...' : 'Save all'} </span>
-              <span>{isLoading_convert ? <BeatLoader size={3} color="#fff"/> : <FontAwesomeIcon  icon={faArrowDown} />}</span>
+              <span className="me-2">
+                {" "}
+                {isLoading_convert ? "Saving data..." : "Save all"}{" "}
+              </span>
+              <span>
+                {isLoading_convert ? (
+                  <BeatLoader size={3} color="#fff" />
+                ) : (
+                  <FontAwesomeIcon icon={faArrowDown} />
+                )}
+              </span>
             </button>
           </div>
         </div>
       )}
       <div className="p-10">
-          {!isLoading && data ? (
-            <>
-<div
-  className="border"
-  ref={editContainer}
-  onClick={handleClick}
-  style={{
-    position: "relative",
-    width: "100%",
-    height: "100vh", 
-    zIndex: "1",
-  }}
->
-{/* <style dangerouslySetInnerHTML={{ __html: data.style }} /> */}
-  <div
-    dangerouslySetInnerHTML={{ __html: data.html_content }}
-    contentEditable={contentEditable}
-    style={{
-      width: "100%",
-      height: "100%", // Đặt chiều cao tối thiểu
-      zIndex: "10",
-    }}
-  />
-  
-</div>
+        {!isLoading && data ? (
+          <>
+            <div
+              className="border"
+              ref={editContainer}
+              onClick={handleClick}
+              style={{
+                position: "relative",
+                width: "100%",
+                height: "100vh",
+                zIndex: "1",
+              }}
+            >
+              <div
+                dangerouslySetInnerHTML={{ __html: data.html_content }}
+                contentEditable={contentEditable}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  zIndex: "10",
+                }}
+              />
+            </div>
 
-              {/* <canvas
+            {/* <canvas
         ref={canvasRef}
         width={containerSize.width}  // Đặt width của canvas bằng chiều rộng thẻ cha
         height={containerSize.height} // Đặt height của canvas bằng chiều cao thẻ cha
@@ -587,46 +582,46 @@ const Edit = () => {
         onMouseLeave={stopDrawing}
         
       /> */}
-            </>
-          ) : (
-            <>
-              <label
-                htmlFor="dropzone-file"
-                className="flex flex-col items-center justify-center w-full h-[90vh] border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50"
-                style={{
-                  fontWeight: 'bold',
-                  flex: 'unset',
-                  maxWidth: 'unset',
-                }}
-              >
-                {isLoading ? (
-                  <LoadingButton
-                    loading
-                    loadingPosition="start"
-                    startIcon={<SaveIcon />}
-                    variant="outlined"
-                  >
-                    Uploading...
-                  </LoadingButton>
-                ) : (
-                  <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                    <CloudUploadOutlinedIcon fontSize="large" />
-                    <p className="mb-2 text-sm text-gray-500">
-                      <span className="font-semibold">Click to upload</span> or
-                      drag and drop
-                    </p>
-                    <p className="text-xs text-gray-500">Upload file here</p>
-                  </div>
-                )}
-                <input
-                  id="dropzone-file"
-                  type="file"
-                  className="hidden"
-                  onChange={handleFileChange} // Gọi API khi chọn file
-                />
-              </label>
-            </>
-          )}
+          </>
+        ) : (
+          <>
+            <label
+              htmlFor="dropzone-file"
+              className="flex flex-col items-center justify-center w-full h-[90vh] border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50"
+              style={{
+                fontWeight: "bold",
+                flex: "unset",
+                maxWidth: "unset",
+              }}
+            >
+              {isLoading ? (
+                <LoadingButton
+                  loading
+                  loadingPosition="start"
+                  startIcon={<SaveIcon />}
+                  variant="outlined"
+                >
+                  Uploading...
+                </LoadingButton>
+              ) : (
+                <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                  <CloudUploadOutlinedIcon fontSize="large" />
+                  <p className="mb-2 text-sm text-gray-500">
+                    <span className="font-semibold">Click to upload</span> or
+                    drag and drop
+                  </p>
+                  <p className="text-xs text-gray-500">Upload file here</p>
+                </div>
+              )}
+              <input
+                id="dropzone-file"
+                type="file"
+                className="hidden"
+                onChange={handleFileChange}
+              />
+            </label>
+          </>
+        )}
       </div>
     </>
   );
