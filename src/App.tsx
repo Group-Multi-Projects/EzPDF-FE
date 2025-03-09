@@ -4,7 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { setUser } from "./store/auth_slice";
-import Layout from "./component/authed/layout/layout";
+import Layout from "./component/layout/main/layout";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 

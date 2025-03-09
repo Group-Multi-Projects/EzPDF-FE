@@ -38,8 +38,9 @@ const initialState:GetListFilesState = {
     "get_list_files/files",
     async ( type , thunkAPI) => {
       try {
-        const response = await getFilesList(type);      
+        const response = await getFilesList(type);     
         return response;
+        console.log('list file',response)
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (errorListFiles: any) {
         return thunkAPI.rejectWithValue(

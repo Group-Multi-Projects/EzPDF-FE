@@ -2,13 +2,12 @@ import "./style.scss";
 import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { toast } from "react-toastify";
-import { useState, useRef, useEffect, useLayoutEffect } from "react";
-import { BeatLoader, PuffLoader, SyncLoader } from "react-spinners";
+import { useState, useRef } from "react";
+import { BeatLoader } from "react-spinners";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SaveIcon from "@mui/icons-material/Save";
 import { RootState, AppDispatch } from "@/store";
-import { uploadFile, resetUploadState } from "@/store/upload_slice";
+import { uploadFile } from "@/store/upload_slice";
 import {
   faArrowDown,
   faCircle,
@@ -21,9 +20,8 @@ import {
   faPencil,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ButtonTool } from "@/component/authed/tool";
 import { ShapeType } from "@/type";
-import { convertFile, HTMLtoPDFResponse } from "@/store/convert_slice";
+import { ButtonTool } from "@/component/specific/tool";
 
 const Edit = () => {
   const dispatch = useDispatch<AppDispatch>();
