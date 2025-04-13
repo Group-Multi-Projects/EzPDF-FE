@@ -40,7 +40,7 @@ const SidebarRoot: FC<SidebarProps> = ({
       collapsed={collapsed}
       toggled={toggled}
       onBackdropClick={handleToggleSidebar}
-       image={`${bgNavbar}`}
+      backgroundColor='#fff'
       {...rest}
     >
       <div className="my-6 flex px-2">

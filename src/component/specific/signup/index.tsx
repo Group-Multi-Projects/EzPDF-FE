@@ -1,9 +1,10 @@
-import ModalSignUp from "@/component/modalSignup";
+
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useSelector, useDispatch } from "react-redux";
 import {  setIsOpenSignup } from "@/store/client/login_register";
 
 import { RootState } from "@/store";
+import ModalSignUp from "../modalSignup";
 const Signup = () => {
 
   const dispatch = useDispatch()

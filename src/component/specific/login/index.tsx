@@ -1,8 +1,8 @@
-import ModalLogin from "@/component/modalLogin";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useSelector, useDispatch } from "react-redux";
 import { setIsOpenLogin } from "@/store/client/login_register";
 import { RootState } from "@/store";
+import ModalLogin from "../modalLogin";
 const Login = () => {
   const dispatch = useDispatch();
   const isOpenLogin = useSelector(

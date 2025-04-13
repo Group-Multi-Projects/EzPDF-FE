@@ -5,22 +5,20 @@ import { RootState } from "@/store";
 import bgImg from '@/assets/svg/ss.svg'
 import { Menu } from "lucide-react";
 interface LayoutProps {
-  children: ReactNode; // Định nghĩa kiểu cho children
+  children: ReactNode; 
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [isSidebarOpen] = useState(false);
   const [toggled, setToggled] = React.useState(false);
-  // Hook to check screen width
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768); // Kiểm tra nếu chiều rộng nhỏ hơn hoặc bằng 768px
-      // console.log(isMobile ,window.innerWidth ,"9")
+      setIsMobile(window.innerWidth <= 768);
     };
 
-    window.addEventListener("resize", handleResize); // Lắng nghe sự thay đổi kích thước
-    handleResize(); // Kiểm tra kích thước khi component mount
+    window.addEventListener("resize", handleResize);
+    handleResize(); 
 
     return () => {
       window.removeEventListener("resize", handleResize); // Dọn dẹp event listener khi component unmount
@@ -44,7 +42,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         )}
       </div>
       <div
-        className={`p-0 transition-[margin] duration-250 ease-out w-full h-screen overflow-y-scroll`}
+        className={`p-0 transition-[margin] duration-250 ease-out w-full h-screen overflow-hidden`}
         style={{
           marginLeft: isMobile ? "0px" : isSidebarOpen ? "" : "250px",
           paddingTop: isMobile ? '3.5rem' : "0px",

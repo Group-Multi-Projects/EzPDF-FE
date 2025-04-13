@@ -1,6 +1,4 @@
 import {   Route, Routes } from "react-router-dom";
-import React from "react";
-const Layout = React.lazy(() => import("@/component/authed/layout/layout"));
 import { useSelector } from "react-redux";
 import HomePage from "@/page/authed/home/home";
 import LandingPage from "@/page/landingPage";

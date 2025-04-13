@@ -1,9 +1,0 @@
-1. chuyển PDF -> HTML 
-- Khi upload thành công, nhận HTML của file 
-- Hiển thị nội dung HTML này lên trình duyệt
-- stringHTML.
-- Nếu nhận ndung HTML thì thêm thuộc tính contentEditable === true vào all thẻ <div/> trong ndung HTML kia
-
-
-
--test
