@@ -1,0 +1,6 @@
+lib tải file lên : thư mục Files/view.py
+quản lý database: Files/modal.py
+migrate database: python manage.py migrate  
+chạy server backend: python manage.py runserver
+tạo tk mặc định : python manage.py createsuperuser.
+

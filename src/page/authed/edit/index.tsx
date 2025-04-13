@@ -17,7 +17,6 @@ import {
   faPenToSquare,
   faSquare,
   faStar,
-  faPencil,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ShapeType } from "@/type";
@@ -29,10 +28,11 @@ const Edit = () => {
   const { isLoading_convert } = useSelector(
     (state: RootState) => state.convert
   );
-   const [isAddingShape, setIsAddingShape] = useState(false);
-  const [isDrawingMode, setIsDrawingMode] = useState(false); 
+  const [zoomLevel, setZoomLevel] = useState(1);
+  const [isAddingShape, setIsAddingShape] = useState(false);
   const [contentEditable, setContentEditable] = useState(false);
   const editContainer = useRef<HTMLDivElement | null>(null);
+  const [shapeType, setShapeType] = useState<ShapeType>("square");
   const [uploadedFileName, setUploadedFileName] = useState<string | undefined>(
     ""
   );
@@ -72,15 +72,7 @@ const Edit = () => {
       console.error("Upload failed:", error);
     }
   };
-  // const handleReset = () => {
-  //   dispatch(resetUploadState());
-  // };
 
-  //add shape
-
-
-
-  const [shapeType, setShapeType] = useState<ShapeType>("square");
   const addShape = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
     type: ShapeType,
@@ -138,8 +130,6 @@ const Edit = () => {
           shape.style.backgroundColor = "green";
           break;
       }
-
-      // Thêm điểm kéo dãn nếu không phải là text
       if (type !== "text") {
         const resizeHandle = document.createElement("div");
         resizeHandle.classList.add("resize-handle");
@@ -160,96 +150,6 @@ const Edit = () => {
     }
     setIsAddingShape(false);
   };
-
-  ////Draw vẽ
-  // const canvasRef = useRef<HTMLCanvasElement | null>(null); // Canvas reference
-  // const [isDrawing, setIsDrawing] = useState(false);
-  // const [lastX, setLastX] = useState(0);
-  // const [lastY, setLastY] = useState(0);
-  // const [lineColor, setLineColor] = useState('#000');
-  // const [lineWidth, setLineWidth] = useState(5);
-  // const [containerSize, setContainerSize] = useState<{ width: number; height: number }>({ width: 1000, height:1000 });
-  // useEffect(() => {
-  //   const updateContainerSize = () => {
-  //     if (editContainer.current) {
-  //       setContainerSize({
-  //         width: editContainer.current.offsetWidth,  // Lấy chiều rộng của thẻ cha
-  //         height: editContainer.current.offsetHeight, // Lấy chiều cao của thẻ cha
-  //       });
-  //     }
-  //   };
-  //   updateContainerSize();
-  //   window.addEventListener('resize', updateContainerSize);
-  //   return () => {
-  //     window.removeEventListener('resize', updateContainerSize);
-  //   };
-  // }, [data]);
-  // const [position, setPosition] = useState({ top: 0, left: 0 });
-
-  // useEffect(() => {
-  //   if (editContainer.current) {
-  //     const rect = editContainer.current.getBoundingClientRect();
-  //     setPosition({
-  //       top: rect.top,
-  //       left: rect.left,
-  //     });
-  //   }
-  // }, [data]);
-
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //       setPosition({ top: editContainer.current?.getBoundingClientRect().top,  // Lấy vị trí cuộn dọc
-  //       left: editContainer.current?.getBoundingClientRect().left, });
-  //   };
-
-  //   window?.addEventListener("scroll", handleScroll);
-
-  //   return () => {
-
-  //       window.removeEventListener("scroll", handleScroll);
-
-  //   };
-  // }, [data ]);
-
-  // // Hàm bắt đầu vẽ
-  // const startDrawing = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
-  //   const canvas = canvasRef.current;
-  //   if (canvas) {
-  //     const context = canvas.getContext('2d');
-  //     if (context) {
-  //       const { offsetX, offsetY } = e.nativeEvent;
-  //       setLastX(offsetX);
-  //       setLastY(offsetY);
-  //       setIsDrawing(true);
-  //     }
-  //   }
-  // };
-
-  // // Hàm vẽ
-  // const draw = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
-  //   const canvas = canvasRef.current;
-  //   if (canvas && isDrawing) {
-  //     const context = canvas.getContext('2d');
-  //     if (context) {
-  //       const { offsetX, offsetY } = e.nativeEvent;
-  //       context.beginPath();
-  //       context.moveTo(lastX, lastY);
-  //       context.lineTo(offsetX, offsetY);
-  //       context.strokeStyle = lineColor;
-  //       context.lineWidth = lineWidth;
-  //       context.stroke();
-
-  //       setLastX(offsetX);
-  //       setLastY(offsetY);
-  //     }
-  //   }
-  // };
-
-  // // Hàm dừng vẽ
-  // const stopDrawing = () => {
-  //   setIsDrawing(false);
-  // };
-  ////
   // add image
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -403,77 +303,31 @@ const Edit = () => {
     setIsAddingShape(true);
     setShapeType("text");
   };
-  const Draw = () => {
-    setIsDrawingMode(!isDrawingMode);
-  };
   const handleEditContent = () => {
     setContentEditable((prev) => !prev);
   };
-
-  // Hàm save nội dung PDF
-  // const SaveAll = async () => {
-  //   setRequestType("html2pdf");
-  //   if (editContainer.current) {
-  //     const htmlContent = editContainer.current.innerHTML;
-  //     const now = new Date();
-  //     const dateTime = now.toISOString().replace(/[:.-]/g, "_"); 
-  //     const baseFileName = uploadedFileName?.split(".")[0]; 
-  //     const newFileName = `${baseFileName}_${dateTime}.html`;
-  //     const blob = new Blob([htmlContent], { type: "text/html" });
-  //     const formData = new FormData();
-  //     formData.append("file", blob, newFileName);
-  //     formData.append("request_type", requestType);
-  //     try {
-  //       let res = await dispatch(convertFile(formData)); 
-
-  //       const response = res.payload as HTMLtoPDFResponse;
-  //       console.log("response edit page", response);
-  //       if (response.ouput_file_url) {
-  //         const fileUrl = response.ouput_file_url;
-
-  //         const a = document.createElement("a");
-  //         a.href = fileUrl;
-  //         a.download = newFileName;
-  //         document.body.appendChild(a);
-  //         a.click();
-  //         document.body.removeChild(a);
-
-  //         toast.success("File saved and downloaded successfully!");
-  //       } else {
-  //         toast.error("Failed to get the file URL!");
-  //         console.error("Response does not include output_file_url:", response);
-  //       }
-  //     } catch (error) {
-  //       toast.error("Download failed!");
-  //       console.error("Download failed:", error);
-  //     }
-  //   } else {
-  //     console.error("EditContainer is not available");
-  //     toast.error("EditContainer is not available !");
-  //   }
-  // };
+   // Hàm tăng giảm zoom
+  const handleZoomIn = () => setZoomLevel((prev) => Math.min(prev + 0.1, 2)); // Zoom tối đa 200%
+  const handleZoomOut = () => setZoomLevel((prev) => Math.max(prev - 0.1, 0.5)); // Zoom tối thiểu 50%
   const SaveAll = () => {
     if (!editContainer.current) return;
-  
+
     const printContent = editContainer.current.innerHTML;
     const originalContent = document.body.innerHTML; // Lưu nội dung gốc
-  
+
     document.body.innerHTML = printContent; // Chỉ hiển thị nội dung cần in
     window.print(); // In nội dung
-  
+
     document.body.innerHTML = originalContent; // Khôi phục lại nội dung sau khi in
     location.reload(); // Tải lại trang để đảm bảo mọi thứ hoạt động đúng
   };
-  
-  
 
   return (
     <>
       {data && (
         <div style={{ zIndex: 1000 }}>
-          <div className="w-full  flex items-center justify-between p-2 shadow-sm">
+          <div className="w-full bg-white flex items-center justify-between p-2 shadow-sm">
             <div className="flex">
-              {/* <ButtonTool onClick={addText} icon={faICursor} ariaLabel="Add Text" /> */}
               <ButtonTool
                 onClick={Square}
                 icon={faSquare}
@@ -495,11 +349,6 @@ const Edit = () => {
                 icon={contentEditable ? faCircleXmark : faPenToSquare} // Icon tương ứng (có thể sử dụng FontAwesome hoặc bất kỳ thư viện nào)
                 ariaLabel="Edit"
               />
-              <ButtonTool
-                onClick={Draw}
-                icon={faPencil} // Icon tương ứng (có thể sử dụng FontAwesome hoặc bất kỳ thư viện nào)
-                ariaLabel="Draw"
-              />
               {/* Nút thêm hình ảnh */}
               <label
                 className="p-2 border"
@@ -517,6 +366,27 @@ const Edit = () => {
                 onChange={handleImageUpload}
                 style={{ display: "none" }}
               />
+              {data && (
+                <div style={{ zIndex: 1000 }}>
+                  {/* Thanh công cụ với nút Zoom */}
+                  <div className="w-full bg-white flex items-center justify-between p-2 shadow-sm">
+                    <div className="flex gap-2">
+                      <button
+                        className="p-2 border rounded"
+                        onClick={handleZoomIn}
+                      >
+                        +
+                      </button>
+                      <button
+                        className="p-2 border rounded"
+                        onClick={handleZoomOut}
+                      >
+                        -
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             <button
@@ -543,43 +413,22 @@ const Edit = () => {
         {!isLoading && data ? (
           <>
             <div
-              className="border"
+              className="border relative w-full h-screen z-1"
               ref={editContainer}
               onClick={handleClick}
-              style={{
-                position: "relative",
-                width: "100%",
-                height: "100vh",
-                zIndex: "1",
-              }}
             >
               <div
                 dangerouslySetInnerHTML={{ __html: data.html_content }}
                 contentEditable={contentEditable}
                 style={{
-                  width: "100%",
-                  height: "100%",
+                  transform: `scale(${zoomLevel})`,
+                  transformOrigin: "top left", 
+                  width: `${100 / zoomLevel}%`, 
+                  height: `${100 / zoomLevel}%`,
                   zIndex: "10",
                 }}
               />
             </div>
-
-            {/* <canvas
-        ref={canvasRef}
-        width={containerSize.width}  // Đặt width của canvas bằng chiều rộng thẻ cha
-        height={containerSize.height} // Đặt height của canvas bằng chiều cao thẻ cha
-        style={{position: 'fixed', // Thoát khỏi z-index bị âm
-          top: isDrawingMode ?`${position.top-1}px`:`${position.top}px`,
-          left: isDrawingMode ?`${position.left-1}px`:`${position.left}px`,
-          zIndex: isDrawingMode? 1 :-1, // Đảm bảo tương tác
-          border: isDrawingMode? '1px solid blue':"",
-          pointerEvents: "auto"}}
-        onMouseDown={startDrawing}
-        onMouseMove={draw}
-        onMouseUp={stopDrawing}
-        onMouseLeave={stopDrawing}
-        
-      /> */}
           </>
         ) : (
           <>

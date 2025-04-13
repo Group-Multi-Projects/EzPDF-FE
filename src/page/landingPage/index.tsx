@@ -3,12 +3,13 @@ import { Slide } from "./slide";
 import ButtonCustom from "@/component/atoms/button/button";
 import mainSlider from "@/assets/svg/mainSlider_right.svg";
 import { PRIMARY } from "@/helper/colors";
-import Signup from "@/component/signup";
-import Login from "@/component/login";
+
 import { Data } from "./data";
 import { useSelector, useDispatch } from "react-redux";
 import { setIsOpenSignup, setIsOpenLogin } from "@/store/client/login_register";
 import { RootState } from "@/store";
+import Signup from "@/component/specific/signup";
+import Login from "@/component/specific/login";
 
 // hiển thị landing page (trang khách) trước khi đăng nhập
 function LandingPage() {
@@ -116,7 +117,7 @@ function LandingPage() {
         ))}
       </div>
       {isOpenSignup && <Signup />}
-      {isOpenLogin && <Login />}
+      {isOpenLogin && <Login/>}
       {isOpenLogin || isOpenSignup ? (
         <div
           className="hidden z-0 lg:block lg:fixed lg:inset-y-0 lg:inset-x-0 bg-black opacity-70"

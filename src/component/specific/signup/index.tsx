@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {  setIsOpenSignup } from "@/store/client/login_register";
 
 import { RootState } from "@/store";
-import ModalSignUp from "../specific/modalSignup";
+import ModalSignUp from "../modalSignup";
 const Signup = () => {
 
   const dispatch = useDispatch()
