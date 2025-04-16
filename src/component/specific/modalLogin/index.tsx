@@ -3,47 +3,42 @@ import ButtonCustom from "@/component/atoms/button/button";
 import InputCustom from "@/component/atoms/input/input";
 import { PRIMARY, WHITE } from "@/helper/colors";
 import { useState } from "react";
-import { handleLoginApi } from "@/service/login";
-import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "@/store/auth_slice";
 import Cookies from "js-cookie";
 import { setIsOpenSignup, setIsOpenLogin } from "@/store/client/login_register";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store";
+import apiService from "@/service";
+import { message } from "antd";
+import { loginUser } from "@/store/auth_slice";
 // import { useAuth } from "@/hooks/useAth";
 
  function ModalLogin() {
   const dispatch:AppDispatch = useDispatch()
   let navigate = useNavigate();
-  const [email_login, setemail_login] = useState("");
-  const [password_login, setpassword_login] = useState("");
+  const [login, setLogin] = useState({
+    valueLogin:'',
+    valuePassword:''
+  });
   const [checkError, setCheckError] = useState(false);
-
-  // const {loginContext} = useAuth()
 
   const handleLogin = async () => {
     try {
-      // Gửi action loginUser
-      const resultAction = await dispatch(
-        loginUser({ email_login, password_login })
-      );
-    
-      // Kiểm tra nếu kết quả là fulfilled
-      const data = resultAction as ReturnType<typeof loginUser.fulfilled>;
-    
-      const access_token = data.payload?.access;
-    
-      if (data.payload?.success) {
-        toast.success("Login successfully");
+      let res =  await dispatch(loginUser(login))
+      let result = res as ReturnType<typeof loginUser.fulfilled>;
+      let data = result.payload.access
+      let access_token = data.DT.access_token
+      if (data?.EC === 0) {
+        message.success(data.EM);
         Cookies.set("accessToken", access_token ?? "", { expires: 365 });
+        dispatch(setIsOpenLogin(false));
         navigate('/home')
       } else {
-        toast.error(data.payload?.message || "Đăng nhập thất bại");
+        message.error(data.EM);
         setCheckError(true);
       }
     } catch (error) {
-      toast.error("Có lỗi xảy ra, vui lòng thử lại!");
+      message.error("Có lỗi xảy ra, vui lòng thử lại!");
       console.error("Login error:", error);
       setCheckError(true);
     }
@@ -69,9 +64,9 @@ import { AppDispatch } from "@/store";
           <InputCustom
             label="Email or phone number"
             type="text"
-            value={email_login}
+            value={login.valueLogin}
             error={checkError}
-            onChange={(e) => setemail_login(e.target.value)}
+            onChange={(e) => setLogin(prev => ({ ...prev, valueLogin: e.target.value }))}
             style={{
               width: "100%",
             }}
@@ -81,9 +76,9 @@ import { AppDispatch } from "@/store";
           <InputCustom
             label="Password"
             type="password"
-            value={password_login}
+            value={login.valuePassword}
             error={checkError}
-            onChange={(e) => setpassword_login(e.target.value)}
+            onChange={(e) => setLogin(prev => ({...prev, valuePassword:e.target.value}))}
             style={{
               width: "100%",
             }}

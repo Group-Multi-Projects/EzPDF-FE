@@ -1,6 +1,6 @@
 
 import { Sidebar, Menu, MenuItem, SubMenu, SidebarProps as ProSidebarProps } from 'react-pro-sidebar';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Cookies from "js-cookie";
 import { FC } from 'react';
 import { FaHome, FaTools,FaTrashAlt  } from "react-icons/fa";
@@ -28,10 +28,12 @@ const SidebarRoot: FC<SidebarProps> = ({
   handleCollapsedChange,
   ...rest
 }) => {
+  const navigate = useNavigate()
   const dispatch: AppDispatch = useDispatch();
   const handleLogout = () => {
-    dispatch(logoutUser()); // Dispatch action để logout
-    Cookies.remove("accessToken"); // Xóa token khỏi cookie
+    dispatch(logoutUser()); 
+    Cookies.remove("accessToken");
+    navigate('/')
   };
 
   return (

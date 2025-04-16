@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import apiService from "@/service";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { handleSignupApi } from "@/service/signup";
-import { handleLoginApi } from "@/service/login";
 import Cookies from "js-cookie";
 
 
@@ -14,26 +13,41 @@ const initialState = {
 };
   
 
+interface registerProps  { email: string; username: string; password: string; phone: string }
 
-// Định nghĩa async thunk
 export const registerUser = createAsyncThunk(
-    "/account/register", // Tên action
-    async ({ email, username, password1, password2 }: { email: string; username: string; password1: string; password2: string }) => {
-       return await handleSignupApi(email, username, password1, password2);
+    "/auth/register", // Tên action
+    async ({ email, username, password, phone }: registerProps,thunkAPI) => {
+       {
+        try {
+          const response = await apiService.auth.register({email, username, password, phone});
+          if (response.data.EC == 0) {
+            return { success: true, access: response.data };
+          } else {
+            return {message: response.data.EM};
+          }
+        } catch (error: any) {
+          return thunkAPI.rejectWithValue(
+            error.response?.data || "Signup failed"
+          );
+        }
+      }
     }
   );
 
-export const loginUser = createAsyncThunk(
-  "/account/signin",
 
-  async ({ email_login,password_login}:{ email_login: string | number, password_login: string | number}, thunkAPI) => {
+interface loginProps{valueLogin:string;valuePassword:string }
+export const loginUser = createAsyncThunk(
+  "/auth/signin",
+
+  async ({ valueLogin,valuePassword}:loginProps, thunkAPI) => {
     {
         try {
-          const response = await handleLoginApi(email_login, password_login);
-          if (response.success === true) {
-            return { success: true, access: response.access };
+          const response = await apiService.auth.login({valueLogin, valuePassword});
+          if (response.data.EC == 0) {
+            return { success: true, access: response.data };
           } else {
-            return {message: response.message};
+            return {message: response.data.EM};
           }
         } catch (error: any) {
           return thunkAPI.rejectWithValue(
@@ -101,8 +115,6 @@ const authSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
-        console.log(action);
-
         state.isLoading = false;
         state.user = action.payload.access || null
         state.isAuthenticated = !!action.payload.access;

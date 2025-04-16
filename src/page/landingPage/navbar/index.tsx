@@ -29,8 +29,6 @@ import logo from "@/assets/png/logo.png"
 import {  useDispatch, useSelector } from "react-redux";
 import { setIsOpenLogin, setIsOpenSignup } from "@/store/client/login_register";
 import { RootState } from "@/store";
-import Login from "@/component/login";
-import Signup from "@/component/signup";
 
 
 const tools = [
