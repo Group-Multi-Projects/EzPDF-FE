@@ -19,7 +19,7 @@ import {
   faStar,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ShapeType } from "@/type";
+import { ShapeType } from "@/interfaces";
 import { ButtonTool } from "@/component/specific/tool";
 
 const Edit = () => {

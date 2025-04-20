@@ -7,6 +7,7 @@ import { setUser } from "./store/auth_slice";
 import Layout from "./component/layout/main/layout";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
+import './App.scss'
 
 function App() {
   const dispatch = useDispatch();

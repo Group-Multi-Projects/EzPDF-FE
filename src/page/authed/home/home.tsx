@@ -40,7 +40,7 @@ const HomePage = () => {
     { icon: Image, color: "#0010f5", label: "PDF to JPG" },
   ];
   return (
-    <div className="md:p-10 h-full overflow-scroll">
+    <div className="md:p-10 h-full overflow-auto">
     <div className="text-white p-6 rounded-xl shadow-lg  md:mx-auto mx-3" style={{backgroundColor:'rgb(143 82 127)'}}>
       <h2 className="text-2xl font-semibold text-center mb-4">
         Select the tools you need

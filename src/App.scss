@@ -1,0 +1,37 @@
+#root {
+  margin: 0 auto;
+}
+
+.cd-custom-select-container {
+  .custom-select-component > div {
+    border-radius: 12px;
+    font-size: 16px;
+  }
+  .custom-select .ant-select-selector {
+    border-radius: 12px !important;
+  }
+
+  .custom-dropdown {
+    border-radius: 12px !important;
+    overflow: hidden;
+  }
+
+  .custom-select-component span {
+    color: #666d80;
+    font-size: 16px;
+  }
+
+  .custom-select-component-radio .ant-select-selector {
+    border-radius: 50px !important;
+    height: 32px;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+  }
+
+  .custom-select-component-radio .ant-select-selection-item {
+    color: #666d80;
+    font-size: 16px;
+  }
+}
+

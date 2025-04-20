@@ -17,8 +17,6 @@ const AppRouter = () => {
   const { isAuthenticated, user } = useSelector(
     (state: RootState) => state.auth
   );
-  console.log("isAuth", isAuthenticated);
-  console.log("user in app router", user);
   return (
       <Routes>
         <Route path="/" element={<PublicRoute component={LandingPage} />} />
