@@ -2,16 +2,15 @@ import axios from "axios";
 import Cookies from "js-cookie";
 window.onerror = (message, error) => {
     console.error("Runtime Error:", message, error);
-    return true; // Ngăn popup lỗi
+    return true; 
   };
 // Set config defaults when creating the instance
 
 const BASE_URL =  import.meta.env.VITE_BASE_URL
-console.log(BASE_URL);
 
 const instance = axios.create({
     baseURL: BASE_URL,
-    // withCredentials: true, // Đảm bảo cookie được gửi cùng request
+    withCredentials: true,
   });
   
 // // Alter defaults after instance has been created

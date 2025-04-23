@@ -1,7 +1,8 @@
 import React from 'react';
 import { Modal, Button, Divider } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
-// import cn from '~/utils/cn';
+import { cn } from '@/lib/utils';
+
 
 interface BaseModalProps {
   open: boolean;
@@ -62,8 +63,7 @@ const BaseModal: React.FC<BaseModalProps> = ({
           </div>
         )
       }
-      className={'rounded-[12px] px-[24px] py-[20px]'}
-      // className={cn('rounded-[12px] px-[24px] py-[20px]', className)}
+      className={cn('rounded-[12px] px-[24px] py-[20px]', className)}
     >
       <div className='flex justify-between items-center'>
         <div className='font-normal text-[24px] text-[#0D0D12]'>{title}</div>

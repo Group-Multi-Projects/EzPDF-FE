@@ -46,3 +46,16 @@ export interface IFieldData {
   format?: string;
   isMulti?: boolean;
 }
+
+
+
+export interface IInfo {
+  address: string;
+  createdAt: string; 
+  email: string;
+  exp: number;
+  iat: number;
+  phone: string;
+  role_id: number;
+  username: string;
+}

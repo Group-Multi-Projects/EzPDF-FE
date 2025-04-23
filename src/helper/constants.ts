@@ -32,5 +32,17 @@ export const profileFormField = [
       placeholder: "Address",
       fieldType: "input",
     },
+  ],
+  [
+    {
+      label: 'Role',
+      name: 'role_id',
+      placeholder: 'Role',
+      fieldType: 'select',
+      options: [
+        { label: 'Admin', value: '2' },
+        { label: 'User', value: '1' },
+      ],
+    },
   ],  
 ];

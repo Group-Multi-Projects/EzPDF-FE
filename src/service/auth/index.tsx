@@ -9,6 +9,9 @@ export default class AuthService {
   async register(params:any){
     return await axiosClient.post(`${baseApi}/register`,params)
   }
+  async getInfo(){
+    return await axiosClient.get(`${baseApi}/user/info`)
+  }  
   async logout(){
    return await axiosClient.post(`${baseApi}/logout`)
   }
