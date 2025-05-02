@@ -3,16 +3,16 @@ import { Sidebar, Menu, MenuItem, SubMenu, SidebarProps as ProSidebarProps } fro
 import { Link, useNavigate } from 'react-router-dom';
 import Cookies from "js-cookie";
 import { FC } from 'react';
-import { FaHome, FaTools,FaTrashAlt  } from "react-icons/fa";
+import { FaHome, FaTools  } from "react-icons/fa";
 import { TfiLayoutListThumbAlt } from "react-icons/tfi";
 import { IoMdPerson } from "react-icons/io";
 import { MdLogout } from "react-icons/md";
 import { PRIMARY } from '@/helper/colors';
 import logo from "@/assets/png/logo.png";
-import bgNavbar from '@/assets/svg/bg_img.svg'
 import { logoutUser } from '@/store/auth_slice';
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store";
+import { User2Icon, Users } from 'lucide-react';
 //import imgSidebar from "@/assets/svg/anhtet.svg";
 // Kế thừa toàn bộ thuộc tính của Sidebar từ react-pro-sidebar
 interface SidebarProps extends ProSidebarProps {
@@ -98,15 +98,15 @@ const SidebarRoot: FC<SidebarProps> = ({
         </div>
         <MenuItem
           icon={<IoMdPerson size={18} />}
-          component={<Link to="/profileDetail" />}
+          component={<Link to="/profile-detail" />}
         >
-          Account
+          Personal
         </MenuItem>
         <MenuItem
-          icon={<FaTrashAlt size={18} />}
-          component={<Link to="/trash" />}
+          icon={<Users  size={18} />}
+          component={<Link to="/users" />}
         >
-          Trash
+          Users List
         </MenuItem>
         <MenuItem icon={<MdLogout size={18} />} onClick={handleLogout}>
           Logout

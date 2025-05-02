@@ -9,6 +9,7 @@ import {
   FilePen,
   Search,
 } from "lucide-react";
+import FileViewBody from "@/component/specific/fileDetail/FileViewBody";
 
 const HomePage = () => {
   const features = [
@@ -40,13 +41,14 @@ const HomePage = () => {
     { icon: Image, color: "#0010f5", label: "PDF to JPG" },
   ];
   return (
-    <div className="md:p-10 h-full overflow-auto">
+    <>
+    <FileViewBody/>
+    {/* <div className="md:p-10 h-full overflow-auto">
     <div className="text-white p-6 rounded-xl shadow-lg  md:mx-auto mx-3" style={{backgroundColor:'rgb(143 82 127)'}}>
       <h2 className="text-2xl font-semibold text-center mb-4">
         Select the tools you need
       </h2>
 
-      {/* Search Box */}
       <div className="flex items-center bg-white p-2 rounded-lg shadow-md">
         <Search className="text-gray-500 ml-2" size={20} />
         <input
@@ -58,7 +60,6 @@ const HomePage = () => {
         </button>
       </div>
 
-      {/* Tools Section */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-6">
         {tools.map(({ icon: Icon, color, label }, index) => (
           <button
@@ -114,7 +115,9 @@ const HomePage = () => {
           ))}
         </div>
       </div>
-    </div>
+    </div>       */}
+    </>
+
   );
 };
 

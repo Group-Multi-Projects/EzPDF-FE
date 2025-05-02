@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { message } from "antd";
 import { registerUser } from "@/store/auth_slice";
 import { AppDispatch } from "@/store";
+import apiService from "@/service";
 
 function ModalSignUp() {
   let dispatch = useDispatch<AppDispatch>();
@@ -31,18 +32,17 @@ function ModalSignUp() {
   };
   const handleRegister = async () => {
     try {
-      let res = await dispatch(registerUser(signupValues));
-      let result = res as ReturnType<typeof registerUser.fulfilled>;
-      let data = result.payload.access;
-      if (data?.EC === 0) {
-        message.success(data.EM);
+      let data = await apiService.auth.register(signupValues)
+      const {EC, EM} = data.data
+      if (EC === 0) {
+        message.success(EM);
         dispatch(setIsOpenSignup(false));
       } else {
-        message.error(data.EM);
+        message.error(EM);
         setCheckError(true);
       }
     } catch (error) {
-      message.error("Có lỗi xảy ra, vui lòng thử lại!");
+      message.error("Please try again the system !");
       console.error("Signup error:", error);
       setCheckError(true);
     }

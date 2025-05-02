@@ -51,7 +51,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         )}
       </div>
       <div
-        className={`transition-[margin] duration-250 ease-out w-full h-screen overflow-hidden`}
+        className={`transition-[margin] duration-250 ease-out w-full overflow-auto`}
         style={{
           marginLeft: isMobile ? "0px" : isSidebarOpen ? "" : "250px",
           paddingTop: isMobile ? "3.5rem" : "0px",

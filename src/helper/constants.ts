@@ -46,3 +46,16 @@ export const profileFormField = [
     },
   ],  
 ];
+
+
+export const fileFormField = [
+  [
+    {
+      fieldType: 'fileDragger',
+      label: 'File',
+      name: 'file',
+      placeholder: 'File',
+      isMulti: false,
+    },
+  ],
+]

@@ -1,3 +1,4 @@
+import FormFileDragger from "@/component/atoms/form/FormFileDragger";
 import FormInput from "@/component/atoms/form/FormInput";
 import FormSelect from "@/component/atoms/form/FormSelect";
 import { IFieldData } from "@/interfaces";
@@ -64,6 +65,17 @@ const getFormField = (
                 required={fieldData?.required}
               />
             );
+            case 'fileDragger':
+              return (
+                <FormFileDragger
+                  key={name}
+                  name={name}
+                  onFileChange={handleFormFieldChange}
+                  disabled={fieldData.disabled}
+                  isMulti={fieldData?.isMulti}
+                  value={formData[name]}
+                />
+              );
             default:
                 return null
     }

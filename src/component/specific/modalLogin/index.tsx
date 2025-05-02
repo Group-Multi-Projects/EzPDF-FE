@@ -38,7 +38,7 @@ import { loginUser } from "@/store/auth_slice";
         setCheckError(true);
       }
     } catch (error) {
-      message.error("Có lỗi xảy ra, vui lòng thử lại!");
+      message.error("Please try your network!");
       console.error("Login error:", error);
       setCheckError(true);
     }

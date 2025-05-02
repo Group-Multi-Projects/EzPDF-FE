@@ -1,55 +1,62 @@
-import FileFormModal from "@/component/specific/fileList/fileFormModal";
-import FileListTable from "@/component/specific/fileList/fileListTable";
+
+import UsersFormModal from "@/component/specific/users/userFormModal";
+import UsersListTable from "@/component/specific/users/userListTable";
+import { IInfo } from "@/interfaces";
 import { CloseOutlined, SearchOutlined } from "@mui/icons-material";
 import { Button, Input } from "antd";
 import { debounce } from "lodash";
 import React, { useState } from "react";
 
-export const fakeFileList= [
-  {
-    id: '1',
-    user_id: '1001',
-    file_url: 'https://example.com/files/report-jan.pdf',
-    file_name: 'report-jan.pdf',
-    file_type: 'application/pdf',
-    createdAt: '2025-04-01T10:15:30.000Z',
-  },
-  {
-    id: '2',
-    user_id: '1002',
-    file_url: 'https://example.com/files/photo-spring.jpg',
-    file_name: 'photo-spring.jpg',
-    file_type: 'image/jpeg',
-    createdAt: '2025-04-05T14:22:10.000Z',
-  },
-  {
-    id: '3',
-    user_id: '1003',
-    file_url: 'https://example.com/files/archive.zip',
-    file_name: 'archive.zip',
-    file_type: 'application/zip',
-    createdAt: '2025-04-10T08:45:00.000Z',
-  },
-  {
-    id: '4',
-    user_id: '1001',
-    file_url: 'https://example.com/files/presentation.pptx',
-    file_name: 'presentation.pptx',
-    file_type: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-    createdAt: '2025-04-12T16:30:25.000Z',
-  },
-  {
-    id: '5',
-    user_id: '1002',
-    file_url: 'https://example.com/files/data.csv',
-    file_name: 'data.csv',
-    file_type: 'text/csv',
-    createdAt: '2025-04-15T11:05:50.000Z',
-  },
+export const fakeUsersList= [
+    {
+        id: 1,
+        username: 'alice',
+        email: 'alice@example.com',
+        address: '123 Main St, Springfield',
+        phone: '555-0101',
+        role_id: 1,
+        createdAt: '2025-04-20T09:00:00.000Z',
+      },
+      {
+        id: 2,
+        username: 'bob',
+        email: 'bob@example.com',
+        address: '456 Elm St, Metropolis',
+        phone: '555-0202',
+        role_id: 2,
+        createdAt: '2025-04-21T10:30:00.000Z',
+      },
+      {
+        id: 3,
+        username: 'charlie',
+        email: 'charlie@example.com',
+        address: '789 Oak Ave, Gotham',
+        phone: '555-0303',
+        role_id: 3,
+        createdAt: '2025-04-22T14:15:00.000Z',
+      },
+      {
+        id: 4,
+        username: 'david',
+        email: 'david@example.com',
+        address: '101 Pine Rd, Star City',
+        phone: '555-0404',
+        role_id: 1,
+        createdAt: '2025-04-23T08:45:00.000Z',
+      },
+      {
+        id: 5,
+        username: 'eve',
+        email: 'eve@example.com',
+        address: '202 Maple Blvd, Central City',
+        phone: '555-0505',
+        role_id: 2,
+        createdAt: '2025-04-24T16:20:00.000Z',
+      },
 ];
 
-const generateFakeFileList = (count: number = 100) => {
-  const baseList = fakeFileList;
+const generateFakeList = (count: number = 100) => {
+  const baseList = fakeUsersList;
   const result = [];
 
   for (let i = 0; i < count; i++) {
@@ -64,11 +71,12 @@ const generateFakeFileList = (count: number = 100) => {
 
   return result;
 };
-const FilesList = () => {
-  const fileList100Items = generateFakeFileList(100)
+const Users = () => {
+  const usersList100Items = generateFakeList(100)
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isSearchInputVisible, setIsSearchInputVisible] = useState(false);
+  const [selectUser, setSelectedUser] = useState<IInfo | null>(null);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [pagination, setPagination] = useState({
     page: 1,
@@ -82,7 +90,14 @@ const FilesList = () => {
   };
 
 
-
+const handleEdit = (user:IInfo) =>{
+    setSelectedUser(user)
+    setIsOpenModal(true)
+}
+const handleDelete = (user:IInfo) =>{
+    setSelectedUser(user)
+    setIsOpenModal(true)
+}
   // const getEditProject = (project: IProject) => {
   //   setEditProject(project);
   // };
@@ -99,20 +114,17 @@ const FilesList = () => {
     debouncedSearch(e.target.value);
   };
 
-  // const handlePageChange = (newPage: number) => {
-  //   setPagination({ ...pagination, page: newPage });
-  // };
-
   const debouncedSearch = debounce((value: string) => {
     setPagination({ ...pagination, page: 1 });
     setSearchKeyword(value);
   }, 1000);
+  
   return (
     <>
       <div className="flex flex-col h-full p-10 gap-4">
         <div className="flex justify-between items-center sticky">
           <div className="font-normal text-[26px] leading-[31.47px] text-[#0D0D12]">
-            Files list
+            User list
           </div>
           <div className="flex items-center gap-x-4">
             <div>
@@ -156,20 +168,24 @@ const FilesList = () => {
               >
                 <div className="flex gap-x-[8px] font-medium text-[18px] leading-[21.78px] text-[#FFFFFF]">
                   <div>+</div>
-                  <div>Add file</div>
+                  <div>Add user</div>
                 </div>
               </Button>
             </div>
           </div>
         </div>
 
-        <FileListTable
-          fileListTable={fileList100Items}
+        <UsersListTable
+          users={usersList100Items}
           isLoading={isLoading}
+          onUpdate={handleEdit}
+          onDelete={handleDelete}  
+            
         />
-        <FileFormModal
+        <UsersFormModal
           open={isOpenModal}
           close={handleCloseModal}
+          initialValues={usersList100Items}
         />
       </div>
 
@@ -178,4 +194,4 @@ const FilesList = () => {
   );
 };
 
-export default FilesList;
+export default Users;

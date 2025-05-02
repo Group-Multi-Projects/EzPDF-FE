@@ -43,9 +43,12 @@ export const loginUser = createAsyncThunk(
   async ({ valueLogin,valuePassword}:loginProps, thunkAPI) => {
     {
         try {
-          const response = await apiService.auth.login({valueLogin, valuePassword});
+          const response = await apiService.auth.login({valueLogin, valuePassword});          
           if (response.data.EC == 0) {
-            return { success: true, access: response.data };
+            return { 
+              success: true, 
+              access: response.data,
+            };
           } else {
             return {message: response.data.EM};
           }

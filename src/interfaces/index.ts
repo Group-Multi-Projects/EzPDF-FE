@@ -50,12 +50,21 @@ export interface IFieldData {
 
 
 export interface IInfo {
+  id:string|number
   address: string;
-  createdAt: string; 
+  createdAt?: string; 
   email: string;
-  exp: number;
-  iat: number;
   phone: string;
   role_id: number;
   username: string;
+}
+
+
+export interface IFileListTable{
+  id:string;
+  user_id:string;
+  file_url:string;
+  file_name:string;
+  file_type:string;
+  createdAt:string;
 }
