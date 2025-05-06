@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -11,7 +11,7 @@ import { message } from 'antd';
 interface UsersFormModalProps {
   open: boolean;
   close: () => void;
-  initialValues?: any;
+  users?: any;
 }
 
 const schema = z.object({
@@ -22,9 +22,9 @@ const schema = z.object({
   role_id : z.any(),
 });
 type FormValues = z.infer<typeof schema>;
-const UsersFormModal = ({open, close, initialValues}:UsersFormModalProps) => {
+const UsersFormModal = ({open, close, users}:UsersFormModalProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const isEdit = !!initialValues;
+  const isEdit = useMemo(() => !!users?.id, [users]);
 
   const defaultValues:FormValues ={
     username: '',
@@ -48,18 +48,18 @@ const UsersFormModal = ({open, close, initialValues}:UsersFormModalProps) => {
     const formData = watch();
 
     useEffect(() => {
-      if (isEdit && initialValues) {
+      if (isEdit && users) {
         reset({
-          username: initialValues.username,
-          phone: initialValues.phone,
-          address: initialValues.address,
-          email: initialValues.email,
-          role_id: initialValues.role_id,
+          username: users.username,
+          phone: users.phone,
+          address: users.address,
+          email: users.email,
+          role_id: users.role_id,
         });
-      } else {
-        reset();
+      }else{
+        reset()
       }
-    }, [ initialValues, reset]);
+    }, [reset, users]);
 
     const handleInputChange = (name: string, value: any) => {
       setValue(name as keyof FormValues, value);

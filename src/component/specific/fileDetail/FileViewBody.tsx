@@ -2,14 +2,35 @@ import React, { useState, useRef, useEffect } from "react";
 import * as pdfjsLib from "pdfjs-dist";
 import "./FileView.scss";
 import {
+  Circle,
   CloudUpload,
+  LetterText,
+  RectangleHorizontal,
   RotateCcw,
   RotateCw,
+  Triangle,
   ZoomIn,
   ZoomOut,
 } from "lucide-react";
 import { message } from "antd";
-import { Canvas, Rect } from "fabric";
+import {
+  Canvas,
+  Control,
+  Rect,
+  TDegree,
+  TPointerEvent,
+  TRadian,
+  Transform,
+  util,
+} from "fabric";
+import deleteIconSvg from "@/assets/svg/delete_control.svg";
+import {
+  addCircle,
+  addRect,
+  addTriangle,
+  deleteActiveObject,
+} from "@/helper/shape";
+import { addText, changeColor, changeFontFamily, toggleBold, toggleItalic, toggleUnderline } from "@/helper/addText";
 // Set the PDF.js worker path
 pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
   "./pdf-worker.js",
@@ -34,23 +55,39 @@ const FileViewBody = () => {
     const canvas = canvasRef.current;
 
     const context = canvas?.getContext("2d");
-    const viewport = page.getViewport({ scale, rotation: rotation });
+    const viewport = page.getViewport({ scale, rotation });
 
     canvas!.height = viewport.height;
     canvas!.width = viewport.width;
 
-    // Render the PDF page
+    // Render PDF content
     const renderContext = {
-      canvasContext: context,
-      viewport: viewport,
+      canvasContext: context!,
+      viewport,
     };
     await page.render(renderContext).promise;
-    const fabricCanvas = new Canvas(canvasRefFabric.current!, {
-      width: viewport?.width,
-      height: viewport?.height,
+
+    if (pdfFabric) {
+      pdfFabric.dispose();
+    }
+
+    const newFabricCanvas = new Canvas(canvasRefFabric.current!, {
+      width: viewport.width,
+      height: viewport.height,
+      selection: true,
     });
-    fabricCanvas.backgroundColor = "#32a852";
-    setPdfFabric(fabricCanvas);
+
+    if (annotations[pageNumber]) {
+      newFabricCanvas.loadFromJSON(annotations[pageNumber], () => {
+        requestAnimationFrame(() => {
+          newFabricCanvas.renderAll();
+        });
+      });
+    } else {
+      newFabricCanvas.renderAll();
+    }
+
+    setPdfFabric(newFabricCanvas);
   };
 
   // Handle file selection
@@ -73,21 +110,31 @@ const FileViewBody = () => {
         setPageNum(1);
       } catch (error) {
         console.error("Error loading PDF:", error);
-        message.warning("Error loading PDF file");
+        message.error("Error loading PDF file");
       }
     };
     reader.readAsArrayBuffer(file);
   };
 
-  // Navigation functions
+  const saveCurrentAnnotations = () => {
+    if (pdfFabric) {
+      setAnnotations((prev) => ({
+        ...prev,
+        [pageNum]: pdfFabric.toJSON(),
+      }));
+    }
+  };
+
   const goToPrevPage = () => {
     if (pageNum > 1) {
+      saveCurrentAnnotations();
       setPageNum((prevPageNum) => prevPageNum - 1);
     }
   };
 
   const goToNextPage = () => {
     if (pageNum < totalPages) {
+      saveCurrentAnnotations();
       setPageNum((prevPageNum) => prevPageNum + 1);
     }
   };
@@ -108,19 +155,6 @@ const FileViewBody = () => {
 
   const rotateCounterClockwise = () => {
     setRotation((prevRotation) => (prevRotation - 90 + 360) % 360);
-  };
-
-  const addRect = () => {
-    if (pdfFabric) {
-      const rect = new Rect({
-        top: 100,
-        left: 50,
-        width: 100,
-        height: 50,
-        fill: "#28bd4f",
-      });
-      pdfFabric.add(rect);
-    }
   };
 
   // Re-render when page number, scale or rotation changes
@@ -179,8 +213,35 @@ const FileViewBody = () => {
                 <RotateCw strokeWidth={1} size={20} />
               </div>
             </div>
-            <div>
-              <button onClick={addRect}>Add shape</button>
+
+            <div className="flex gap-2">
+              <button onClick={() => addRect(pdfFabric)}>
+                <RectangleHorizontal strokeWidth={1.5} size={20} />
+              </button>
+              <button onClick={() => addCircle(pdfFabric)}>
+                <Circle strokeWidth={1.5} size={20} />
+              </button>
+              <button onClick={() => addTriangle(pdfFabric)}>
+                <Triangle strokeWidth={1.5} size={20} />
+              </button>
+              <button onClick={() => addText(pdfFabric)}>
+                <LetterText strokeWidth={1.5} size={20} />
+              </button>              
+              <button onClick={() => deleteActiveObject(pdfFabric)}>
+                Delete
+              </button>
+            </div>
+
+            <div className="flex gap-2">
+              <button onClick={()=> toggleBold(pdfFabric)}>B</button>
+              <button onClick={()=> toggleItalic(pdfFabric)}>I</button>
+              <button onClick={()=>toggleUnderline(pdfFabric)}>U</button>
+              {/* <input type="color" onChange={()=>changeColor(pdfFabric)} />
+              <select onChange={()=>changeFontFamily(pdfFabric, e)}>
+                <option value="Arial">Arial</option>
+                <option value="Georgia">Georgia</option>
+                <option value="Courier New">Courier New</option>
+              </select> */}
             </div>
           </div>
         </div>
@@ -228,3 +289,41 @@ const FileViewBody = () => {
 };
 
 export default FileViewBody;
+
+function deleteObject(
+  _eventData: TPointerEvent,
+  _transform: Transform,
+  _x: number,
+  _y: number
+) {
+  throw new Error("Function not implemented.");
+}
+
+function renderIcon(icon: string) {
+  return (
+    ctx: {
+      save: () => void;
+      translate: (arg0: any, arg1: any) => void;
+      rotate: (arg0: TRadian) => void;
+      drawImage: (
+        arg0: any,
+        arg1: number,
+        arg2: number,
+        arg3: any,
+        arg4: any
+      ) => void;
+      restore: () => void;
+    },
+    left: any,
+    top: any,
+    _styleOverride: any,
+    fabricObject: { angle: TDegree }
+  ) => {
+    const size = this.cornerSize;
+    ctx.save();
+    ctx.translate(left, top);
+    ctx.rotate(util.degreesToRadians(fabricObject.angle));
+    ctx.drawImage(icon, -size / 2, -size / 2, size, size);
+    ctx.restore();
+  };
+}

@@ -2,10 +2,11 @@
 import UsersFormModal from "@/component/specific/users/userFormModal";
 import UsersListTable from "@/component/specific/users/userListTable";
 import { IInfo } from "@/interfaces";
+import apiService from "@/service";
 import { CloseOutlined, SearchOutlined } from "@mui/icons-material";
 import { Button, Input } from "antd";
 import { debounce } from "lodash";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export const fakeUsersList= [
     {
@@ -74,17 +75,31 @@ const generateFakeList = (count: number = 100) => {
 const Users = () => {
   const usersList100Items = generateFakeList(100)
   const [isOpenModal, setIsOpenModal] = useState(false);
+  const [userList, setUserList] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isSearchInputVisible, setIsSearchInputVisible] = useState(false);
   const [selectUser, setSelectedUser] = useState<IInfo | null>(null);
   const [searchKeyword, setSearchKeyword] = useState("");
-  const [pagination, setPagination] = useState({
-    page: 1,
-    limit: 10,
-    totalPages: 1,
-    totalItems: 0,
-  });
+  // const [pagination, setPagination] = useState({
+  //   page: 1,
+  //   limit: 10,
+  //   totalPages: 1,
+  //   totalItems: 0,
+  // });
   
+  const fetchUsers = async () => {
+    setIsLoading(true)
+    try {
+      const res = await apiService.users.getInfo()
+      setUserList(res.data.DT.rows)
+       console.log('list users',res);
+    } catch (error) {
+      console.log(error);
+    } finally{
+      setIsLoading(false)
+    } 
+   
+  }
   const handleCloseModal = () => {
     setIsOpenModal(false);
   };
@@ -111,13 +126,17 @@ const handleDelete = (user:IInfo) =>{
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    debouncedSearch(e.target.value);
+    // debouncedSearch(e.target.value);
   };
 
-  const debouncedSearch = debounce((value: string) => {
-    setPagination({ ...pagination, page: 1 });
-    setSearchKeyword(value);
-  }, 1000);
+  // const debouncedSearch = debounce((value: string) => {
+  //   setPagination({ ...pagination, page: 1 });
+  //   setSearchKeyword(value);
+  // }, 1000);
+  useEffect(()=>{
+    fetchUsers()
+  },[])
+  console.log(selectUser);
   
   return (
     <>
@@ -176,7 +195,7 @@ const handleDelete = (user:IInfo) =>{
         </div>
 
         <UsersListTable
-          users={usersList100Items}
+          users={userList ?? ''}
           isLoading={isLoading}
           onUpdate={handleEdit}
           onDelete={handleDelete}  
@@ -185,7 +204,7 @@ const handleDelete = (user:IInfo) =>{
         <UsersFormModal
           open={isOpenModal}
           close={handleCloseModal}
-          initialValues={usersList100Items}
+          users={selectUser}
         />
       </div>
 

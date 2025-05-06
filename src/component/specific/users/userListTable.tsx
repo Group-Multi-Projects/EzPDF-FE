@@ -20,7 +20,7 @@ interface UsersListTableProps {
   onDelete: (user:IInfo) => void;
 }
 const UsersListTable = ({
-    users,
+  users,
   refresh,
   isLoading,
   onDelete,
@@ -61,54 +61,47 @@ const UsersListTable = ({
     {
       title: "ID",
       key: "id",
-      render: (_, record: IInfo) => {
-        return <Link to={`/`}>{record.id}</Link>;
-      },
+      dataIndex:'id',
+      render: (_, record: IInfo) => <span>{record?.id}</span>,
     },
     {
       title: "Username",
       dataIndex: "username",
       key: "username",
-      render: (_, record: IInfo) => <span>{record.username}</span>,
+      render: (_, record: IInfo) => <span>{record?.username}</span>,
     },
     {
       title: "Phone",
       dataIndex: "phone",
       key: "phone",
+      render: (_, record: IInfo) => <span>{record?.phone}</span>,
     },
     {
       title: "Email address",
       dataIndex: "email",
       key: "email",
+      render: (_, record: IInfo) => <span>{record?.email}</span>,
     },
     {
       title: "Address",
       dataIndex: "address",
       key: "address",
+      render: (_, record: IInfo) => <span>{record?.address}</span>,
+
     },
     {
       title: "Role",
-      dataIndex: "role_id",
-      key: "role_id",
-    }, // {
-    //   title: 'Type',
-    //   key: 'type',
-    //   render: (_, record: IFileListTable) => {
-    //     const type = ticketType.find(item => item.value === record.file_type);
-    //     return (
-    //       <div>
-    //         {type ? type.label : record.type}
-    //       </div>
-    //     );
-    //   },
-    // },
+      dataIndex: "role_name",
+      key: "role_name",
+      render: (_, record: any) => <span>{record?.roles?.role_name}</span>,
+    },
     {
       title: "Created",
       key: "createdAt",
       render: (_: any, record: IInfo) => (
         <span>
           {record.createdAt !== null
-            ? dayjs(record.createdAt).format("YYYY MMM DD")
+            ? dayjs(record?.createdAt).format("MMM, DD YYYY")
             : ""}
         </span>
       ),
@@ -139,7 +132,7 @@ const UsersListTable = ({
         <Table
           loading={isLoading}
           columns={columns}
-          dataSource={users}
+          dataSource={users ?? 'Not found data'}
           pagination={{
             position: ["topLeft"],
             total: users.length,
