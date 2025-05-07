@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Cookies from "js-cookie";
 import { FC } from 'react';
 import { FaHome, FaTools  } from "react-icons/fa";
-import { TfiLayoutListThumbAlt } from "react-icons/tfi";
+import { TfiFile, TfiFiles, TfiLayoutListThumbAlt } from "react-icons/tfi";
 import { IoMdPerson } from "react-icons/io";
 import { MdLogout } from "react-icons/md";
 import { PRIMARY } from '@/helper/colors';
@@ -88,10 +88,10 @@ const SidebarRoot: FC<SidebarProps> = ({
           <MenuItem component={<Link to="/convert" />}>Convert</MenuItem>
         </SubMenu>
         <MenuItem
-          icon={<TfiLayoutListThumbAlt size={18} />}
+          icon={<TfiFiles size={18} />}
           component={<Link to="/filesList" />}
         >
-          Projects
+          File list
         </MenuItem>
         <div className="mt-4 mb-2 px-6">
           <span className="text-xs text-slate-400 font-semibold">Extra</span>

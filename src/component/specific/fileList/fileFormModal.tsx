@@ -42,14 +42,17 @@ const FileFormModal = ({
   };
 
   const onSubmit = async (data: FormValues) => {
-    message.warning("Please connect API");
+   
     // setIsLoading(true)
     try {
         const payload = new FormData();
         if (data.file.length > 0) {
-            payload.append('files', data.file[0] as Blob);
+            payload.append('file_url', data.file[0] as Blob);
+            payload.append('file_name', data.file[0].name);
+            payload.append('file_type', data.file[0].type);
+            payload.append('user_id', '1');
           } else {
-            payload.append('files', '');
+             message.warning("Please select a file");
           }
 
     } catch (error) {

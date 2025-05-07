@@ -1,6 +1,9 @@
 import { IFileListTable } from "@/interfaces";
+import apiService from "@/service";
 import {
   DeleteOutlined,
+  DownloadOutlined,
+  DownOutlined,
   EditOutlined,
   EllipsisOutlined,
 } from "@ant-design/icons";
@@ -17,28 +20,21 @@ interface FileListTableProps {
   refresh?: () => void;
   isLoading: boolean;
   onPageChange?: (page: number) => void;
-  pagination?: any;
+  isDownLoad?: (id:string|number) => void;
 }
-const FileListTable = ({
-  fileListTable,
-  refresh,
-  onPageChange,
-  isLoading,
-  pagination,
-}: FileListTableProps) => {
-  const getMenuItems = (ticket: IFileListTable): MenuProps["items"] => [
+const FileListTable = (props: FileListTableProps) => {
+
+  const getMenuItems = (file: any): MenuProps["items"] => [
     {
       key: "1",
       label: (
         <div
           className="flex items-center gap-x-[7px] w-full"
-          onClick={(e) => {
-            // showEditModal(ticket);
-          }}
+          onClick={() => props?.isDownLoad?.(file)}
         >
-          <EditOutlined />
+          <DownloadOutlined />
           <span className="font-normal text-[14px] leading-[18px] text-[#696D87]">
-            Edit
+            Download
           </span>
         </div>
       ),
@@ -65,29 +61,35 @@ const FileListTable = ({
     {
       title: "ID",
       key: "id",
-      render: (_, record: IFileListTable) => {
-        return (
-          <Link
-            to={`/admin/ticketing-system/${record.id}/ticketing-information/activity`}
-          >
-            {record.id}
-          </Link>
-        );
-      },
+      dataIndex:'id'
+      // render: (_, record: IFileListTable) => {
+      //   return (
+      //     <Link
+      //       to={`/admin/ticketing-system/${record.id}/ticketing-information/activity`}
+      //     >
+      //       {record.id}
+      //     </Link>
+      //   );
+      // },
     },
     {
       title: "File name",
-      dataIndex: "name",
-      key: "name",
-      render: (_, record: IFileListTable) => <span>{record.file_name}</span>,
+      dataIndex: "file_name",
+      key: "file_name",
+      render: (_, record: IFileListTable) => <span>{record?.file_name}</span>,
     },
     {
       title: "File url",
-      dataIndex: "account_name",
-      key: "account_name",
-      render: (_, record: IFileListTable) => <span>{record.file_url}</span>,
+      dataIndex: "file_url",
+      key: "file_url",
+      render: (_, record: IFileListTable) => <span>{record?.file_url}</span>,
     },
-    // {
+    {
+      title: "Created by",
+      dataIndex: "user",
+      key: "user",
+      render: (_, record: any) => <span>{record?.user?.username}</span>,
+    },    // {
     //   title: 'Type',
     //   key: 'type',
     //   render: (_, record: IFileListTable) => {
@@ -105,7 +107,7 @@ const FileListTable = ({
       render: (_: any, record: IFileListTable) => (
         <span>
           {record.createdAt !== null
-            ? dayjs(record.createdAt).format("YYYY MMM DD")
+            ? dayjs(record.createdAt).format("MMM, DD YYYY")
             : ""}
         </span>
       ),
@@ -134,14 +136,14 @@ const FileListTable = ({
     <div className="bg-[#FFFFFF] p-4 rounded-xl flex-1 flex flex-col overflow-auto">
       <div className="w-full flex-1 overflow-y-auto">
         <Table
-          loading={isLoading}
+          loading={props.isLoading}
           columns={columns}
-          dataSource={fileListTable}
+          dataSource={props.fileListTable}
           pagination={{
             position: ["topLeft"],
             // Các tuỳ chọn khác nếu cần:
             pageSize: 5,
-            total: fileListTable.length,
+            total: props.fileListTable.length,
             showSizeChanger: true,
           }}
         />

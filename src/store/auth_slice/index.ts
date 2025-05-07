@@ -43,7 +43,9 @@ export const loginUser = createAsyncThunk(
   async ({ valueLogin,valuePassword}:loginProps, thunkAPI) => {
     {
         try {
-          const response = await apiService.auth.login({valueLogin, valuePassword});          
+          const response = await apiService.auth.login({valueLogin, valuePassword});
+          console.log(response);
+          localStorage.setItem("user_id", '')          
           if (response.data.EC == 0) {
             return { 
               success: true, 
