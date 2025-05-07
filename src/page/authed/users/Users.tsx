@@ -1,127 +1,77 @@
-
+import BaseRemoveModal from "@/component/atoms/modal/BaseRemoveModal";
 import UsersFormModal from "@/component/specific/users/userFormModal";
 import UsersListTable from "@/component/specific/users/userListTable";
 import { IInfo } from "@/interfaces";
 import apiService from "@/service";
 import { CloseOutlined, SearchOutlined } from "@mui/icons-material";
-import { Button, Input } from "antd";
+import { Button, Input, message } from "antd";
 import { debounce } from "lodash";
 import React, { useEffect, useState } from "react";
 
-export const fakeUsersList= [
-    {
-        id: 1,
-        username: 'alice',
-        email: 'alice@example.com',
-        address: '123 Main St, Springfield',
-        phone: '555-0101',
-        role_id: 1,
-        createdAt: '2025-04-20T09:00:00.000Z',
-      },
-      {
-        id: 2,
-        username: 'bob',
-        email: 'bob@example.com',
-        address: '456 Elm St, Metropolis',
-        phone: '555-0202',
-        role_id: 2,
-        createdAt: '2025-04-21T10:30:00.000Z',
-      },
-      {
-        id: 3,
-        username: 'charlie',
-        email: 'charlie@example.com',
-        address: '789 Oak Ave, Gotham',
-        phone: '555-0303',
-        role_id: 3,
-        createdAt: '2025-04-22T14:15:00.000Z',
-      },
-      {
-        id: 4,
-        username: 'david',
-        email: 'david@example.com',
-        address: '101 Pine Rd, Star City',
-        phone: '555-0404',
-        role_id: 1,
-        createdAt: '2025-04-23T08:45:00.000Z',
-      },
-      {
-        id: 5,
-        username: 'eve',
-        email: 'eve@example.com',
-        address: '202 Maple Blvd, Central City',
-        phone: '555-0505',
-        role_id: 2,
-        createdAt: '2025-04-24T16:20:00.000Z',
-      },
-];
-
-const generateFakeList = (count: number = 100) => {
-  const baseList = fakeUsersList;
-  const result = [];
-
-  for (let i = 0; i < count; i++) {
-    const template = baseList[i % baseList.length];
-    const index = i + 1;
-    const id = index.toString();
-    result.push({
-      ...template,
-      id,
-    });
-  }
-
-  return result;
-};
 const Users = () => {
-  const usersList100Items = generateFakeList(100)
-  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [isOpenAddModal, setIsOpenAddModal] = useState(false);
+  const [isOpenUpdateModal, setIsOpenUpdateModal] = useState(false);
+  const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
   const [userList, setUserList] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isSearchInputVisible, setIsSearchInputVisible] = useState(false);
   const [selectUser, setSelectedUser] = useState<IInfo | null>(null);
   const [searchKeyword, setSearchKeyword] = useState("");
-  // const [pagination, setPagination] = useState({
-  //   page: 1,
-  //   limit: 10,
-  //   totalPages: 1,
-  //   totalItems: 0,
-  // });
-  
+
   const fetchUsers = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      const res = await apiService.users.getInfo()
-      setUserList(res.data.DT.rows)
-       console.log('list users',res);
+      const res = await apiService.users.getInfo();
+      setUserList(res.data.DT.rows);
     } catch (error) {
       console.log(error);
-    } finally{
-      setIsLoading(false)
-    } 
-   
-  }
-  const handleCloseModal = () => {
-    setIsOpenModal(false);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
+  const deleteUser = async (user: any) => {
+    setIsLoading(true);
+    try {
+      let res = await apiService.users.delete(user.id);
+      setSelectedUser(user);
+      if (res.data.EC === 0) {
+        message.success(res.data.EM);
+        setIsOpenDeleteModal(false);
+      } else {
+        message.error(res.data.EM);
+      }
+      fetchUsers();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const handleCloseModal = () => {
+    setIsOpenAddModal(false);
+    setIsOpenUpdateModal(false);
+  };
 
-const handleEdit = (user:IInfo) =>{
-    setSelectedUser(user)
-    setIsOpenModal(true)
-}
-const handleDelete = (user:IInfo) =>{
-    setSelectedUser(user)
-    setIsOpenModal(true)
-}
-  // const getEditProject = (project: IProject) => {
-  //   setEditProject(project);
-  // };
+  const handleEdit = (user: IInfo) => {
+    setSelectedUser(user);
+    setIsOpenUpdateModal(true);
+  };
+
+  const handleDelete = (user: IInfo) => {
+    setSelectedUser(user);
+    setIsOpenDeleteModal(true);
+  };
+
+  const handleCreate = () => {
+    setIsOpenAddModal(true);
+  };
 
   const handleClickSearchInput = () => {
     setIsSearchInputVisible(!isSearchInputVisible);
 
     if (isSearchInputVisible) {
-      setSearchKeyword('');
+      setSearchKeyword("");
     }
   };
 
@@ -133,11 +83,10 @@ const handleDelete = (user:IInfo) =>{
   //   setPagination({ ...pagination, page: 1 });
   //   setSearchKeyword(value);
   // }, 1000);
-  useEffect(()=>{
-    fetchUsers()
-  },[])
-  console.log(selectUser);
-  
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
   return (
     <>
       <div className="flex flex-col h-full p-10 gap-4">
@@ -183,7 +132,7 @@ const handleDelete = (user:IInfo) =>{
                 type="primary"
                 className="h-[44px] w-[161px] rounded-xl"
                 style={{ backgroundColor: "#4258F1" }}
-                onClick={() => setIsOpenModal(true)}
+                onClick={handleCreate}
               >
                 <div className="flex gap-x-[8px] font-medium text-[18px] leading-[21.78px] text-[#FFFFFF]">
                   <div>+</div>
@@ -195,20 +144,38 @@ const handleDelete = (user:IInfo) =>{
         </div>
 
         <UsersListTable
-          users={userList ?? ''}
+          users={userList ?? ""}
           isLoading={isLoading}
           onUpdate={handleEdit}
-          onDelete={handleDelete}  
-            
+          onDelete={handleDelete}
         />
-        <UsersFormModal
-          open={isOpenModal}
-          close={handleCloseModal}
-          users={selectUser}
-        />
+
+        {isOpenAddModal && (
+          <UsersFormModal
+            open={isOpenAddModal}
+            close={handleCloseModal}
+            onRefresh={fetchUsers}
+          />
+        )}
+
+        {isOpenUpdateModal && (
+          <UsersFormModal
+            open={isOpenUpdateModal}
+            close={handleCloseModal}
+            users={selectUser}
+            onRefresh={fetchUsers}
+          />
+        )}
+
+        {isOpenDeleteModal && (
+          <BaseRemoveModal
+            isOpen={isOpenDeleteModal}
+            onClose={() => setIsOpenDeleteModal(false)}
+            onOk={() => deleteUser(selectUser)}
+            title="User"
+          />
+        )}
       </div>
-
-
     </>
   );
 };
