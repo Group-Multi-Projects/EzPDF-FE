@@ -7,68 +7,10 @@ import { Button, Input, message } from "antd";
 import { debounce } from "lodash";
 import React, { useEffect, useState } from "react";
 
-export const fakeFileList = [
-  {
-    id: "1",
-    user_id: "1001",
-    file_url: "https://example.com/files/report-jan.pdf",
-    file_name: "report-jan.pdf",
-    file_type: "application/pdf",
-    createdAt: "2025-04-01T10:15:30.000Z",
-  },
-  {
-    id: "2",
-    user_id: "1002",
-    file_url: "https://example.com/files/photo-spring.jpg",
-    file_name: "photo-spring.jpg",
-    file_type: "image/jpeg",
-    createdAt: "2025-04-05T14:22:10.000Z",
-  },
-  {
-    id: "3",
-    user_id: "1003",
-    file_url: "https://example.com/files/archive.zip",
-    file_name: "archive.zip",
-    file_type: "application/zip",
-    createdAt: "2025-04-10T08:45:00.000Z",
-  },
-  {
-    id: "4",
-    user_id: "1001",
-    file_url: "https://example.com/files/presentation.pptx",
-    file_name: "presentation.pptx",
-    file_type:
-      "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-    createdAt: "2025-04-12T16:30:25.000Z",
-  },
-  {
-    id: "5",
-    user_id: "1002",
-    file_url: "https://example.com/files/data.csv",
-    file_name: "data.csv",
-    file_type: "text/csv",
-    createdAt: "2025-04-15T11:05:50.000Z",
-  },
-];
 
-const generateFakeFileList = (count: number = 100) => {
-  const baseList = fakeFileList;
-  const result = [];
 
-  for (let i = 0; i < count; i++) {
-    const template = baseList[i % baseList.length];
-    const index = i + 1;
-    const id = index.toString();
-    result.push({
-      ...template,
-      id,
-    });
-  }
 
-  return result;
-};
 const FilesList = () => {
-  const fileList100Items = generateFakeFileList(100);
   const [files, setFiles] = useState<any>(null);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
