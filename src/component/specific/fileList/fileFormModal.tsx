@@ -6,10 +6,12 @@ import BaseModal from "@/component/atoms/modal/BaseModal";
 import { fileFormField, profileFormField } from "@/helper/constants";
 import { renderFormField } from "@/helper/formHelper";
 import { message } from "antd";
+import apiService from "@/service";
 
 interface fileListFormModalProps {
   open: boolean;
   close: () => void;
+  refresh:() => void;
 }
 
 const schema = z.object({
@@ -19,6 +21,7 @@ type FormValues = z.infer<typeof schema>;
 const FileFormModal = ({
   open,
   close,
+  refresh
 }: fileListFormModalProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const {
@@ -42,8 +45,7 @@ const FileFormModal = ({
   };
 
   const onSubmit = async (data: FormValues) => {
-   
-    // setIsLoading(true)
+    setIsLoading(true)
     try {
         const payload = new FormData();
         if (data.file.length > 0) {
@@ -54,13 +56,17 @@ const FileFormModal = ({
           } else {
              message.warning("Please select a file");
           }
-
+        const res = await apiService.files.upload(payload)
+        reset()
+        refresh()
+        close()
     } catch (error) {
       console.log("err in updated user form", error);
     } finally {
       setIsLoading(false);
     }
   };
+
   return (
     <>
       <BaseModal
@@ -71,6 +77,8 @@ const FileFormModal = ({
         width={900}
         loading={isLoading}
         onOk={handleSubmit(onSubmit)}
+        okText="Đồng ý"
+        cancelText="Hủy bỏ"
       >
         {fileFormField.map((group, index) => (
           <div key={index}>

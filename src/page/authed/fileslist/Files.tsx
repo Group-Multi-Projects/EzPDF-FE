@@ -1,3 +1,4 @@
+import BaseRemoveModal from "@/component/atoms/modal/BaseRemoveModal";
 import FileFormModal from "@/component/specific/fileList/fileFormModal";
 import FileListTable from "@/component/specific/fileList/fileListTable";
 import { IFileListTable } from "@/interfaces";
@@ -7,16 +8,14 @@ import { Button, Input, message } from "antd";
 import { debounce } from "lodash";
 import React, { useEffect, useState } from "react";
 
-
-
-
-const FilesList = () => {
+const Files = () => {
   const [files, setFiles] = useState<any>(null);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [selectFile, setSelectedFile] = useState<IFileListTable | null>(null);
   const [isSearchInputVisible, setIsSearchInputVisible] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
+  const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
   // const [pagination, setPagination] = useState({
   //   page: 1,
   //   limit: 10,
@@ -42,6 +41,27 @@ const FilesList = () => {
     }
   };
 
+  const deleteFile = async (file: any) => {
+    console.log(file);
+
+    setIsLoading(true);
+    try {
+      let res = await apiService.files.delete(file.id);
+      setSelectedFile(file);
+      if (res.data.EC === 0) {
+        message.success(res.data.EM);
+        setIsOpenDeleteModal(false);
+        fetchFiles()
+      } else {
+        message.error(res.data.EM);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleCloseModal = () => {
     setIsOpenModal(false);
   };
@@ -58,8 +78,8 @@ const FilesList = () => {
     // debouncedSearch(e.target.value);
   };
 
-  const handleDownloadFile = async (file:any) => {
-    setSelectedFile(file)
+  const handleDownloadFile = async (file: any) => {
+    setSelectedFile(file);
     window.open(file?.file_url);
   };
 
@@ -130,11 +150,29 @@ const FilesList = () => {
           </div>
         </div>
 
-        <FileListTable fileListTable={files ?? ''} isLoading={isLoading} isDownLoad={handleDownloadFile}/>
-        <FileFormModal open={isOpenModal} close={handleCloseModal} />
+        <FileListTable
+          fileListTable={files ?? ""}
+          isLoading={isLoading}
+          isDownLoad={handleDownloadFile}
+          onDelete={(file:any) => {
+            setSelectedFile(file); // 👈 Lưu file để xoá
+            setIsOpenDeleteModal(true); // 👈 Mở modal
+          }}
+        />
+        <FileFormModal
+          open={isOpenModal}
+          close={handleCloseModal}
+          refresh={fetchFiles}
+        />
+        <BaseRemoveModal
+          isOpen={isOpenDeleteModal}
+          onClose={() => setIsOpenDeleteModal(false)}
+          onOk={() => deleteFile(selectFile)}
+          title="Delete file"
+        />
       </div>
     </>
   );
 };
 
-export default FilesList;
+export default Files;

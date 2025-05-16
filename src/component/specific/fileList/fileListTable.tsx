@@ -8,7 +8,7 @@ import {
   EllipsisOutlined,
 } from "@ant-design/icons";
 import type { MenuProps, TableProps } from "antd";
-import { Dropdown, Modal, Table } from "antd";
+import { Dropdown, message, Modal, Table } from "antd";
 import dayjs from "dayjs";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -17,13 +17,27 @@ type ColumnsType<T extends object> = TableProps<T>["columns"];
 
 interface FileListTableProps {
   fileListTable: any[];
-  refresh?: () => void;
   isLoading: boolean;
   onPageChange?: (page: number) => void;
-  isDownLoad?: (id:string|number) => void;
+  isDownLoad?: (id: string | number) => void;
+  onDelete?: (id: string | number) => void;
 }
 const FileListTable = (props: FileListTableProps) => {
-
+  //     const deleteFile = async (file: any) => {
+  //     console.log(file)
+  //   try {
+  //     let res = await apiService.files.delete(file.id);
+  //     if (res.data.EC === 0) {
+  //       message.success(res.data.EM);
+  //     } else {
+  //       message.error(res.data.EM);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
   const getMenuItems = (file: any): MenuProps["items"] => [
     {
       key: "1",
@@ -44,9 +58,9 @@ const FileListTable = (props: FileListTableProps) => {
       label: (
         <div
           className="flex items-center gap-x-[7px] w-full"
-          // onClick={() => {
-          //   openTicketingDeleteModal(Number(ticket.id),refresh);
-          // }}
+          onClick={() => {
+            props?.onDelete?.(file);             
+          }}
         >
           <DeleteOutlined />
           <span className="font-normal text-[14px] leading-[18px] text-[#696D87]">
@@ -61,7 +75,7 @@ const FileListTable = (props: FileListTableProps) => {
     {
       title: "ID",
       key: "id",
-      dataIndex:'id'
+      dataIndex: "id",
       // render: (_, record: IFileListTable) => {
       //   return (
       //     <Link
@@ -89,7 +103,7 @@ const FileListTable = (props: FileListTableProps) => {
       dataIndex: "user",
       key: "user",
       render: (_, record: any) => <span>{record?.user?.username}</span>,
-    },    // {
+    }, // {
     //   title: 'Type',
     //   key: 'type',
     //   render: (_, record: IFileListTable) => {

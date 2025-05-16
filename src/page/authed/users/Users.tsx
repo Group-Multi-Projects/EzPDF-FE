@@ -48,6 +48,8 @@ const Users = () => {
       setIsLoading(false);
     }
   };
+
+  
   const handleCloseModal = () => {
     setIsOpenAddModal(false);
     setIsOpenUpdateModal(false);

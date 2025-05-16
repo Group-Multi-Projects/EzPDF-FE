@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import * as pdfjsLib from "pdfjs-dist";
 import "./FileView.scss";
 import {
+  ArrowDownToLine,
   Circle,
   CloudUpload,
   LetterText,
@@ -12,7 +13,7 @@ import {
   ZoomIn,
   ZoomOut,
 } from "lucide-react";
-import { message } from "antd";
+import { Button, message } from "antd";
 import {
   Canvas,
   Control,
@@ -30,7 +31,14 @@ import {
   addTriangle,
   deleteActiveObject,
 } from "@/helper/shape";
-import { addText, changeColor, changeFontFamily, toggleBold, toggleItalic, toggleUnderline } from "@/helper/addText";
+import {
+  addText,
+  changeColor,
+  changeFontFamily,
+  toggleBold,
+  toggleItalic,
+  toggleUnderline,
+} from "@/helper/addText";
 // Set the PDF.js worker path
 pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
   "./pdf-worker.js",
@@ -38,6 +46,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
 ).toString();
 
 const FileViewBody = () => {
+  const [loading, setLoading] = useState(false);
   const [pdfDoc, setPdfDoc] = useState<any>(null);
   const [pdfFabric, setPdfFabric] = useState<any>(null);
   const [pageNum, setPageNum] = useState(1);
@@ -167,8 +176,8 @@ const FileViewBody = () => {
   return (
     <div className="pdf-viewer">
       {pdfDoc && (
-        <div className="">
-          <div className="flex w-full flex-wrap gap-[15px] mb-[20px] p-[12px] bg-white rounded-[6px] shadow-md">
+        <div className="flex justify-between mb-[20px] p-[12px] bg-white rounded-[6px] shadow-md">
+          <div className="flex w-full flex-wrap gap-[15px] ">
             <div className="page-controls">
               <button onClick={goToPrevPage} disabled={pageNum <= 1}>
                 Previous
@@ -226,16 +235,16 @@ const FileViewBody = () => {
               </button>
               <button onClick={() => addText(pdfFabric)}>
                 <LetterText strokeWidth={1.5} size={20} />
-              </button>              
+              </button>
               <button onClick={() => deleteActiveObject(pdfFabric)}>
                 Delete
               </button>
             </div>
 
             <div className="flex gap-2">
-              <button onClick={()=> toggleBold(pdfFabric)}>B</button>
-              <button onClick={()=> toggleItalic(pdfFabric)}>I</button>
-              <button onClick={()=>toggleUnderline(pdfFabric)}>U</button>
+              <button onClick={() => toggleBold(pdfFabric)}>B</button>
+              <button onClick={() => toggleItalic(pdfFabric)}>I</button>
+              <button onClick={() => toggleUnderline(pdfFabric)}>U</button>
               {/* <input type="color" onChange={()=>changeColor(pdfFabric)} />
               <select onChange={()=>changeFontFamily(pdfFabric, e)}>
                 <option value="Arial">Arial</option>
@@ -243,6 +252,20 @@ const FileViewBody = () => {
                 <option value="Courier New">Courier New</option>
               </select> */}
             </div>
+          </div>
+          <div>
+            <Button
+              loading={loading}
+              type="primary"
+              className="px-3 py-5 rounded-xl"
+              style={{ backgroundColor: "#4258F1" }}
+              // onClick={() => setIsOpenModal(true)}
+            >
+              <div className="flex justify-center items-center gap-x-[8px] text-[#FFFFFF]">
+                {loading ? null : <ArrowDownToLine strokeWidth={1.75} size={20}/>}
+                <div>{loading ? "Saving..." : "Save"}</div>
+              </div>
+            </Button>
           </div>
         </div>
       )}
