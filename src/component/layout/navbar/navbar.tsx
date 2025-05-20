@@ -81,17 +81,17 @@ const SidebarRoot: FC<SidebarProps> = ({
           <span className="text-xs text-slate-400 font-semibold">General</span>
         </div>
         <MenuItem icon={<FaHome size={16} />} component={<Link to="/home" />}>
-          Home
+          Trang chủ
         </MenuItem>
-        <SubMenu label="Tools" icon={<FaTools size={16} />}>
-          <MenuItem component={<Link to="/edit" />}>Edit</MenuItem>
-          <MenuItem component={<Link to="/convert" />}>Convert</MenuItem>
+        <SubMenu label="Công cụ" icon={<FaTools size={16} />}>
+          <MenuItem component={<Link to="/edit" />}>Tải lên file</MenuItem>
+          <MenuItem component={<Link to="/convert" />}>Chuyển đổi dạng</MenuItem>
         </SubMenu>
         <MenuItem
           icon={<TfiFiles size={18} />}
           component={<Link to="/filesList" />}
         >
-          File list
+          Danh sách file
         </MenuItem>
         <div className="mt-4 mb-2 px-6">
           <span className="text-xs text-slate-400 font-semibold">Extra</span>
@@ -100,16 +100,16 @@ const SidebarRoot: FC<SidebarProps> = ({
           icon={<IoMdPerson size={18} />}
           component={<Link to="/profile-detail" />}
         >
-          Personal
+          Trang cá nhân
         </MenuItem>
         <MenuItem
           icon={<Users  size={18} />}
           component={<Link to="/users" />}
         >
-          Users List
+          Danh sách users
         </MenuItem>
         <MenuItem icon={<MdLogout size={18} />} onClick={handleLogout}>
-          Logout
+          Đăng xuất
         </MenuItem>
       </Menu>
     </Sidebar>

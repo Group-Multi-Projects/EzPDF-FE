@@ -1,12 +1,14 @@
 import AuthService from "./auth";
-import FilesService from "./filesList";
+import CanvasService from "./canvas";
+import FilesService from "./files";
 import UsersService from "./users";
 
 
 const apiService = {
     auth: new AuthService(),
     users: new UsersService(),
-    files: new FilesService()
+    files: new FilesService(),
+    canvas: new CanvasService(),
 }
 
 export default apiService;

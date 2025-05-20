@@ -1,4 +1,4 @@
-import FileViewBody from '@/component/specific/fileDetail/FileViewBody'
+import FileViewBody from '@/component/specific/edit/FileViewBody'
 import React from 'react'
 
 const FileView = () => {

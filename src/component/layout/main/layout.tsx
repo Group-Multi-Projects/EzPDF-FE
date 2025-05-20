@@ -5,11 +5,12 @@ import { RootState } from "@/store";
 import bgImg from "@/assets/svg/ss.svg";
 import { Menu } from "lucide-react";
 import { Avatar } from "antd";
+import { Outlet } from "react-router-dom";
 interface LayoutProps {
   children: ReactNode;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+const Layout = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [isSidebarOpen] = useState(false);
   const [toggled, setToggled] = React.useState(false);
@@ -36,7 +37,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         />
         {isMobile && (
           <>
-            <div className="bg-white z-50 flex justify-between items-center fixed right-0 left-0 px-3 h-16 shadow-lg">
+            <div className="bg-white z-10 flex justify-between items-center fixed right-0 left-0 px-3 h-16 shadow-lg">
               {isMobile ? (
                 <Menu onClick={() => setToggled(!toggled)} size={18} />
               ) : (
@@ -58,7 +59,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           backgroundColor: "#f5f0f5",
         }}
       >
-        <div className={isMobile ? 'pt-12' : ''}>{children}</div>
+        <div className={isMobile ? 'pt-12' : ''}>
+          <Outlet/>
+        </div>
       </div>
     </div>
   );

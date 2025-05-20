@@ -10,6 +10,8 @@ const PrivateRouters: React.FC<PrivateRoutersProps> = ({
   component: Component,
 }) => {
   const {isAuthenticated} = useSelector((state:RootState)=>state.auth)
+  console.log('auth ?? :', isAuthenticated);
+  
   return isAuthenticated === true ? <Component /> : <Navigate to="/" replace />;
 };
 export default PrivateRouters;

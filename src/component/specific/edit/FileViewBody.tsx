@@ -102,6 +102,8 @@ const FileViewBody = () => {
   // Handle file selection
   const handleFileChange = (event: any) => {
     const file = event.target.files[0];
+    console.log('file upload', file);
+    
     if (!file || file.type !== "application/pdf") {
       message.warning("Please select a valid PDF file");
       return;

@@ -9,7 +9,7 @@ import {
   FilePen,
   Search,
 } from "lucide-react";
-import FileViewBody from "@/component/specific/fileDetail/FileViewBody";
+import FileViewBody from "@/component/specific/edit/FileViewBody";
 
 const HomePage = () => {
   const features = [

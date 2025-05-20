@@ -11,7 +11,7 @@ import type { MenuProps, TableProps } from "antd";
 import { Dropdown, message, Modal, Table } from "antd";
 import dayjs from "dayjs";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 type ColumnsType<T extends object> = TableProps<T>["columns"];
 
@@ -23,6 +23,7 @@ interface FileListTableProps {
   onDelete?: (id: string | number) => void;
 }
 const FileListTable = (props: FileListTableProps) => {
+  const navigate = useNavigate();
   //     const deleteFile = async (file: any) => {
   //     console.log(file)
   //   try {
@@ -59,7 +60,7 @@ const FileListTable = (props: FileListTableProps) => {
         <div
           className="flex items-center gap-x-[7px] w-full"
           onClick={() => {
-            props?.onDelete?.(file);             
+            props?.onDelete?.(file);
           }}
         >
           <DeleteOutlined />
@@ -153,6 +154,9 @@ const FileListTable = (props: FileListTableProps) => {
           loading={props.isLoading}
           columns={columns}
           dataSource={props.fileListTable}
+          onRow={(record) => ({
+            onClick: () => navigate(`/filesList/${record.id}`),
+          })}
           pagination={{
             position: ["topLeft"],
             // Các tuỳ chọn khác nếu cần:

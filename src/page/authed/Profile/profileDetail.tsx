@@ -70,8 +70,8 @@ const ProfileDetail = () => {
               <Descriptions.Item label="Role">
               {getInfo?.role_id === 2 ? 'Admin' : 'User'}
               </Descriptions.Item>
-              <Descriptions.Item label="Status">
-                Active
+              <Descriptions.Item label="Trạng thái">
+                Đang hoạt động
               </Descriptions.Item>
               <Descriptions.Item label="Created at">
                 {dayjs(getInfo?.createdAt).format('MMM, DD YYYY')}
@@ -86,8 +86,6 @@ const ProfileDetail = () => {
         close={handleCloseModal}
         initialValues={getInfo}
       />
-
-
     </div>
   );
 };

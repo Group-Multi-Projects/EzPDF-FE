@@ -1,6 +1,6 @@
 import BaseRemoveModal from "@/component/atoms/modal/BaseRemoveModal";
-import FileFormModal from "@/component/specific/fileList/fileFormModal";
-import FileListTable from "@/component/specific/fileList/fileListTable";
+import FileFormModal from "@/component/specific/files/fileFormModal";
+import FileListTable from "@/component/specific/files/fileListTable";
 import { IFileListTable } from "@/interfaces";
 import apiService from "@/service";
 import { CloseOutlined, SearchOutlined } from "@mui/icons-material";
@@ -155,9 +155,10 @@ const Files = () => {
           isLoading={isLoading}
           isDownLoad={handleDownloadFile}
           onDelete={(file:any) => {
-            setSelectedFile(file); // 👈 Lưu file để xoá
-            setIsOpenDeleteModal(true); // 👈 Mở modal
+            setSelectedFile(file); 
+            setIsOpenDeleteModal(true);
           }}
+          
         />
         <FileFormModal
           open={isOpenModal}

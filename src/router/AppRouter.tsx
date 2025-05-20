@@ -2,7 +2,7 @@ import {   Route, Routes } from "react-router-dom";
 import { useSelector } from "react-redux";
 import HomePage from "@/page/authed/home/home";
 import LandingPage from "@/page/landingPage";
-import FilesList from "@/page/authed/fileslist/Files";
+import FilesList from "@/page/authed/files/Files";
 import { RootState } from "@/store";
 import Convert from "@/page/authed/convert";
 import PdfToWord from "@/page/authed/convert/PdfToWord"
@@ -15,7 +15,6 @@ import { pdfjs } from "react-pdf";
 import FileView from "@/page/authed/edit/FileView";
 
 const AppRouter = () => {
-  pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
   const { isAuthenticated, user } = useSelector(
     (state: RootState) => state.auth
   );
