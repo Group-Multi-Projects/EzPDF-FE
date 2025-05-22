@@ -3,11 +3,14 @@ import * as pdfjsLib from "pdfjs-dist";
 import {
   ArrowDownToLine,
   Circle,
+  CircleX,
   CloudUpload,
   LetterText,
   RectangleHorizontal,
   RotateCcw,
   RotateCw,
+  Save,
+  Trash,
   Triangle,
   ZoomIn,
   ZoomOut,
@@ -40,15 +43,54 @@ const FileDetail = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(false);
   const [pdfDoc, setPdfDoc] = useState<any>(null); // dữ liệu pdf
+  const [canvasId, setCanvasId] = useState(null);
   const [pdfFabric, setPdfFabric] = useState<any>(null);
   const [pageNum, setPageNum] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [scale, setScale] = useState(1.0);
   const [rotation, setRotation] = useState(0);
   const [annotations, setAnnotations] = useState<Record<number, Object[]>>({});
+
+  const [showDeleteButton, setShowDeleteButton] = useState(false);
+  const [showTextStyleButtons, setShowTextStyleButtons] = useState(false);
+
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const canvasRefFabric = useRef<HTMLCanvasElement | null>(null);
   const fabricRef = useRef<Canvas | null>(null);
+
+  useEffect(() => {
+    const handleSelection = () => {
+      const activeObject = pdfFabric?.getActiveObject();
+      setShowDeleteButton(!!activeObject); // Có object là true
+
+      // Chỉ hiện khi là object type "text" hoặc "i-text"
+      if (
+        activeObject &&
+        (activeObject.type === "text" || activeObject.type === "i-text")
+      ) {
+        setShowTextStyleButtons(true);
+      } else {
+        setShowTextStyleButtons(false);
+      }
+    };
+
+    if (pdfFabric) {
+      pdfFabric.on("selection:created", handleSelection);
+      pdfFabric.on("selection:updated", handleSelection);
+      pdfFabric.on("selection:cleared", () => {
+        setShowDeleteButton(false);
+        setShowTextStyleButtons(false);
+      });
+    }
+
+    return () => {
+      if (pdfFabric) {
+        pdfFabric.off("selection:created", handleSelection);
+        pdfFabric.off("selection:updated", handleSelection);
+        pdfFabric.off("selection:cleared");
+      }
+    };
+  }, [pdfFabric]);
 
   const renderPage = async (pageNumber: number) => {
     if (!pdfDoc) return;
@@ -92,22 +134,6 @@ const FileDetail = () => {
     setPdfFabric(newFabricCanvas);
   };
 
-  const handleLoadPdfFromApi = async (fileUrl: string) => {
-    try {
-      const response = await fetch(fileUrl);
-      const arrayBuffer = await response.arrayBuffer();
-
-      const loadingTask = pdfjsLib.getDocument(arrayBuffer);
-      const pdf = await loadingTask.promise;
-
-      setPdfDoc(pdf);
-      setTotalPages(pdf.numPages);
-      setPageNum(1);
-    } catch (error) {
-      console.error("Error loading PDF from API:", error);
-      message.error("Error loading PDF file from server");
-    }
-  };
 
   const saveCurrentAnnotations = () => {
     if (pdfFabric) {
@@ -150,28 +176,28 @@ const FileDetail = () => {
     setRotation((prevRotation) => (prevRotation - 90 + 360) % 360);
   };
 
-  const saveAll = async () => {
-    let canvas = fabricRef.current;
-    let file_id = Number(id);
-    const canvasJson = JSON.stringify(canvas?.toJSON());
-    const payload = {
-      file_id: file_id,
-      json_canvas: canvasJson,
-    };
+    const handleLoadPdfFromApi = async (fileUrl: string) => {
     try {
-      let res = await apiService.canvas.create(payload);
-      if (res.data.EC === 0) {
-        message.success('Save data successfully')
-      }
+      const response = await fetch(fileUrl);
+      const arrayBuffer = await response.arrayBuffer();
+
+      const loadingTask = pdfjsLib.getDocument(arrayBuffer);
+      const pdf = await loadingTask.promise;
+
+      setPdfDoc(pdf);
+      setTotalPages(pdf.numPages);
+      setPageNum(1);
     } catch (error) {
-      console.error("Error save canvas:", error);
-      message.error("Error save canvas");
+      console.error("Error loading PDF from API:", error);
+      message.error("Error loading PDF file from server");
     }
   };
 
   const getSaveAll = async () => {
     let file_id = String(id);
-    let res = await apiService.canvas.get(file_id);
+    let res = await apiService.canvas.get(file_id, pageNum);
+    setCanvasId(res.data.DT.id);
+
     let savedJson = res.data.DT.json_canvas;
     let canvas = fabricRef.current;
     if (typeof savedJson === "string") {
@@ -184,6 +210,52 @@ const FileDetail = () => {
     });
   };
 
+  const saveAll = async () => {
+    let canvas = fabricRef.current;
+    let file_id = Number(id);
+    const canvasJson = JSON.stringify(canvas?.toJSON());
+    const payload = {
+      file_id: file_id,
+      json_canvas: canvasJson,
+      page_canvas:pageNum
+    };
+    try {
+      if (canvasId) {
+        let res = await apiService.canvas.update(canvasId, {
+          json_canvas: canvasJson,
+        });
+        if (res.data.EC === 0) {
+          message.success("Lưu dữ liệu thành công");
+        }
+      } else {
+        let res = await apiService.canvas.create(payload);
+        if (res.data.EC === 0) {
+          message.success("Lưu dữ liệu thành công");
+        }
+      }
+    } catch (error) {
+      console.error("Error save canvas:", error);
+      message.error("Error save canvas");
+    }
+  };
+
+    const deleteCanvas = async () => {
+    try {
+      if (canvasId) {
+        let res = await apiService.canvas.delete(canvasId);
+        if (res.data.EC === 0) {
+          message.success("Dữ liệu của canvas đã được xóa");
+        }
+      }else{
+        message.warning("Không tìm thấy các đối tượng trong canvas");
+      }
+
+    } catch (error) {
+      console.error("Error delete canvas:", error);
+      message.error("Error delete canvas");
+    }
+  };
+
   const fetchFile = async () => {
     const res = await apiService.files.getDetail(id);
     if (res?.data.EC === 0) {
@@ -193,29 +265,71 @@ const FileDetail = () => {
   };
 
   useEffect(() => {
-    getSaveAll();
-  }, [saveAll]);
-
-  useEffect(() => {
+    console.log('create canvas');
+    
     if (canvasRef.current) {
       fabricRef.current = new Canvas(canvasRef.current);
     }
   }, []);
 
-  useEffect(() => {
+useEffect(() => {
+  const loadPageAndCanvas = async () => {
     if (pdfDoc) {
-      renderPage(pageNum);
+      await renderPage(pageNum);       // Render PDF + tạo Fabric Canvas
+      await getSaveAll();              // Sau khi đã tạo Fabric canvas → load JSON
     }
-  }, [pdfDoc, pageNum, scale, rotation]);
+  };
+
+  loadPageAndCanvas();
+}, [pdfDoc, pageNum, scale, rotation]);
+
+
+
+
 
   useEffect(() => {
     fetchFile();
   }, []);
 
+  const controlBtnClass =
+    "w-[28px] h-[28px] rounded-[6px] border border-[#DFE1E6] flex justify-center items-center cursor-pointer";
+
+  // Các nút vẽ hình
+  const shapeButtons = [
+    {
+      onClick: () => addRect(pdfFabric),
+      icon: <RectangleHorizontal strokeWidth={1.5} size={20} />,
+    },
+    {
+      onClick: () => addCircle(pdfFabric),
+      icon: <Circle strokeWidth={1.5} size={20} />,
+    },
+    {
+      onClick: () => addTriangle(pdfFabric),
+      icon: <Triangle strokeWidth={1.5} size={20} />,
+    },
+    {
+      onClick: () => addText(pdfFabric),
+      icon: <LetterText strokeWidth={1.5} size={20} />,
+    },
+    {
+      onClick: () => deleteActiveObject(pdfFabric),
+      icon: <Trash strokeWidth={1.5} size={20} />,
+    },
+  ];
+
+  // Nút định dạng chữ
+  const textStyleButtons = [
+    { label: "B", onClick: () => toggleBold(pdfFabric) },
+    { label: "I", onClick: () => toggleItalic(pdfFabric) },
+    { label: "U", onClick: () => toggleUnderline(pdfFabric) },
+  ];
   return (
     <div className="pdf-viewer">
+      <div className="fixed top-0 left-0 right-0 z-[1050]">
       <div className="flex justify-between mb-[20px] p-[12px] bg-white rounded-[6px] shadow-md">
-        <div className="flex w-full flex-wrap gap-[15px] ">
+        <div className="flex w-full items-center flex-wrap gap-[15px] ">
+          {/* Page controls */}
           <div className="page-controls">
             <button onClick={goToPrevPage} disabled={pageNum <= 1}>
               Previous
@@ -228,91 +342,97 @@ const FileDetail = () => {
             </button>
           </div>
 
-          <div className="zoom-controls">
-            <div
-              onClick={zoomOut}
-              className="w-[28px] h-[28px] rounded-[6px] border-[1px] border-[#DFE1E6] flex justify-center items-center cursor-pointer"
-            >
+          {/* Zoom controls */}
+          <div className="zoom-controls flex gap-2 items-center">
+            <div className={controlBtnClass} onClick={zoomOut}>
               <ZoomOut strokeWidth={1} size={20} />
             </div>
             <span className="text-[14px] text-gray-500">
               {Math.round(scale * 100)}%
             </span>
-            <div
-              className="w-[28px] h-[28px] rounded-[6px] border-[1px] border-[#DFE1E6] flex justify-center items-center cursor-pointer"
-              onClick={zoomIn}
-            >
+            <div className={controlBtnClass} onClick={zoomIn}>
               <ZoomIn strokeWidth={1} size={20} />
             </div>
           </div>
 
-          <div className="rotation-controls">
-            <div
-              className="w-[28px] h-[28px] rounded-[6px] border-[1px] border-[#DFE1E6] flex justify-center items-center cursor-pointer"
-              onClick={rotateCounterClockwise}
-            >
+          {/* Rotation controls */}
+          <div className="rotation-controls flex gap-2">
+            <div className={controlBtnClass} onClick={rotateCounterClockwise}>
               <RotateCcw strokeWidth={1} size={20} />
             </div>
-            <div
-              onClick={rotateClockwise}
-              className="w-[28px] h-[28px] rounded-[6px] border-[1px] border-[#DFE1E6] flex justify-center items-center cursor-pointer"
-            >
+            <div className={controlBtnClass} onClick={rotateClockwise}>
               <RotateCw strokeWidth={1} size={20} />
             </div>
           </div>
 
+          {/* Shape buttons */}
           <div className="flex gap-2">
-            <button onClick={() => addRect(pdfFabric)}>
-              <RectangleHorizontal strokeWidth={1.5} size={20} />
-            </button>
-            <button onClick={() => addCircle(pdfFabric)}>
-              <Circle strokeWidth={1.5} size={20} />
-            </button>
-            <button onClick={() => addTriangle(pdfFabric)}>
-              <Triangle strokeWidth={1.5} size={20} />
-            </button>
-            <button onClick={() => addText(pdfFabric)}>
-              <LetterText strokeWidth={1.5} size={20} />
-            </button>
-            <button onClick={() => deleteActiveObject(pdfFabric)}>
-              Delete
-            </button>
+            {shapeButtons.map((btn, index) => {
+              // Nếu là delete button thì kiểm tra showDeleteButton
+              if (btn.icon.type === Trash && !showDeleteButton) return null;
+              return (
+                <button
+                  key={index}
+                  className={controlBtnClass}
+                  onClick={btn.onClick}
+                >
+                  {btn.icon}
+                </button>
+              );
+            })}
           </div>
 
-          <div className="flex gap-2">
-            <button onClick={() => toggleBold(pdfFabric)}>B</button>
-            <button onClick={() => toggleItalic(pdfFabric)}>I</button>
-            <button onClick={() => toggleUnderline(pdfFabric)}>U</button>
-            {/* <input type="color" onChange={()=>changeColor(pdfFabric)} />
-              <select onChange={()=>changeFontFamily(pdfFabric, e)}>
-                <option value="Arial">Arial</option>
-                <option value="Georgia">Georgia</option>
-                <option value="Courier New">Courier New</option>
-              </select> */}
-          </div>
+          {/* Text style buttons (B, I, U) */}
+          {showTextStyleButtons && (
+            <div className="flex gap-2">
+              {textStyleButtons.map((btn, index) => (
+                <button
+                  key={index}
+                  className={controlBtnClass}
+                  onClick={btn.onClick}
+                >
+                  {btn.label}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
-        <div>
+        <div className="flex gap-2">
+          <Button
+            loading={loading}
+            className="px-3 py-5 rounded-xl"
+            onClick={deleteCanvas}
+          >
+            <div className="flex justify-center items-center gap-x-[8px]">
+              {loading ? null : (
+                <CircleX
+                  className="text-red-500"
+                  strokeWidth={1.75}
+                  size={20}
+                />
+              )}
+              <div>{"Xóa dữ liệu"}</div>
+            </div>
+          </Button>
+
           <Button
             loading={loading}
             type="primary"
             className="px-3 py-5 rounded-xl"
             style={{ backgroundColor: "#4258F1" }}
-            // onClick={() => setIsOpenModal(true)}
+            onClick={saveAll}
           >
-            <div
-              className="flex justify-center items-center gap-x-[8px] text-[#FFFFFF]"
-              onClick={saveAll}
-            >
-              {loading ? null : (
-                <ArrowDownToLine strokeWidth={1.75} size={20} />
-              )}
-              <div>{loading ? "Saving..." : "Save"}</div>
+            <div className="flex justify-center items-center gap-x-[8px] text-[#FFFFFF]">
+              {loading ? null : <Save strokeWidth={1.75} size={20} />}
+              <div>{loading ? "Saving..." : "Lưu"}</div>
             </div>
           </Button>
         </div>
+      </div>        
       </div>
 
-      <div className="flex flex-col items-center justify-center h-full w-full  rounded-lg cursor-pointer bg-white p-4 overflow-auto">
+
+      <div className="mt-11 flex flex-col items-center justify-center h-full w-full  rounded-lg cursor-pointer bg-white p-4 overflow-auto">
         {pdfDoc ? (
           <>
             {" "}

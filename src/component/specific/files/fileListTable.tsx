@@ -130,7 +130,14 @@ const FileListTable = (props: FileListTableProps) => {
     {
       title: "",
       key: "action",
-      width: "5.13%",
+      width: "70px",
+      onCell: () => {
+        return {
+          onClick: (event) => {
+            event.stopPropagation();
+          },
+        };
+      },
       render: (_: any, item: IFileListTable) => (
         <Dropdown
           menu={{

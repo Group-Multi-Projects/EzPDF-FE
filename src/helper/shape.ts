@@ -53,18 +53,18 @@ export function deleteActiveObject(canvas:any) {
   }
 }
 
-export function bringForward(canvas:any) {
-  const activeObject = canvas.getActiveObject();
-  if (activeObject) {
-    canvas.bringForward(activeObject);
-  }
-}
+// export function bringForward(canvas:any) {
+//   const activeObject = canvas.getActiveObject();
+//   if (activeObject) {
+//     canvas.bringForward(activeObject);
+//   }
+// }
 
-export function sendBackward(canvas:any) {
-  const activeObject = canvas.getActiveObject();
-  if (activeObject) {
-    canvas.sendBackwards(activeObject);
-  }
-}
+// export function sendBackward(canvas:any) {
+//   const activeObject = canvas.getActiveObject();
+//   if (activeObject) {
+//     canvas.sendBackwards(activeObject);
+//   }
+// }
 
 
