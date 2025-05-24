@@ -59,7 +59,7 @@ const Layout = () => {
           backgroundColor: "#f5f0f5",
         }}
       >
-        <div className={isMobile ? 'pt-12' : ''}>
+        <div className={isMobile ? 'pt-12 h-full' : 'h-full'}>
           <Outlet/>
         </div>
       </div>

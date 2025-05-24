@@ -20,6 +20,7 @@ import FilesList from "@/page/authed/files/Files";
 import Users from "./page/authed/users/Users";
 import ProfileDetail from "./page/authed/Profile/profileDetail";
 import FileDetail from "./page/authed/files/FileDetail";
+import ConvertFormat from "./page/authed/convert/ConvertFormat";
 
 function App() {
   const dispatch = useDispatch();
@@ -39,7 +40,7 @@ function App() {
         <Route element={<Layout/>}>
 
         <Route path="/edit" element={<PrivateRouters component={FileView} />} />
-        <Route path="/convert" element={<PrivateRouters component={Convert} />} />
+        <Route path="/convert" element={<PrivateRouters component={ConvertFormat} />} />
         <Route path="/convert/pdf-to-word" element={<PrivateRouters component={PdfToWord} />} />
         <Route path="/filesList" element={<PrivateRouters component={FilesList} />} />
         

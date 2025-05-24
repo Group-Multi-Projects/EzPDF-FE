@@ -1,0 +1,128 @@
+.editor {
+  :global {
+    .ql-container {
+      border-bottom-left-radius: 12px;
+      border-bottom-right-radius: 12px;
+      background: #ffffff;
+      // border: 1px solid #DFE1E6;
+      border-top: 0;
+      font-family: inherit;
+
+      &.ql-snow {
+        &.ql-disabled {
+          background-color: #f8f8f8;
+          cursor: not-allowed;
+        }
+      }
+    }
+
+    .ql-toolbar {
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+      background: #ffffff;
+      border: 1px solid #DFE1E6;
+      padding: 8px 16px;
+
+      .ql-picker-label {
+        &:hover {
+          color: #1890ff;
+        }
+      }
+
+      .ql-picker-options {
+        background: #ffffff;
+        // border: 1px solid #DFE1E6;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        border-radius: 4px;
+      }
+
+      button {
+        color: #666D80;
+        &:hover {
+          color: #1890ff;
+        }
+
+        &.ql-active {
+          color: #1890ff;
+        }
+      }
+    }
+
+    .ql-editor {
+      height: 100%;
+      font-size: 14px;
+      line-height: 1.5;
+      padding: 16px;
+
+      &.ql-blank::before {
+        font-style: normal;
+        color: #666D80;
+      }
+
+      p {
+        margin-bottom: 8px;
+      }
+
+      h1 {
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: 16px;
+      }
+
+      h2 {
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 14px;
+      }
+
+      h3 {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 12px;
+      }
+
+      ul, ol {
+        padding-left: 24px;
+        margin-bottom: 12px;
+      }
+
+      li {
+        margin-bottom: 4px;
+      }
+
+      blockquote {
+        border-left: 4px solid #DFE1E6;
+        margin: 16px 0;
+        padding-left: 16px;
+        color: #666D80;
+      }
+
+      code {
+        background: #F8F9FA;
+        padding: 2px 4px;
+        border-radius: 4px;
+        font-family: monospace;
+      }
+
+      pre {
+        background: #F8F9FA;
+        padding: 16px;
+        border-radius: 4px;
+        margin: 16px 0;
+        
+        code {
+          background: none;
+          padding: 0;
+        }
+      }
+    }
+
+    .ql-tooltip {
+      background: #ffffff;
+      border: 1px solid #DFE1E6;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      border-radius: 4px;
+      padding: 8px;
+    }
+  }
+}

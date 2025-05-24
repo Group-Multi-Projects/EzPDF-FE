@@ -16,6 +16,8 @@ const Files = () => {
   const [isSearchInputVisible, setIsSearchInputVisible] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
+  const role = localStorage.getItem("role");
+  const user_id = localStorage.getItem("user_id")
   // const [pagination, setPagination] = useState({
   //   page: 1,
   //   limit: 10,
@@ -26,12 +28,22 @@ const Files = () => {
   const fetchFiles = async () => {
     setIsLoading(true);
     try {
-      let res = await apiService.files.getList();
-      const { EC, EM, DT } = res.data;
-      if (EC === 0) {
-        setFiles(DT);
+      if (role === "admin") {
+        let res = await apiService.files.getList();
+        const { EC, EM, DT } = res.data;
+        if (EC === 0) {
+          setFiles(DT);
+        } else {
+          message.error(EM);
+        }
       } else {
-        message.error(EM);
+        let res = await apiService.files.getById(user_id!);
+        const { EC, EM, DT } = res.data;
+        if (EC === 0) {
+          setFiles(DT);
+        } else {
+          message.error(EM);
+        }
       }
     } catch (error) {
       console.error(error);
@@ -51,7 +63,7 @@ const Files = () => {
       if (res.data.EC === 0) {
         message.success(res.data.EM);
         setIsOpenDeleteModal(false);
-        fetchFiles()
+        fetchFiles();
       } else {
         message.error(res.data.EM);
       }
@@ -95,11 +107,10 @@ const Files = () => {
     fetchFiles();
   }, []);
   return (
-    <>
       <div className="flex flex-col h-full p-10 gap-4">
         <div className="flex justify-between items-center sticky">
           <div className="font-normal text-[26px] leading-[31.47px] text-[#0D0D12]">
-            Files list
+            Danh sách file
           </div>
           <div className="flex items-center gap-x-4">
             <div>
@@ -143,7 +154,7 @@ const Files = () => {
               >
                 <div className="flex gap-x-[8px] font-medium text-[18px] leading-[21.78px] text-[#FFFFFF]">
                   <div>+</div>
-                  <div>Add file</div>
+                  <div>Thêm file</div>
                 </div>
               </Button>
             </div>
@@ -154,11 +165,10 @@ const Files = () => {
           fileListTable={files ?? ""}
           isLoading={isLoading}
           isDownLoad={handleDownloadFile}
-          onDelete={(file:any) => {
-            setSelectedFile(file); 
+          onDelete={(file: any) => {
+            setSelectedFile(file);
             setIsOpenDeleteModal(true);
           }}
-          
         />
         <FileFormModal
           open={isOpenModal}
@@ -172,7 +182,6 @@ const Files = () => {
           title="Delete file"
         />
       </div>
-    </>
   );
 };
 

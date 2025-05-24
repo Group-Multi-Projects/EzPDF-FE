@@ -1,5 +1,5 @@
 export const PRIMARY = {
-    LIGHT: '#C754A8',  // Màu hồng tím nhạt
+    LIGHT: '#fcf2fa',  // Màu hồng tím nhạt
     MEDIUM: '#A23E8D', // Màu tím trung bình
     DARK: '#7B266F'    // Màu tím đậm
 }

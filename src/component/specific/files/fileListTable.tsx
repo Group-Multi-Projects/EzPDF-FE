@@ -24,21 +24,9 @@ interface FileListTableProps {
 }
 const FileListTable = (props: FileListTableProps) => {
   const navigate = useNavigate();
-  //     const deleteFile = async (file: any) => {
-  //     console.log(file)
-  //   try {
-  //     let res = await apiService.files.delete(file.id);
-  //     if (res.data.EC === 0) {
-  //       message.success(res.data.EM);
-  //     } else {
-  //       message.error(res.data.EM);
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
+  const role = localStorage.getItem("role");
+  const hasPermission = role === "admin";
+
   const getMenuItems = (file: any): MenuProps["items"] => [
     {
       key: "1",
@@ -49,7 +37,7 @@ const FileListTable = (props: FileListTableProps) => {
         >
           <DownloadOutlined />
           <span className="font-normal text-[14px] leading-[18px] text-[#696D87]">
-            Download
+            Tải xuống
           </span>
         </div>
       ),
@@ -65,7 +53,7 @@ const FileListTable = (props: FileListTableProps) => {
         >
           <DeleteOutlined />
           <span className="font-normal text-[14px] leading-[18px] text-[#696D87]">
-            Delete
+            Xóa
           </span>
         </div>
       ),
@@ -77,48 +65,36 @@ const FileListTable = (props: FileListTableProps) => {
       title: "ID",
       key: "id",
       dataIndex: "id",
-      // render: (_, record: IFileListTable) => {
-      //   return (
-      //     <Link
-      //       to={`/admin/ticketing-system/${record.id}/ticketing-information/activity`}
-      //     >
-      //       {record.id}
-      //     </Link>
-      //   );
-      // },
     },
     {
-      title: "File name",
+      title: "Tên file",
       dataIndex: "file_name",
       key: "file_name",
       render: (_, record: IFileListTable) => <span>{record?.file_name}</span>,
     },
     {
-      title: "File url",
+      title: "Đường dẫn URL",
       dataIndex: "file_url",
       key: "file_url",
       render: (_, record: IFileListTable) => <span>{record?.file_url}</span>,
     },
+    ...(hasPermission
+      ? [
+          {
+            title: "Người tạo",
+            dataIndex: "user",
+            key: "user",
+            width:150,
+            render: (_: any, record: any) => (
+              <span>{record?.user?.username}</span>
+            ),
+          },
+        ]
+      : []),
     {
-      title: "Created by",
-      dataIndex: "user",
-      key: "user",
-      render: (_, record: any) => <span>{record?.user?.username}</span>,
-    }, // {
-    //   title: 'Type',
-    //   key: 'type',
-    //   render: (_, record: IFileListTable) => {
-    //     const type = ticketType.find(item => item.value === record.file_type);
-    //     return (
-    //       <div>
-    //         {type ? type.label : record.type}
-    //       </div>
-    //     );
-    //   },
-    // },
-    {
-      title: "File creation",
+      title: "Ngày tạo",
       key: "createdAt",
+      width:150,
       render: (_: any, record: IFileListTable) => (
         <span>
           {record.createdAt !== null

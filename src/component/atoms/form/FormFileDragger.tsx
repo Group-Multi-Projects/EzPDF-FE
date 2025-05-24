@@ -77,10 +77,10 @@ const FormFileDragger = (props: FormUploadProps) => {
               </div>
             </div>
             <div className='flex items-center justify-center gap-x-[5px] font-normal text-[24px] text-[#0D0D12] leading-[16px] mb-[20px]'>
-              Drag & Drop or <span className='text-[#4258F1]'>Choose file</span> to upload
+              Kéo & thả hoặc <span className='text-[#4258F1]'>Chọn file</span> tải lên
             </div>
             <div className='flex items-center justify-center text-[#808897] text-[14px] font-normal leading-[17px]'>
-              Supported Formats : CVS, XLS, XLSX, PDF, Image Types
+              Định dạng được hỗ trợ : CVS, XLS, XLSX, PDF, Image 
             </div>
           </div>
         </div>

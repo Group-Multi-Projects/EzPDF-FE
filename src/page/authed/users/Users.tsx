@@ -94,7 +94,7 @@ const Users = () => {
       <div className="flex flex-col h-full p-10 gap-4">
         <div className="flex justify-between items-center sticky">
           <div className="font-normal text-[26px] leading-[31.47px] text-[#0D0D12]">
-            User list
+            Danh sách người dùng
           </div>
           <div className="flex items-center gap-x-4">
             <div>

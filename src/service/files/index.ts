@@ -5,6 +5,9 @@ export default class FilesService {
   async getList() {
     return await axiosClient.get(`${baseApi}/file/get`);
   }
+  async getById(id?: string) {
+    return await axiosClient.get(`${baseApi}/file/get/${id}/user`);
+  }  
   async getDetail(id?: string) {
     return await axiosClient.get(`${baseApi}/file/get/${id}`);
   }

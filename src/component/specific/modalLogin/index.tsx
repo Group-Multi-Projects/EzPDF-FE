@@ -28,13 +28,11 @@ import { loginUser } from "@/store/auth_slice";
       let result = res as ReturnType<typeof loginUser.fulfilled>;
       let data = result.payload.access
       let access_token = data.DT.access_token
-      console.log(res);
       
       if (data?.EC === 0) {
         message.success(data.EM);
         Cookies.set("accessToken", access_token ?? "", { expires: 365 });
 
-        localStorage.setItem('role',data.DT.role)
         dispatch(setIsOpenLogin(false));
         navigate('/home')
       } else {

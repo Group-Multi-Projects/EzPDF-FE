@@ -48,13 +48,14 @@ const FileFormModal = ({
     setIsLoading(true)
     try {
         const payload = new FormData();
+        let user_id = localStorage.getItem('user_id')
         if (data.file.length > 0) {
             payload.append('file_url', data.file[0] as Blob);
             payload.append('file_name', data.file[0].name);
             payload.append('file_type', data.file[0].type);
-            payload.append('user_id', '1');
+            payload.append('user_id', user_id || '');
           } else {
-             message.warning("Please select a file");
+             message.warning("Vui lòng chọn 1 file");
           }
         const res = await apiService.files.upload(payload)
         reset()
@@ -71,7 +72,7 @@ const FileFormModal = ({
     <>
       <BaseModal
         open={open}
-        title="Upload your file"
+        title="Tải lên file"
         onCancel={close}
         centered
         width={900}

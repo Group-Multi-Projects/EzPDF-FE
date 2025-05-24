@@ -5,10 +5,9 @@ import {
   EllipsisOutlined,
 } from "@ant-design/icons";
 import type { MenuProps, TableProps } from "antd";
-import { Dropdown, Modal, Table } from "antd";
+import { Avatar, Dropdown, Modal, Table } from "antd";
 import dayjs from "dayjs";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import avatar from "@/assets/jpg/avatar.jpg";
 
 type ColumnsType<T extends object> = TableProps<T>["columns"];
 
@@ -16,8 +15,8 @@ interface UsersListTableProps {
   users: any[];
   refresh?: () => void;
   isLoading: boolean;
-  onUpdate: (user:IInfo) => void;
-  onDelete: (user:IInfo) => void;
+  onUpdate: (user: IInfo) => void;
+  onDelete: (user: IInfo) => void;
 }
 const UsersListTable = ({
   users,
@@ -25,7 +24,7 @@ const UsersListTable = ({
   isLoading,
   onDelete,
   onUpdate,
-}:UsersListTableProps) => {
+}: UsersListTableProps) => {
   const getMenuItems = (user: IInfo): MenuProps["items"] => [
     {
       key: "1",
@@ -61,42 +60,46 @@ const UsersListTable = ({
     {
       title: "ID",
       key: "id",
-      dataIndex:'id',
+      dataIndex: "id",
       render: (_, record: IInfo) => <span>{record?.id}</span>,
     },
     {
-      title: "Username",
+      title: "Tên người dùng",
       dataIndex: "username",
       key: "username",
-      render: (_, record: IInfo) => <span>{record?.username}</span>,
+      render: (_, record: IInfo) => (
+        <div className="flex gap-2 items-center">
+          <Avatar size={32} src={avatar} />
+          <span>{record?.username}</span>
+        </div>
+      ),
     },
     {
-      title: "Phone",
+      title: "Số điện thoại",
       dataIndex: "phone",
       key: "phone",
       render: (_, record: IInfo) => <span>{record?.phone}</span>,
     },
     {
-      title: "Email address",
+      title: "Email ",
       dataIndex: "email",
       key: "email",
       render: (_, record: IInfo) => <span>{record?.email}</span>,
     },
     {
-      title: "Address",
+      title: "Địa chỉ",
       dataIndex: "address",
       key: "address",
       render: (_, record: IInfo) => <span>{record?.address}</span>,
-
     },
     {
-      title: "Role",
+      title: "Vai trò",
       dataIndex: "role_name",
       key: "role_name",
       render: (_, record: any) => <span>{record?.roles?.role_name}</span>,
     },
     {
-      title: "Created",
+      title: "Ngày được tạo",
       key: "createdAt",
       render: (_: any, record: IInfo) => (
         <span>
@@ -132,7 +135,7 @@ const UsersListTable = ({
         <Table
           loading={isLoading}
           columns={columns}
-          dataSource={users ?? 'Not found data'}
+          dataSource={users ?? "Not found data"}
           pagination={{
             position: ["topLeft"],
             total: users.length,
