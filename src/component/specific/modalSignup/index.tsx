@@ -52,14 +52,14 @@ function ModalSignUp() {
     <div className="max-w-sm w-full">
       <form className="space-y-4">
         <div className="mb-8">
-          <h3 className="text-gray-800 text-3xl font-extrabold">Sign up</h3>
+          <h3 className="text-gray-800 text-3xl font-extrabold">Đăng ký</h3>
           <p className="text-gray-500 text-sm mt-4 leading-relaxed">
-            If you don't have account, let create it here !
+            Nếu bạn không có tài khoản, hãy tạo nó ở đây!
           </p>
         </div>
         <div className="relative flex items-center">
           <InputCustom
-            label="Email address"
+            label="Email "
             error={checkError}
             value={signupValues.email}
             helperText={helperTextErrorEmail}
@@ -74,7 +74,7 @@ function ModalSignUp() {
         </div>
         <div className="relative flex items-center">
           <InputCustom
-            label="User name"
+            label="Tên người dùng"
             error={checkError}
             value={signupValues.username}
             helperText={helperTextErrorUsername}
@@ -89,7 +89,7 @@ function ModalSignUp() {
         </div>
         <div className="relative flex items-center">
           <InputCustom
-            label="Phone"
+            label="Số điện thoại"
             error={checkError}
             value={signupValues.phone}
             onChange={(e) =>
@@ -103,7 +103,7 @@ function ModalSignUp() {
         </div>{" "}
         <div className="relative flex items-center">
           <InputCustom
-            label="Password"
+            label="Mật khẩu"
             error={checkError}
             value={signupValues.password}
             helperText={
@@ -122,18 +122,18 @@ function ModalSignUp() {
         </div>
         <div className="mt-8 flex flex-col justify-center">
           <ButtonCustom fontWeight="600" onClick={() => handleRegister()}>
-            Sign up
+            Đăng ký
           </ButtonCustom>
         </div>
         <p className="text-sm mt-8 text-center text-gray-800">
-          Do you already have an account?
+          Bạn đã có tài khoản ?
           <Link
             to=""
             style={{ color: PRIMARY.MEDIUM }}
             className=" font-semibold hover:underline ml-1 whitespace-nowrap"
             onClick={() => handleOpenLogin()}
           >
-            Login here
+            Đăng nhập tại đây
           </Link>
         </p>
       </form>

@@ -83,7 +83,7 @@ const UsersFormModal = ({
       };
       if (users) {
         await apiService.users.update(payload, users.id).then(() => {
-          message.success("User updated successfully");
+          message.success("Cập nhật thông tin thành công");
         });
       } else {
         let res = await apiService.users.create(payload);
@@ -108,7 +108,7 @@ const UsersFormModal = ({
     <>
       <BaseModal
         open={open}
-        title={isEdit ? "Update user information" : "Create new user"}
+        title={isEdit ? "Cập nhật thông tin" : "Tạo mới user"}
         onCancel={close}
         centered
         width={600}

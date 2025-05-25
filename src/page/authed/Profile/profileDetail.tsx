@@ -12,18 +12,22 @@ import avatar from "@/assets/jpg/avatar.jpg";
 const ProfileDetail = () => {
   const [getInfo, setGetInfo] = useState<IInfo>();
   const [open, setOpen] = useState(false);
-
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  
   useEffect(() => {
     fetchInfo();
   }, []);
 
   const fetchInfo = async () => {
+    setIsLoading(true)
     try {
       let response = await apiService.auth.getInfo();
       let data = response.data.DT.data;
       setGetInfo(data);
     } catch (error) {
       console.error("Profile err:", error);
+    }finally{
+      setIsLoading(false)
     }
   };
 
@@ -31,11 +35,10 @@ const ProfileDetail = () => {
     setOpen(false);
   };
 
-  console.log("state open", open);
 
   return (
     <div className="p-6 w-full mx-auto">
-      <Card className="shadow-lg rounded-2xl">
+      <Card loading={isLoading} className="shadow-lg rounded-2xl">
         <div className="flex flex-col md:flex-row gap-6 items-center md:items-start">
           <Avatar shape="square" size={100} src={avatar} />
           <div className="flex-1">
@@ -47,7 +50,7 @@ const ProfileDetail = () => {
                 className={`rounded-xl p-2`}
                 icon={<EditOutlined />}
               >
-                Update
+                Cập nhật
               </Button>
             </div>
 
@@ -79,7 +82,7 @@ const ProfileDetail = () => {
                 </div>
               </Descriptions.Item>
               <Descriptions.Item label="Ngày tạo">
-                {dayjs(getInfo?.createdAt).format("MMM, DD YYYY")}
+                {dayjs(getInfo?.createdAt).format("DD/MM/YYYY")}
               </Descriptions.Item>
             </Descriptions>
           </div>

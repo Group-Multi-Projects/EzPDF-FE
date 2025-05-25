@@ -47,7 +47,7 @@ const BaseModal: React.FC<BaseModalProps> = ({
           footer
         ) : (
           <div className='flex justify-between gap-x-[20px]'>
-            <Button className='w-full h-[48px] rounded-[12px]' onClick={onCancel}>
+            <Button className='w-full h-[48px] rounded-[12px]' onClick={onCancel} disabled={loading}>
               {cancelText}
             </Button>
             <Button
@@ -56,7 +56,7 @@ const BaseModal: React.FC<BaseModalProps> = ({
               style={{ backgroundColor: '#4258F1' }}
               onClick={onOk}
               disabled={disabled}
-              loading={disabled || loading}
+              loading={loading}
             >
               {okText}
             </Button>

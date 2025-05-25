@@ -138,7 +138,7 @@ const Users = () => {
               >
                 <div className="flex gap-x-[8px] font-medium text-[18px] leading-[21.78px] text-[#FFFFFF]">
                   <div>+</div>
-                  <div>Add user</div>
+                  <div>Thêm mới</div>
                 </div>
               </Button>
             </div>

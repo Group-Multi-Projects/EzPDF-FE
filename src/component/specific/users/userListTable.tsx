@@ -35,7 +35,7 @@ const UsersListTable = ({
         >
           <EditOutlined />
           <span className="font-normal text-[14px] leading-[18px] text-[#696D87]">
-            Edit
+            Sửa
           </span>
         </div>
       ),
@@ -49,7 +49,7 @@ const UsersListTable = ({
         >
           <DeleteOutlined />
           <span className="font-normal text-[14px] leading-[18px] text-[#696D87]">
-            Delete
+            Xóa
           </span>
         </div>
       ),
@@ -104,7 +104,7 @@ const UsersListTable = ({
       render: (_: any, record: IInfo) => (
         <span>
           {record.createdAt !== null
-            ? dayjs(record?.createdAt).format("MMM, DD YYYY")
+            ? dayjs(record?.createdAt).format("DD/MM/YYYY")
             : ""}
         </span>
       ),

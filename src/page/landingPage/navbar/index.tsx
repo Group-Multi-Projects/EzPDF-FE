@@ -33,21 +33,22 @@ import { RootState } from "@/store";
 
 const tools = [
   {
-    name: "View & edit PDF",
-    description: "Alow edit PDF file from your storage",
+    name: "Xem & chỉnh sửa PDF",
+    description: "Cho phép chỉnh sửa tệp PDF từ bộ nhớ của bạn",
     href: "#",
     icon: PencilSquareIcon,
   },
   {
-    name: "PDF conversion",
-    description: "Convert PDF file to HTML, Word or other files...",
+    name: "Chuyển đổi PDF",
+    description: "Chuyển đổi tệp PDF sang HTML, Word hoặc các tệp khác...",
     href: "#",
-    icon:ArrowPathIcon,
+    icon: ArrowPathIcon,
   },
 ];
+
 const callsToAction = [
-  { name: "Watch demo", href: "#", icon: PlayCircleIcon },
-  { name: "Contact sales", href: "#", icon: PhoneIcon },
+  { name: "Xem bản demo", href: "#", icon: PlayCircleIcon },
+  { name: "Liên hệ bán hàng", href: "#", icon: PhoneIcon },
 ];
 
 
@@ -72,7 +73,7 @@ export default function sidebarLandingPage() {
       >
         <div className="flex lg:flex-1">
           <a href="#" className="-m-1.5 p-1.5">
-            <span className="sr-only">Your Company</span>
+            <span className="sr-only">Công ty của bạn</span>
             <img
               alt=""
               src={logo}
@@ -86,7 +87,7 @@ export default function sidebarLandingPage() {
             onClick={() => setMobileMenuOpen(true)}
             className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
           >
-            <span className="sr-only">Open main menu</span>
+            <span className="sr-only">Mở menu chính</span>
             <Bars3Icon aria-hidden="true" className="size-6" />
           </button>
         </div>
@@ -94,7 +95,7 @@ export default function sidebarLandingPage() {
         <PopoverGroup className="hidden lg:flex lg:gap-x-12">
           <Popover className="relative">
             <PopoverButton className="flex items-center gap-x-1 text-sm/6 font-semibold text-gray-900">
-              Tools
+              Công cụ
               <ChevronDownIcon
                 aria-hidden="true"
                 className="size-5 flex-none text-gray-400"
@@ -149,13 +150,13 @@ export default function sidebarLandingPage() {
           </Popover>
 
           <a href="#" className="text-sm/6 font-semibold text-gray-900">
-            Technology
+            Công nghệ
           </a>
           <a href="#" className="text-sm/6 font-semibold text-gray-900">
-            About us
+            Về chúng tôi
           </a>
           <a href="#" className="text-sm/6 font-semibold text-gray-900">
-            Company
+            Công ty
           </a>
         </PopoverGroup>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
@@ -168,7 +169,7 @@ export default function sidebarLandingPage() {
               borderColor: "rgb(196, 196, 196)",
             }}
           >
-            Login
+            Đăng nhập
           </span>
 
           <ButtonCustom
@@ -204,7 +205,7 @@ export default function sidebarLandingPage() {
               onClick={() => setMobileMenuOpen(false)}
               className="-m-2.5 rounded-md p-2.5 text-gray-700"
             >
-              <span className="sr-only">Close menu</span>
+              <span className="sr-only">Đóng menu</span>
               <XMarkIcon aria-hidden="true" className="size-6" />
             </button>
           </div>
@@ -236,25 +237,25 @@ export default function sidebarLandingPage() {
                   href="#"
                   className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
                 >
-                  Technology
+                  Công nghệ
                 </a>
                 <a
                   href="#"
                   className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
                 >
-                  About us
+                  Về chúng tôi
                 </a>
                 <a
                   href="#"
                   className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
                 >
-                  Company
+                  Công nghệ
                 </a>
               </div>
               <div className="py-6">
                 <span className="text-sm p-3 font-semibold"
                 onClick={() =>handleOpenLogin()}
-                >Login</span>
+                >Đăng nhập</span>
                 <ButtonCustom
                   className="text-sm p-3"
                   padding="0.5rem 1rem"

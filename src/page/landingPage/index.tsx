@@ -38,18 +38,18 @@ function LandingPage() {
           leftChildren={
             <div className="text-center">
               <h1 className="font-black md:text-6xl text-4xl md:pe-16 md:text-left mb-5">
-                We make PDF processing easier.
+                Xử lý PDF trở nên dễ dàng hơn
               </h1>
               <p className="md:text-2xl text-xl text-slate-500 md:text-left mb-4">
-                All the tools you need to work smarter and more efficiently with
-                documents.
+                Tất cả các công cụ bạn cần để làm việc thông minh hơn và hiệu
+                quả hơn với tài liệu.
               </p>
               <div className="lg:flex justify-between  ">
                 <ButtonCustom
                   className="w-full lg:me-2 mb-2 lg:mb-0"
                   fontWeight="600"
                 >
-                  Explore all PDF tools
+                  Khám phá tất cả công cụ PDF
                 </ButtonCustom>
                 <button
                   className=" hover:text-white w-full font-bold border  px-4 py-4 rounded-md"
@@ -117,7 +117,7 @@ function LandingPage() {
         ))}
       </div>
       {isOpenSignup && <Signup />}
-      {isOpenLogin && <Login/>}
+      {isOpenLogin && <Login />}
       {isOpenLogin || isOpenSignup ? (
         <div
           className="hidden z-0 lg:block lg:fixed lg:inset-y-0 lg:inset-x-0 bg-black opacity-70"

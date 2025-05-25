@@ -3,7 +3,7 @@ export const baseApi = "/api";
 export const profileFormField = [
   [
     {
-      label: "Username",
+      label: "Tên",
       name: "username",
       placeholder: "Username",
       fieldType: "input",
@@ -11,7 +11,7 @@ export const profileFormField = [
   ],
   [
     {
-      label: "Phone number",
+      label: "Số điện thoại",
       name: "phone",
       placeholder: "Phone number",
       fieldType: "input",
@@ -27,7 +27,7 @@ export const profileFormField = [
   ],
   [
     {
-      label: "Address",
+      label: "Địa chỉ",
       name: "address",
       placeholder: "Address",
       fieldType: "input",
@@ -35,13 +35,13 @@ export const profileFormField = [
   ],
   [
     {
-      label: 'Role',
+      label: 'Vai trò',
       name: 'role_id',
       placeholder: 'Role',
       fieldType: 'select',
       options: [
-        { label: 'Admin', value: '2' },
-        { label: 'User', value: '1' },
+        { label: 'Admin', value: 2 },
+        { label: 'User', value: 1 },
       ],
     },
   ],  

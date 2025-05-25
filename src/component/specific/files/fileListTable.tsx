@@ -98,7 +98,7 @@ const FileListTable = (props: FileListTableProps) => {
       render: (_: any, record: IFileListTable) => (
         <span>
           {record.createdAt !== null
-            ? dayjs(record.createdAt).format("MMM, DD YYYY")
+            ? dayjs(record.createdAt).format("DD/MM/YYYY")
             : ""}
         </span>
       ),

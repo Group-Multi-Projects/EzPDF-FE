@@ -4,35 +4,36 @@ import slider3 from "@/assets/png/img2.png";
 export const Data = [
   {
     id: 1,
-    tittle: "Working directly on your files",
-    description:"Do more than just view PDF files. Highlight and add text, images, shapes, and annotations hands-free to your documents. You can connect with other tools to perform many other functions on your files.",
+    tittle: "Làm việc trực tiếp trên tệp của bạn",
+    description: "Làm được nhiều hơn là chỉ xem tệp PDF. Bạn có thể tô sáng, thêm văn bản, hình ảnh, hình dạng và ghi chú vào tài liệu của mình mà không cần chạm tay. Bạn cũng có thể kết nối với các công cụ khác để thực hiện nhiều chức năng hơn trên tệp.",
     link: (
       <>
-        Edit PDF files now <span aria-hidden="true">&rarr;</span>
+        Chỉnh sửa PDF ngay <span aria-hidden="true">&rarr;</span>
       </>
     ),
     image: slider2,
   },
   {
     id: 2,
-    tittle: "Document management—All in one place",
-    description:"You don't need to work on many different applications anymore! Save time by storing, managing,and sharing files across multiple devices—from our web platform.",
+    tittle: "Quản lý tài liệu — Tất cả ở một nơi",
+    description: "Bạn không còn cần phải sử dụng nhiều ứng dụng khác nhau nữa! Tiết kiệm thời gian bằng cách lưu trữ, quản lý và chia sẻ tệp trên nhiều thiết bị — ngay từ nền tảng web của chúng tôi.",
     link: (
       <>
-        Manage now <span aria-hidden="true">&rarr;</span>
+        Quản lý ngay <span aria-hidden="true">&rarr;</span>
       </>
     ),
     image: slider1,
   },
   {
     id: 3,
-    tittle: "Converting PDF files is not difficult",
-    description:"Online conversion from PDF files to other formats(Word, PPT, Excel, HTML,...) and from other formats to PDF.",
+    tittle: "Chuyển đổi tệp PDF không hề khó",
+    description: "Chuyển đổi trực tuyến từ tệp PDF sang các định dạng khác (Word, PPT, Excel, HTML,...) và ngược lại từ các định dạng đó sang PDF.",
     link: (
       <>
-        Convert now <span aria-hidden="true">&rarr;</span>
+        Chuyển đổi ngay <span aria-hidden="true">&rarr;</span>
       </>
     ),
     image: slider3,
   },
 ];
+
